@@ -1,0 +1,589 @@
+[
+  {
+    "file": "test/author-source-collider.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('recorded shape metadata retains both original surface vocabularies', () => {",
+      "test('all six recorded shapes retain their words and typed materialization', () => {",
+      "test('recorded admission retains exact malformed-shape refusals', () => {"
+    ]
+  },
+  {
+    "file": "test/declared-audio-set.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "it('retains score-set inventory, boot order and Synth gates (Nalati)',async()=>{",
+      "it('retains score-set inventory, boot order and Synth gates (Nine Dragon)',async()=>{",
+      "it.each([[NALATI_AUDIO,'nalati'],[ND_AUDIO,'nine']] as const)('retains title/score/cue/sample decode order, overlays and completion ticks %#',async(rows,which)=>{"
+    ]
+  },
+  {
+    "file": "test/declared-portal-entry.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('a leave or replaced entered owner during declared policy preparation has no ledger, veil or system effects', async () => {",
+      "test('the final UI module await refuses leave and runtime, world, source, app or progress replacement before effects', async () => {",
+      "test('invalid directors and finite fade rows allocate no ledger, mounted veil or system', async () => {"
+    ]
+  },
+  {
+    "file": "test/grapple-every-player.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('a bot locks, fires and crosses on its own claw while the lead stands idle', async () => {",
+      "test('P1-E5.3: the hook a client names is bitten, though the server has no camera to pick it with, and a bad one is nothing', async () => {",
+      "test('a mid-air claw saves with its player, one player saves no extra row', async () => {"
+    ]
+  },
+  {
+    "file": "test/grapple-guard.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('a guard remains closed until it binds the same entered tool and follows its live state', () => {",
+      "test('a guard refuses another entered scope before accepting its own concrete tool', () => {",
+      "test('a sliced retiring ancestor closes the guard before the child cleanup and refuses binding', () => {"
+    ]
+  },
+  {
+    "file": "test/grapple-platform.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('two course rows rotate the clearance plane and reject invalid anchors', () => {",
+      "test('quarry lock and fire use the real capsule, clear the rail and release the guard', async () => {",
+      "test('quarry ribbon keeps endpoints pinned and uses only its declared look', () => {"
+    ]
+  },
+  {
+    "file": "test/grapple-port.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('a claw on the wire follows the server through a crossing', async () => {"
+    ]
+  },
+  {
+    "file": "test/headless-direct-admission.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test.each(["
+    ]
+  },
+  {
+    "file": "test/held-entered.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('the entered claims feature adopts one Jian and adds its original grapple exactly once', async () => {",
+      "test('getter-based held input is refused without reading it or installing a tool', async () => {",
+      "test.each(['leave', 'product', 'source', 'app', 'equipment', 'primary', 'profile', 'melee'])('held entry refuses %s replacement during its read before tool effects', async kind => "
+    ]
+  },
+  {
+    "file": "test/held-preparation-owner.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('unchanged preparation publishes once on its original scope without constructing equipment', async () => {",
+      "test.each(['scope', 'product', 'game', 'runtime', 'world'])('replaced %s during preparation never publishes a held owner', async owner => {",
+      "test.each([false, true])('retirement during preparation never publishes a held owner (ancestor: %s)', async ancestor => {"
+    ]
+  },
+  {
+    "file": "test/held-primary-entry.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('declared primary phases lend the real installed melee owner without preparing another rig', async () => {",
+      "test.each([{}, { portraitFov: 0 }, { portraitFov: 180 }, { portraitFov: '78' }])('primary preparation refuses invalid presentation %j', async presentation => {",
+      "test('a sliced retiring ancestor prevents a pending primary from publishing its loan', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-binary-outputs.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('corrected casts keep their names, exact admitted costs and original draw/triangle counts',()=>{",
+      "test('the hook producer returns the same original GLB and material without encoding it',async()=>{",
+      "test.each(['castSources','signAtlasSources'])('%s declarations bundle without file services; SDK reads later',async entry=>{"
+    ]
+  },
+  {
+    "file": "test/nine-boot-discovery.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('source discovery retains all four declared slot identities', () => {",
+      "test('inventory presence controls the same phone fallback and authored-file filtering', () => {",
+      "test('the injected source reader retains current discovery values and refuses older contexts', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-cast-sources.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('cast resource rows publish exact channels and preserve middle-LOD sharing without mutating source templates', async () => {",
+      "test('hook material rows retain native properties and borrow the original maps', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-casts-program.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test.each([false, true])('entry casts preserve declared codec transformations (caps=%s)', async caps => {",
+      "test('a hit never rebuilds and owns every original cast byte independently', async () => {",
+      "test('missing, extra, invalid and wrongly published casts refuse', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-cloth-bake.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('baked cloth channels remain ordinary native buffers', () => {",
+      "test('pendants have a finite drape and bounded flutter that leaves their roots pinned', () => {",
+      "test('body and ink hull read the same baked motion with no extra outline draw', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-crowd-table.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('every table LOD retains original primary geometry and both phone colourways bit for bit',async()=>{",
+      "test('only the explicit own-light key changes; every real dye keeps its original RGB',()=>{",
+      "test('ordinary kit shaders never reserve palette inputs and the crowd fits native vertex slots',()=>{"
+    ]
+  },
+  {
+    "file": "test/nine-data-runtime.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('Nine compiled entry preserves original native binds, section authority, runtime cost and home retention', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-decal-rows.test.ts",
+    "disposition": "ran",
+    "reason": "Actual authored data/course crosses the released author and engine API; remove implementation pins.",
+    "evidence": [
+      "test.each([",
+      "test('author atlas admission preserves the original JSON-only boundary', () => {",
+      "test('decal dimensions and UV cells retain their authored frames', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-declarations-program.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('a hit never rebuilds and returns independently owned canonical wires and rows', async () => {",
+      "test('missing, extra, invalid and mismatched row/audio results remain refusals', async () => {",
+      "test('undeclared crowd bytes and invalid partition GLBs refuse before publication', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-entry-proof.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('the injected capability repeats the original complete Nine capsule proof in fresh disposed worlds', async () => {",
+      "test('static-only capability refuses ordinary edges before constructing a world', async () => {",
+      "test('malformed pieces and missing grounded collision refuse and still dispose their native worlds', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-explorer-declarations.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('declares exactly the existing six welded place groups without a second binding', () => {",
+      "test('declared held card lists the identical original fp-arms metadata without a native roster', async () => {",
+      "test('graph card references refuse foreign owners, presentations, ambiguous cards and unknown items', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-glyph-bake.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('sign pools select one tier and publish all original parts without extra descriptor files', () => {",
+      "test(`${tier} admitted glyph pixels and metrics match the original runtime byte for byte`, async () => {",
+      "test('separate worlds own separate glyph textures and decoded pixel arrays', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-graph-arms.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('Nine held arms are one admitted GraphArms row', () => {",
+      "test('held view admission preserves rows and refuses malformed named payloads', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-held-melee.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "it('keeps Nine combos, held heavies, active windows and old single-clock saves on the shared native owner',async()=>{"
+    ]
+  },
+  {
+    "file": "test/nine-held-profile-source.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('cold and hit source profiles retain every original GLB mesh/channel/transform and black texel byte', async () => {",
+      "test('GLB metadata observes nonzero views and refuses truncated/wrong headers and invalid rig rows', () => {",
+      "test('missing source or cached profile stays a named refusal', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-item-adoption.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('Nine item JSON keeps both native equipment presentations', () => {",
+      "test('Nine play admits the complete primary/tool set before installing the native grapple', async () => {",
+      "test('Nine admits the existing Jian while retaining the sword save slot, cues and state owner', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-jian-bake.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('verified Jian GLB pools preserve every original channel, index and bound', async () => {",
+      "test('the held row changes only its geometry references', async () => {",
+      "test('held effects are admitted graph rows with independent frame params', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-lantern-hum.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('the lanterns hum where each deck ending hangs them: its placement file per world variant', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-light-volume-atlas.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test.each(['phone', 'desktop'] as const)('the %s volume consumes supplied readonly native lamps', tier => {",
+      "test('volume hits reuse equivalent native rows and invalidate an in-place lamp edit', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-live-paint.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('the live layers retain every look, URL and original image byte in both tiers', () => {",
+      "test('ordinary authored JSON keeps the original uniform arities and additive-alpha state', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-look-graphs.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('every admitted volume variant resolves its shared lossless voxel payload', () => {",
+      "test('wet receivers compile within both caps and retain their plane channels', () => {",
+      "test('grapple bursts use the field clock and hide at their declared lifetimes', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-manual-author-tools.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('native decal documentation keeps the browser lane and read-only check flag', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-map-native-inputs.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test.each(['/assets/nine-dragon/authored/sign-atlas/', '/assets/nine-dragon/authored/glyphs/'])('the source map refuses omitted native root %s', async native => {",
+      "test('the source map encodes and a cache hit returns the same pixels', async () => {",
+      "test('Nine has no scheduler jobs and all retired map and practice source handoffs stay absent', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-movers-program.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('source-only movers retain the complete original admitted view module on cold and hit', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-movers-view.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('Nine\\'s movers view module poses the train, the gondola and the drones on their original paths', async () => {",
+      "test('each mover copy stands at identity under the object the view module poses (NF3: no double rest pose)', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-native-atlas-assets.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('the GD2 public atlas inputs preserve every predecessor file on cold and hit admission', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-native-decals.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('committed native decals retain every original PNG byte, pixel, dimension and admitted cost on cold and hit', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-native-glyphs.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('all six native glyph files preserve original pixels and metrics on cold and detached hits', async () => {",
+      "test('missing, extra, duplicate and changed immutable native glyph files refuse', () => {",
+      "test('matching metadata hashes still refuse invalid dimensions, rectangles and escaped raster references', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-native-sign-atlas.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('all seven native files retain their original hashes on cold and detached hits', async () => {",
+      "test('missing, extra and changed native bytes refuse before metadata consumption', () => {",
+      "test('even matching metadata hashes cannot admit escaped geometry ranges or missing referenced files', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-navigation-program.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('the original public navigation transport is explicitly owned by the defining shard', () => {",
+      "test('cold and hit navigation preserve current native bytes, ordered layers and costs', async () => {",
+      "test('every invocation observes changed native input and refuses malformed WSNM instead of a prior hit', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-owned-layout.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('owned layout rows preserve every original projection and facade packet byte', async () => {",
+      "test('a supplied window layout controls records, packet bindings and recipe instance counts', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-owned-product.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('the product uses the supplied view memory while retaining every other declaration field', () => {",
+      "test('supplied source inputs own their executable, decals and entry proof', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-practice-guest.test.ts",
+    "disposition": "ran",
+    "reason": "Actual authored data/course crosses the released author and engine API; remove implementation pins.",
+    "evidence": [
+      "test('the guest selects all eleven real pads and preserves closed edges and strict floor tolerance', () => {",
+      "test('every checkpoint fall keeps its original native spawn, facing and pitch', () => {",
+      "test('reset preserves the best run and emits the original start pose; finishing uses the same clock', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-practice-law.test.ts",
+    "disposition": "ran",
+    "reason": "Actual authored data/course crosses the released author and engine API; remove implementation pins.",
+    "evidence": [
+      "test('real Nine route starts beyond its line, records checkpoints and finishes once',()=>{",
+      "test('seeded airborne samples preserve the checkpoint and copied continuation resumes',()=>{"
+    ]
+  },
+  {
+    "file": "test/nine-practice-program.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('product-free practice fixtures retain the complete independently compiled module and contract', () => {",
+      "test('the injected course retains every original contract field, executable byte and admitted cost', () => {",
+      "test('persistent hits need no compiler and detach the complete row and raw module', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-presentation-binary.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('Nine presentation keeps every pinned channel word and draw reference', () => {",
+      "test('presentation sharing distinguishes word bits and instancing and consumes sources once', () => {",
+      "test('empty presentation channels stay valid without publishing empty blobs', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-program-files.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('both actual raw executables name their shipped module and pass their contracts',async()=>{",
+      "test('the shared course compiler retains its complete legacy default and original binary',async()=>{",
+      "test('pure ABI1 page preparation lends the same map to both original scopes exactly once',async()=>{"
+    ]
+  },
+  {
+    "file": "test/nine-sign-textures.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('sign product rows bind the original three textures with the original GPU mip samplers', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-signs-program.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('published sign metadata includes both device tiers', () => {",
+      "test('a hit never rebuilds, owns every byte and republishes identical named metadata', async () => {",
+      "test('changed supplied native lamps cannot reuse earlier sign bytes', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-source-admission.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('complete practice refuses the old author-only null script before native installation',()=>{",
+      "test('original checked profile inputs retain identity, order and complete native values', () => {",
+      "test('all light pool declarations keep original finite nonnegative bounds and strict fields', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-source-entry.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('the source entry shares one admitted practice contract across raw output and scene/controller rows', () => {",
+      "test('the real import closure seals source helpers without a manual scheduler root list', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-sword-entry.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('Nine manifest native load installs its original Jian once', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-traversal-data.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test.each(plan.decks)('$edge ring keeps its trigger bounds and mid-fade continuation', deck => {",
+      "test('product-sorted portal inputs retain authored save bytes', () => {",
+      "test('a second shard drives walk-in rides with its own nodes, cadence and director ids', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-window-packets.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('binary window rows cover each original packet exactly in its two draws', () => {",
+      "test('the window draws fit the two existing recipe envelopes without embedded matrix arrays', () => {",
+      "test('admitted window steps keep independent mutable geometry ports and the original packet bindings', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-world-install.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('page install rows preserve the existing collider payload and order', () => {",
+      "test('stair floor covers every tread boundary within one step of its collider', () => {",
+      "test('declared floors cover the authored plaza, street, rim and stair without adding floors', () => {"
+    ]
+  },
+  {
+    "file": "test/nine-world-program.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test('a cache hit never rebuilds and retains complete rows and independently owned geometry', async () => {",
+      "test('changed native lamps cannot hit an earlier world cache', async () => {",
+      "test('missing, extra, corrupt and wrongly published world bytes remain refusals', async () => {"
+    ]
+  },
+  {
+    "file": "test/nine-world-scenes.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('phone pool selection preserves shared files and explicit device pairs without changing its source', () => {",
+      "test('the real fine-file inventory defers transport while critical demand still wins', () => {",
+      "test('every Nine catalogue draw names a declared whole-library model on its own baked tiles', () => {"
+    ]
+  },
+  {
+    "file": "test/portal-ride-room.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test('a bot walks into a portal alone, and the save holds its fade', async () => {"
+    ]
+  },
+  {
+    "file": "test/scene-buffer-files.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test.each([false, true])('buffer admission overlaps bounded reads and drains a refused batch (%s)', async fail => {",
+      "test('binary scene channels detach subviews, preserve words and share geometry', () => {",
+      "test('binary admission refuses absent, crossed, oversized and invalid sources', () => {"
+    ]
+  },
+  {
+    "file": "test/scripts/nine-casts.test.ts",
+    "disposition": "deleted",
+    "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
+    "evidence": [
+      "test.each(names)('%s preserves half-float decoding and borrowed geometry identity', async name => {",
+      "test('layout blobs retain every float64 bit and signed author zero', () => {",
+      "test.each(middleLevels)('$key shares the full cast buffers and retains decoded half-float channels', ({key}) => {"
+    ]
+  },
+  {
+    "file": "test/world-entry-guard.test.ts",
+    "disposition": "engine",
+    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "evidence": [
+      "test.each(['capped', 'open'] as const)('declared %s guard keeps original colliders and the last registration', async variant => {",
+      "test('active policy and missing owner refuse before any earlier piece registers', async () => {",
+      "test('retirement between rows refuses later registration and closes the original guard', async () => {"
+    ]
+  }
+]

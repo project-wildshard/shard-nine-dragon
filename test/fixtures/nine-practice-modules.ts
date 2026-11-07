@@ -1,5 +1,5 @@
-import type { Scope } from '../../src/shared/engine/app/scope';
-import { ReturnProgram } from '../../src/shared/game/population/returnProgram';
+import type { Scope } from '@wildshard/engine/app/scope';
+import { ReturnProgram } from '@wildshard/engine/game/population/returnProgram';
 import { ninePracticeBytes, ninePracticeRows } from './nine-practice-product';
 
 const assets = new Map([[ninePracticeRows.script.module.slice('blobs/wasm/'.length, -'.wasm'.length), ninePracticeBytes]]);
