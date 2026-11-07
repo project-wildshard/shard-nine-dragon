@@ -10,3 +10,11 @@ blob-report/
 .env.*
 # No worktrees here (D27); ignored so a stray one never gets committed.
 .claude/worktrees/
+
+# Lifted from singleplayer (P5).
+out/
+tmp/
+.cache/
+/public/assets/nine-dragon-stack/map/top.webp
+/public/assets/nine-dragon-stack/entry-reads.json
+/src/shards/nine-dragon-stack/discovery.generated.ts
