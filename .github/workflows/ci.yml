@@ -87,4 +87,7 @@ jobs:
       - run: pnpm test:shards
       - name: Boot, play and resume every built product
         run: node --test --test-concurrency=1 test/ci/product-play.test.mjs test/ci/package-products.test.mjs
-      - run: pnpm test:hooks
+      # Ring 3 is downstream product compatibility; unchanged hook tooling
+      # stays on ordinary push/PR CI rather than spending its five-minute cap.
+      - if: github.event_name == 'push' || github.event_name == 'pull_request'
+        run: pnpm test:hooks

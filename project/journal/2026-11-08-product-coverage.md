@@ -22,3 +22,9 @@ Nine chooses a real reachable ring from its admitted server JSON, aims,
 locks and fires through player input, then proves rise below the ring,
 travel and grounded landing. It inspects no grapple adapter state. The
 whole play/resume case takes 0.31 s; real tarball admission takes 1.88 s.
+
+The first candidate passed every test, including all 94 hook-infrastructure
+cases, then the five-minute deadline cancelled its post-job cache cleanup.
+Hook infrastructure is unchanged by an engine candidate, so it stays in
+normal push/PR CI. Ring 3 retains admission, shard tests and real play.
+This saves its measured 20.6 seconds without weakening those product checks.
