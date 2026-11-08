@@ -85,6 +85,8 @@ jobs:
         run: node scripts/check-test-boundary.mjs
       - name: Build shard products on the runner
         run: pnpm build:shards
+      - name: Walk the owned 1800-tick authored route
+        run: node --experimental-transform-types --test test/ci/owned-journey.test.mjs
       - name: Boot, play and resume every built product
         run: node --test --test-concurrency=1 test/ci/product-play.test.mjs test/ci/package-products.test.mjs
       # Ring 3 is downstream product compatibility; unchanged hook tooling
