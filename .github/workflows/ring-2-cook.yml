@@ -2,6 +2,26 @@ name: ring-2-cook
 
 # Real cold q11 cook exceeds J186's ten-second case budget.
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ring-2-cook.yml'
+      - '.github/actions/**'
+      - 'src/**'
+      - 'test/**'
+      - 'scripts/**'
+      - 'public/**'
+      - 'lint/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'tsconfig*.json'
+      - 'vitest.config.*'
+      - '.npmrc'
+      - '.gitattributes'
+      - '.oxlintrc.author.json'
+  schedule:
+    - cron: '20 3 * * *'
   workflow_dispatch:
     inputs:
       engine:
@@ -18,7 +38,7 @@ permissions:
 
 concurrency:
   group: ring-2-cook-${{ github.ref }}-${{ inputs.engine }}-${{ inputs.sharddev }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   cook-play:
