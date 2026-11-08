@@ -15,3 +15,7 @@ Status: in progress 2026-11-08: installed product coverage.
 | Goldens and GPU | Existing graphical owner and Mac mini; outside this lane |
 
 New coverage stays outside hooks under J186. Nothing uploads or deploys.
+
+Candidate source/build/package/play and retained source tests are independent
+mandatory jobs, each capped at five minutes after a real serial timeout.
+The retained suite reads source/fixtures; the CLI product is built once.

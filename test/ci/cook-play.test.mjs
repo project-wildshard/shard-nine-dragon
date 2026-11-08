@@ -1,4 +1,6 @@
-// Ring 2, J186: the actual cold cook takes 25.78 s locally. Both native
+// Ring 2, J186: cold cook takes 25.78 s locally, 190.16 s on Linux.
+// The complete Linux case took 198.62 s and exceeded its first 180 s cap.
+// Both native
 // worlds use only cooked server files for grapple, landing and restore.
 // Use the shipped cooker/encoder, then only extracted server-pack bytes.
 // This complete publish/serve/play journey never joins hooks or Ring 3.
@@ -20,7 +22,7 @@ const {outputDescriptor,serverReadsFile}=await import('@wildshard/engine/game/sh
 const {loadRapier}=await import('@wildshard/engine/physics/rapier');
 const require=createRequire(import.meta.url);
 
-test('the real cooked Nine earns grapple and resumes using only served server files',{timeout:180_000},async()=>{
+test('the real cooked Nine earns grapple and resumes using only served server files',{timeout:300_000},async()=>{
  const parent=process.env.WS_PROOF_SCRATCH??tmpdir();mkdirSync(parent,{recursive:true});
  const root=mkdtempSync(join(parent,'nine-cook-')),worlds=[];
  const previous=process.env.WILDSHARD_SPAWN_PART_CACHE;
