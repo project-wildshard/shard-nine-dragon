@@ -11,99 +11,113 @@
   },
   {
     "file": "test/declared-audio-set.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Coupled unit harness with 7 mock/spy references. It fabricates page/owner/service dependencies and asserts private construction, preparation, ownership or callback behavior instead of traversing a real player/author boundary.",
     "evidence": [
       "it('retains score-set inventory, boot order and Synth gates (Nalati)',async()=>{",
       "it('retains score-set inventory, boot order and Synth gates (Nine Dragon)',async()=>{",
       "it.each([[NALATI_AUDIO,'nalati'],[ND_AUDIO,'nine']] as const)('retains title/score/cue/sample decode order, overlays and completion ticks %#',async(rows,which)=>{"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/declared-portal-entry.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Coupled unit harness with 30 mock/spy references. It fabricates page/owner/service dependencies and asserts private construction, preparation, ownership or callback behavior instead of traversing a real player/author boundary.",
     "evidence": [
       "test('a leave or replaced entered owner during declared policy preparation has no ledger, veil or system effects', async () => {",
       "test('the final UI module await refuses leave and runtime, world, source, app or progress replacement before effects', async () => {",
       "test('invalid directors and finite fade rows allocate no ledger, mounted veil or system', async () => {"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/grapple-every-player.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "moved-engine",
+    "reason": "Run the real host, wire, physics or durable-store flow against engine and admitted pin data; remove imports of retired shard author modules.",
     "evidence": [
       "test('a bot locks, fires and crosses on its own claw while the lead stands idle', async () => {",
       "test('P1-E5.3: the hook a client names is bitten, though the server has no camera to pick it with, and a bad one is nothing', async () => {",
       "test('a mid-air claw saves with its player, one player saves no extra row', async () => {"
-    ]
+    ],
+    "engineOutcome": "migrated",
+    "engineTarget": "project-wildshard/engine/test/grapple-every-player.test.ts",
+    "ring": 1
   },
   {
     "file": "test/grapple-guard.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Coupled unit harness with 5 mock/spy references. It fabricates page/owner/service dependencies and asserts private construction, preparation, ownership or callback behavior instead of traversing a real player/author boundary.",
     "evidence": [
       "test('a guard remains closed until it binds the same entered tool and follows its live state', () => {",
       "test('a guard refuses another entered scope before accepting its own concrete tool', () => {",
       "test('a sliced retiring ancestor closes the guard before the child cleanup and refuses binding', () => {"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/grapple-platform.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Coupled unit harness with 16 mock/spy references. It fabricates page/owner/service dependencies and asserts private construction, preparation, ownership or callback behavior instead of traversing a real player/author boundary.",
     "evidence": [
       "test('two course rows rotate the clearance plane and reject invalid anchors', () => {",
       "test('quarry lock and fire use the real capsule, clear the rail and release the guard', async () => {",
       "test('quarry ribbon keeps endpoints pinned and uses only its declared look', () => {"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/grapple-port.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "moved-engine",
+    "reason": "Run the real host, wire, physics or durable-store flow against engine and admitted pin data; remove imports of retired shard author modules.",
     "evidence": [
       "test('a claw on the wire follows the server through a crossing', async () => {"
-    ]
+    ],
+    "engineOutcome": "migrated",
+    "engineTarget": "project-wildshard/engine/test/grapple-port.test.ts",
+    "ring": 1
   },
   {
     "file": "test/headless-direct-admission.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Coupled unit harness with 2 mock/spy references. It fabricates page/owner/service dependencies and asserts private construction, preparation, ownership or callback behavior instead of traversing a real player/author boundary.",
     "evidence": [
       "test.each(["
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/held-entered.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Coupled unit harness with 8 mock/spy references. It fabricates page/owner/service dependencies and asserts private construction, preparation, ownership or callback behavior instead of traversing a real player/author boundary.",
     "evidence": [
       "test('the entered claims feature adopts one Jian and adds its original grapple exactly once', async () => {",
       "test('getter-based held input is refused without reading it or installing a tool', async () => {",
       "test.each(['leave', 'product', 'source', 'app', 'equipment', 'primary', 'profile', 'melee'])('held entry refuses %s replacement during its read before tool effects', async kind => "
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/held-preparation-owner.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Coupled unit harness with 8 mock/spy references. It fabricates page/owner/service dependencies and asserts private construction, preparation, ownership or callback behavior instead of traversing a real player/author boundary.",
     "evidence": [
       "test('unchanged preparation publishes once on its original scope without constructing equipment', async () => {",
       "test.each(['scope', 'product', 'game', 'runtime', 'world'])('replaced %s during preparation never publishes a held owner', async owner => {",
       "test.each([false, true])('retirement during preparation never publishes a held owner (ancestor: %s)', async ancestor => {"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/held-primary-entry.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Coupled unit harness with 9 mock/spy references. It fabricates page/owner/service dependencies and asserts private construction, preparation, ownership or callback behavior instead of traversing a real player/author boundary.",
     "evidence": [
       "test('declared primary phases lend the real installed melee owner without preparing another rig', async () => {",
       "test.each([{}, { portraitFov: 0 }, { portraitFov: 180 }, { portraitFov: '78' }])('primary preparation refuses invalid presentation %j', async presentation => {",
       "test('a sliced retiring ancestor prevents a pending primary from publishing its loan', async () => {"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/nine-binary-outputs.test.ts",
@@ -194,13 +208,14 @@
   },
   {
     "file": "test/nine-entry-proof.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Coupled unit harness with 3 mock/spy references. It fabricates page/owner/service dependencies and asserts private construction, preparation, ownership or callback behavior instead of traversing a real player/author boundary.",
     "evidence": [
       "test('the injected capability repeats the original complete Nine capsule proof in fresh disposed worlds', async () => {",
       "test('static-only capability refuses ordinary edges before constructing a world', async () => {",
       "test('malformed pieces and missing grounded collision refuse and still dispose their native worlds', async () => {"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/nine-explorer-declarations.test.ts",
@@ -224,20 +239,22 @@
   },
   {
     "file": "test/nine-graph-arms.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Directly pins private row/factory/owner representation or an internal callback projection against a copied fixture. Its asserted contract is the implementation layout or projection, including direct guards for that layout.",
     "evidence": [
       "test('Nine held arms are one admitted GraphArms row', () => {",
       "test('held view admission preserves rows and refuses malformed named payloads', async () => {"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/nine-held-melee.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Runs a retired weapon oracle beside the current owner for 900 ticks and compares private clock/window counters at every step. Real player weapon commands and hits run in net-held-wire and headless-launcher-commands.",
     "evidence": [
       "it('keeps Nine combos, held heavies, active windows and old single-clock saves on the shared native owner',async()=>{"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/nine-held-profile-source.test.ts",
@@ -251,13 +268,14 @@
   },
   {
     "file": "test/nine-item-adoption.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Coupled unit harness with 1 mock/spy references. It fabricates page/owner/service dependencies and asserts private construction, preparation, ownership or callback behavior instead of traversing a real player/author boundary.",
     "evidence": [
       "test('Nine item JSON keeps both native equipment presentations', () => {",
       "test('Nine play admits the complete primary/tool set before installing the native grapple', async () => {",
       "test('Nine admits the existing Jian while retaining the sword save slot, cues and state owner', () => {"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/nine-jian-bake.test.ts",
@@ -333,12 +351,13 @@
   },
   {
     "file": "test/nine-movers-view.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Coupled unit harness with 1 mock/spy references. It fabricates page/owner/service dependencies and asserts private construction, preparation, ownership or callback behavior instead of traversing a real player/author boundary.",
     "evidence": [
       "test('Nine\\'s movers view module poses the train, the gondola and the drones on their original paths', async () => {",
       "test('each mover copy stands at identity under the object the view module poses (NF3: no double rest pose)', () => {"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/nine-native-atlas-assets.test.ts",
@@ -445,13 +464,14 @@
   },
   {
     "file": "test/nine-program-files.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Coupled unit harness with 11 mock/spy references. It fabricates page/owner/service dependencies and asserts private construction, preparation, ownership or callback behavior instead of traversing a real player/author boundary.",
     "evidence": [
       "test('both actual raw executables name their shipped module and pass their contracts',async()=>{",
       "test('the shared course compiler retains its complete legacy default and original binary',async()=>{",
       "test('pure ABI1 page preparation lends the same map to both original scopes exactly once',async()=>{"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/nine-sign-textures.test.ts",
@@ -492,21 +512,23 @@
   },
   {
     "file": "test/nine-sword-entry.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Coupled unit harness with 1 mock/spy references. It fabricates page/owner/service dependencies and asserts private construction, preparation, ownership or callback behavior instead of traversing a real player/author boundary.",
     "evidence": [
       "test('Nine manifest native load installs its original Jian once', async () => {"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/nine-traversal-data.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Directly pins private row/factory/owner representation or an internal callback projection against a copied fixture. Its asserted contract is the implementation layout or projection, including direct guards for that layout.",
     "evidence": [
       "test.each(plan.decks)('$edge ring keeps its trigger bounds and mid-fade continuation', deck => {",
       "test('product-sorted portal inputs retain authored save bytes', () => {",
       "test('a second shard drives walk-in rides with its own nodes, cadence and director ids', () => {"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/nine-window-packets.test.ts",
@@ -520,13 +542,14 @@
   },
   {
     "file": "test/nine-world-install.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Directly pins private row/factory/owner representation or an internal callback projection against a copied fixture. Its asserted contract is the implementation layout or projection, including direct guards for that layout.",
     "evidence": [
       "test('page install rows preserve the existing collider payload and order', () => {",
       "test('stair floor covers every tread boundary within one step of its collider', () => {",
       "test('declared floors cover the authored plaza, street, rim and stair without adding floors', () => {"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/nine-world-program.test.ts",
@@ -540,31 +563,36 @@
   },
   {
     "file": "test/nine-world-scenes.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Directly pins private rendering/author representation: geometry, transforms, materials, buffers, source selection, generated row layout or sampled guest arithmetic. The asserted contract is the internal representation itself, including its direct admission guards.",
     "evidence": [
       "test('phone pool selection preserves shared files and explicit device pairs without changing its source', () => {",
       "test('the real fine-file inventory defers transport while critical demand still wins', () => {",
       "test('every Nine catalogue draw names a declared whole-library model on its own baked tiles', () => {"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/portal-ride-room.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "moved-engine",
+    "reason": "Replaced the fake host/motor with real physics, owned static portal floors and a fresh-host restore that completes the bot transfer.",
     "evidence": [
       "test('a bot walks into a portal alone, and the save holds its fade', async () => {"
-    ]
+    ],
+    "engineOutcome": "migrated",
+    "engineTarget": "project-wildshard/engine/test/portal-ride-room.test.ts",
+    "ring": 1
   },
   {
     "file": "test/scene-buffer-files.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Coupled unit harness with 1 mock/spy references. It fabricates page/owner/service dependencies and asserts private construction, preparation, ownership or callback behavior instead of traversing a real player/author boundary.",
     "evidence": [
       "test.each([false, true])('buffer admission overlaps bounded reads and drains a refused batch (%s)', async fail => {",
       "test('binary scene channels detach subviews, preserve words and share geometry', () => {",
       "test('binary admission refuses absent, crossed, oversized and invalid sources', () => {"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   },
   {
     "file": "test/scripts/nine-casts.test.ts",
@@ -578,12 +606,13 @@
   },
   {
     "file": "test/world-entry-guard.test.ts",
-    "disposition": "engine",
-    "reason": "Engine-owned lifecycle, simulation, resource admission or runtime integration; preserve for engine port without moving during its in-flight port.",
+    "disposition": "deleted",
+    "reason": "J186: Coupled unit harness with 4 mock/spy references. It fabricates page/owner/service dependencies and asserts private construction, preparation, ownership or callback behavior instead of traversing a real player/author boundary.",
     "evidence": [
       "test.each(['capped', 'open'] as const)('declared %s guard keeps original colliders and the last registration', async variant => {",
       "test('active policy and missing owner refuse before any earlier piece registers', async () => {",
       "test('retirement between rows refuses later registration and closes the original guard', async () => {"
-    ]
+    ],
+    "engineOutcome": "deleted-j186"
   }
 ]
