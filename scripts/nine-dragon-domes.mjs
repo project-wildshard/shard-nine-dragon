@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { KEYCHAIN_ARGS } from './chromium-keychain.mjs';
 // nine-dragon-domes.mjs — E281, the Nine Dragon Stack mockup pass: each dome's nine target views against the same nine
 // views in the engine, plus the four mockup cameras on the phone frame. One tool for every agent in the pass, so every
 // before / after is the same frame.
@@ -61,7 +62,7 @@ for (const s of ['SIGINT', 'SIGTERM']) process.on(s, () => { release(); process.
 
 const { MOCKUP_CAMERAS } = await import(join(ROOT, 'src/shards/nine-dragon-stack/generators/mockupCameras.ts'));
 
-const browser = await chromium.launch({ args: ['--mute-audio', '--use-angle=metal', '--ignore-gpu-blocklist', '--enable-gpu-rasterization'] });
+const browser = await chromium.launch({ args: [...KEYCHAIN_ARGS, '--mute-audio', '--use-angle=metal', '--ignore-gpu-blocklist', '--enable-gpu-rasterization'] });
 const stats = { url: base, when: new Date().toISOString(), poses: {}, memory: null };
 try {
   const ctx = await browser.newContext({ viewport: { width: 402, height: 874 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });

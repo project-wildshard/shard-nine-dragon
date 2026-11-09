@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { KEYCHAIN_ARGS } from './chromium-keychain.mjs';
 // nine-dragon-grapple-touch.mjs — E286: does the Fei Zhua work with REAL touch taps, and does the HUD say so?
 //
 // Jake plays Nine Dragon as an iOS home-screen PWA on the touch HUD. The grapple rides the baseline LOCK and JUMP discs
@@ -66,7 +67,7 @@ const FLOWS = [
   { name: 'stair', mockup: 'C', ...cam('C'), pitch: 4 },
 ].filter((f) => pick.includes(f.name));
 
-const browser = await chromium.launch({ args: ['--mute-audio', '--use-angle=metal', '--ignore-gpu-blocklist'] });
+const browser = await chromium.launch({ args: [...KEYCHAIN_ARGS, '--mute-audio', '--use-angle=metal', '--ignore-gpu-blocklist'] });
 /** @type {{ flow: string, ok: boolean }[]} */
 const results = [];
 /** @type {string[]} */

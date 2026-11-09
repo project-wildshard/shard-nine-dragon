@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { KEYCHAIN_ARGS } from './chromium-keychain.mjs';
 // nine-dragon-budget.mjs — E169 P0-5c, the Nine Dragon Stack partial shard's phone budget ruler
 // (src/shards/nine-dragon-stack/art/budget.md holds the caps). Serve a build (`vite preview`, or the dev server) and run:
 //
@@ -34,7 +35,7 @@ for (const [k, c] of Object.entries(MOCKUP_CAMERAS)) {
   views.push({ id: `mockup ${k}`, dome: 'mockup', n: 5, eye: c.eye, look, kind: 'fp' });
 }
 const sleep = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
-const browser = await chromium.launch({ args: ['--mute-audio', '--use-angle=metal', '--ignore-gpu-blocklist', '--enable-gpu-rasterization'] });
+const browser = await chromium.launch({ args: [...KEYCHAIN_ARGS, '--mute-audio', '--use-angle=metal', '--ignore-gpu-blocklist', '--enable-gpu-rasterization'] });
 try {
   const ctx = await browser.newContext({ viewport: { width: 402, height: 874 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
   const page = await ctx.newPage();

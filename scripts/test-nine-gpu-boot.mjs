@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { KEYCHAIN_ARGS } from './chromium-keychain.mjs';
 import { harnessPins, saveFixture } from './debug-settings.mjs';
 // Reproduce the phone's null precision result or the Simulator's shaderSource failure during boot.
 // Run after `pnpm build` with `pnpm exec vite preview --port 4184` up:
@@ -16,7 +17,7 @@ if (only !== 'all' && only !== 'webkit' && only !== 'chromium') throw new Error(
 
 let failed = false;
 for (const [name, engine] of engines) {
-  const browser = await engine.launch(name === 'chromium' ? { args: ['--use-angle=metal'] } : {});
+  const browser = await engine.launch(name === 'chromium' ? { args: [...KEYCHAIN_ARGS, '--use-angle=metal'] } : {});
   let page;
   try {
     const context = await browser.newContext({ viewport: { width: 402, height: 654 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true, serviceWorkers: 'block' });

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { KEYCHAIN_ARGS } from './chromium-keychain.mjs';
 // nine-dragon-gpu.mjs — E283, where Nine Dragon Stack's GPU milliseconds go on the phone frame (the method of
 // scripts/pine-hollow-gpu.mjs, read its header for why it is built this way).
 //
@@ -161,7 +162,7 @@ async function runAB([name, n]) {
   return { base: mb, off: mo, delta: mb - mo };
 }
 
-const browser = await chromium.launch({ args: ['--mute-audio', '--use-angle=metal', '--ignore-gpu-blocklist', '--enable-gpu-rasterization'] });
+const browser = await chromium.launch({ args: [...KEYCHAIN_ARGS, '--mute-audio', '--use-angle=metal', '--ignore-gpu-blocklist', '--enable-gpu-rasterization'] });
 try {
   const ctx = await browser.newContext({ viewport: { width: 402, height: 812 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
   const picks = Object.fromEntries(flag('debug', '').split(',').filter(Boolean).map((kv) => { const i = kv.indexOf(':'); return [kv.slice(0, i), kv.slice(i + 1)]; }));
