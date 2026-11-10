@@ -14,6 +14,11 @@ Run from the repo root.
 - `pnpm lint:fix` / `pnpm format`: the hooks only check; these fix.
 - `node src/cli/main.ts --help`: the CLI without installing it.
 - `pnpm md:wrap`: rewraps Markdown prose to ~72 columns.
+- `node scripts/nine-phone-rig.mjs [--check]`: bakes the phone tier's
+  first-person rig, `fp-rig.phone.glb` (meshoptimizer, 1 mm, ~30 % of
+  the triangles), beside the authored `fp-rig.glb`. Gitignored;
+  `pnpm build:shards` runs it first. The engine's phone tier fetches a
+  `name.phone.glb` in place of `name.glb`; the desktop is unchanged.
 - `src/scripts/ask-new.sh "<Jake's words>"`: opens an ask (`docs/tasks/asks/README.md`).
 
 The explicit CI-only route proof runs after a real build:
