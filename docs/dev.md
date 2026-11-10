@@ -16,8 +16,9 @@ Run from the repo root.
 - `pnpm md:wrap`: rewraps Markdown prose to ~72 columns.
 - `node scripts/nine-phone-rig.mjs [--check]`: bakes the phone tier's
   first-person rig, `fp-rig.phone.glb` (meshoptimizer, 1 mm, ~30 % of
-  the triangles), beside the authored `fp-rig.glb`. Gitignored;
-  `pnpm build:shards` runs it first. The engine's phone tier fetches a
+  the triangles), beside the authored `fp-rig.glb`. Checked in: rerun
+  it after changing the rig; `test/nine-phone-rig.test.ts` refuses a
+  stale copy. The engine's phone tier fetches a
   `name.phone.glb` in place of `name.glb`; the desktop is unchanged.
 - `src/scripts/ask-new.sh "<Jake's words>"`: opens an ask (`docs/tasks/asks/README.md`).
 

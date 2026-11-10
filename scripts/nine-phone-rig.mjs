@@ -9,7 +9,7 @@
 // measured in metres through each mesh's bind pose (skinned) or world matrix (rigid), so a quantized mesh's [-1, 1]
 // units never stand in for metres. Deterministic: the same rig and meshoptimizer give the same bytes.
 //
-//   node scripts/nine-phone-rig.mjs [--check]     (pnpm build:shards runs it before the build)
+//   node scripts/nine-phone-rig.mjs [--check]     (after any change to fp-rig.glb, this script or meshoptimizer)
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { NodeIO } from '@gltf-transform/core';
@@ -17,9 +17,9 @@ import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
 import { MeshoptDecoder, MeshoptEncoder, MeshoptSimplifier } from 'meshoptimizer';
 
 const ROOT = join(import.meta.dirname, '..');
-/** the authored rig, and the phone copy beside it (gitignored: `pnpm build:shards` writes it before the build) */
+/** the authored rig, and the phone copy checked in beside it */
 export const SOURCE = join(ROOT, 'public/assets/nine-dragon/viewmodel/fp-rig.glb');
-const TARGET = join(ROOT, 'public/assets/nine-dragon/viewmodel/fp-rig.phone.glb');
+export const TARGET = join(ROOT, 'public/assets/nine-dragon/viewmodel/fp-rig.phone.glb');
 /** the surface's largest move, in millimetres. A pixel of the phone frame (portrait, 78° FOV over ~1750 buffer px) is
  *  ~0.3 mm at the glove's 0.3 m from the eye and ~0.6 mm at the gauntlet and blade; at 1 mm the 402×874 captures of the
  *  spawn view (Chromium and WebKit) show no difference and the rig keeps ~30 % of its triangles. */
@@ -33,17 +33,29 @@ function mul(a, b) {
   for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) for (let k = 0; k < 4; k++) o[c * 4 + r] += a[k * 4 + r] * b[c * 4 + k];
   return o;
 }
-/** a matrix's uniform scale (the cube root of its 3×3 determinant) */
+/** a matrix's largest stretch (its longest basis column), so a non-uniform scale never lets an error grow past the bound */
 function scaleOf(m) {
-  return Math.cbrt(Math.abs(m[0] * (m[5] * m[10] - m[6] * m[9]) - m[4] * (m[1] * m[10] - m[2] * m[9]) + m[8] * (m[1] * m[6] - m[2] * m[5])));
+  return Math.max(Math.hypot(m[0], m[1], m[2]), Math.hypot(m[4], m[5], m[6]), Math.hypot(m[8], m[9], m[10]));
 }
 /** metres per unit of the mesh's own positions: a skinned mesh through its joints' bind pose (glTF skinning ignores its
- *  node matrix), a rigid one through its world matrix; the smallest joint's, so the error never grows past ERROR_MM */
+ *  node matrix), a rigid one through its world matrix; the largest, so the error never grows past ERROR_MM */
 function metresPerUnit(node) {
   const skin = node.getSkin();
   if (skin === null) return scaleOf(node.getWorldMatrix());
   const ibm = skin.getInverseBindMatrices();
-  return Math.min(...skin.listJoints().map((joint, i) => scaleOf(mul(joint.getWorldMatrix(), ibm.getElement(i, [])))));
+  return Math.max(...skin.listJoints().map((joint, i) => scaleOf(mul(joint.getWorldMatrix(), ibm.getElement(i, [])))));
+}
+/** give a primitive its own copy of every accessor another primitive also reads, so compacting it leaves the other intact
+ *  (R_upper and R_upper_hull share positions, skin and index; the hull's own _AHULLN must stay in step with them) */
+function ownAccessors(primitive, users) {
+  const rows = primitive.listSemantics().map(semantic => [semantic, primitive.getAttribute(semantic)]);
+  if (rows.some(([, accessor]) => (users.get(accessor) ?? 0) > 1)) {
+    // re-set every attribute in its original order (a replaced one would otherwise move to the end)
+    for (const [semantic] of rows) primitive.setAttribute(semantic, null);
+    for (const [semantic, accessor] of rows) primitive.setAttribute(semantic, (users.get(accessor) ?? 0) > 1 ? accessor.clone() : accessor);
+  }
+  const index = primitive.getIndices();
+  if (index !== null && (users.get(index) ?? 0) > 1) primitive.setIndices(index.clone());
 }
 
 /** simplify one primitive in place: a new index, its unused vertices dropped from every attribute; [before, after] */
@@ -71,6 +83,9 @@ function simplify(primitive, metres) {
 export async function phoneRig(source) {
   await Promise.all([MeshoptDecoder.ready, MeshoptEncoder.ready, MeshoptSimplifier.ready]);
   const doc = await io.readBinary(source);
+  const primitives = doc.getRoot().listMeshes().flatMap(mesh => mesh.listPrimitives()), users = new Map();
+  for (const p of primitives) for (const accessor of new Set([...p.listAttributes(), p.getIndices()])) if (accessor !== null) users.set(accessor, (users.get(accessor) ?? 0) + 1);
+  for (const p of primitives) ownAccessors(p, users);
   let before = 0, after = 0;
   const done = new Set();
   for (const node of doc.getRoot().listNodes()) {
@@ -83,6 +98,8 @@ export async function phoneRig(source) {
   return { bytes: await io.writeBinary(doc), before, after };
 }
 
+// Checked in beside the rig, so every product build (`pnpm build:shards`, a direct `wildshard build`) mounts it;
+// test/nine-phone-rig.test.ts refuses a copy that differs from a fresh bake.
 if (import.meta.main) {
   const { bytes, before, after } = await phoneRig(readFileSync(SOURCE));
   const summary = `fp-rig.phone.glb: ${before} -> ${after} triangles (${(100 * after / before).toFixed(0)} %), ${bytes.length} bytes, error ${ERROR_MM} mm`;
