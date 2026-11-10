@@ -57,7 +57,9 @@ jobs:
         with:
           node-version-file: package.json
           cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            pnpm-workspace.yaml
       - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         id: app-token
         if: env.APP_CLIENT_ID != ''
@@ -86,10 +88,12 @@ jobs:
           CANDIDATE_SHARDDEV: ${{ inputs.sharddev }}
         run: |
           if [ -n "$CANDIDATE_ENGINE$CANDIDATE_SHARDDEV" ]; then
-            pnpm install --no-frozen-lockfile
+            pnpm install --no-frozen-lockfile --config.ci=false --config.enableGlobalVirtualStore=true
           else
-            pnpm install --frozen-lockfile
+            pnpm install --frozen-lockfile --config.ci=false --config.enableGlobalVirtualStore=true
           fi
+      - name: Prove the installed global store
+        run: node scripts/assert-store-layout.mjs
       - name: Build this repo's real shard
         run: pnpm build:shards
       - name: Cook, grapple and restore from server files
