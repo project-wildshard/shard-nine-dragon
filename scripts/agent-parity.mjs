@@ -671,7 +671,7 @@ const skillDirs = (dir) => {
   return found;
 };
 
-/** Codex's skill limits (codex-cli 0.167.1's skill validator): a hyphen-case name up to 64 characters, a description up to 1024. */
+/** The skill spec's limits (Claude Code's skill docs; codex-cli 0.167.1's skill validator): a hyphen-case name up to 64 characters, a description up to 1024. */
 export const SKILL_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 export const SKILL_NAME_MAX = 64;
 export const SKILL_DESCRIPTION_MAX = 1024;
@@ -711,7 +711,7 @@ function skillProblems(dir, name = basename(dir)) {
   else if (fields.name.trim() !== name) problems.push(`frontmatter name "${fields.name.trim()}" is not the directory name "${name}"`);
   else if (!SKILL_NAME.test(name) || name.length > SKILL_NAME_MAX) problems.push(`name "${name}" is not hyphen-case within ${SKILL_NAME_MAX} characters`);
   if (!nonEmpty(fields.description)) problems.push('frontmatter description is missing or empty');
-  else if (fields.description.trim().length > SKILL_DESCRIPTION_MAX) problems.push(`description is ${fields.description.trim().length} characters; Codex takes at most ${SKILL_DESCRIPTION_MAX}`);
+  else if (fields.description.trim().length > SKILL_DESCRIPTION_MAX) problems.push(`description is ${fields.description.trim().length} characters; the skill spec allows at most ${SKILL_DESCRIPTION_MAX}`);
   for (const file of list(dir).filter((entry) => entry.endsWith('.md'))) problems.push(...deadLinks(dir, file));
   return problems;
 }
