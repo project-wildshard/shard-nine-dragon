@@ -681,7 +681,17 @@ function deadLinks(dir, file) {
   const { text } = readText(join(dir, file));
   if (text === null) return [];
   const dead = [];
-  for (const match of text.matchAll(/\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)) {
+  // Links in fenced code and inline code spans are examples or templates, not links.
+  let fence = null;
+  const prose = text.split('\n').map((line) => {
+    const open = /^\s*(`{3,}|~{3,})/.exec(line);
+    if (open && (fence === null || open[1][0] === fence[0] && open[1].length >= fence.length)) {
+      fence = fence === null ? open[1] : null;
+      return '';
+    }
+    return fence === null ? line.replace(/(`+)[^`]*?\1/g, '') : '';
+  }).join('\n');
+  for (const match of prose.matchAll(/\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)) {
     const target = match[1].split('#')[0];
     if (!target || /^[a-z][a-z0-9+.-]*:/i.test(target) || target.startsWith('/')) continue;
     let decoded = target;
