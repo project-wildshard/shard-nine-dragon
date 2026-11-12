@@ -108,6 +108,7 @@ jobs:
         if: github.event_name != 'push'
         run: node --test test/ci/portal-journey.test.mjs
       - name: Admit Nine on the shipped grid, checkpoint and restore
+        if: github.event_name != 'push'
         run: node --test test/ci/grid-ready.test.mjs
       # Ring 3 is downstream product compatibility; unchanged hook tooling
       # stays on ordinary push/PR CI rather than spending its five-minute cap.
@@ -275,6 +276,8 @@ jobs:
         run: node --test --test-concurrency=1 test/ci/product-play.test.mjs test/ci/package-products.test.mjs
       - name: Ride the portal out and home, then grapple
         run: node --test test/ci/portal-journey.test.mjs
+      - name: Admit Nine on the shipped grid, checkpoint and restore
+        run: node --test test/ci/grid-ready.test.mjs
       - name: Cook, grapple and restore from server files
         if: steps.ring2.outputs.play == 'true'
         run: node --test test/ci/cook-play.test.mjs
