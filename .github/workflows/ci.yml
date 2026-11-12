@@ -107,6 +107,8 @@ jobs:
       - name: Ride the portal out and home, then grapple
         if: github.event_name != 'push'
         run: node --test test/ci/portal-journey.test.mjs
+      - name: Admit Nine on the shipped grid, checkpoint and restore
+        run: node --test test/ci/grid-ready.test.mjs
       # Ring 3 is downstream product compatibility; unchanged hook tooling
       # stays on ordinary push/PR CI rather than spending its five-minute cap.
       - if: github.event_name == 'push' || github.event_name == 'pull_request'
