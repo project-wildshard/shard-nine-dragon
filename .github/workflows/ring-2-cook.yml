@@ -1,25 +1,10 @@
 name: ring-2-cook
 
 # Real cold q11 cook exceeds J186's ten-second case budget.
+# On a push, ci.yml's ring-2-cook job plays the build it already made,
+# so a push SHA runs build:shards once (TEST-SPEED TS16e); this workflow
+# keeps the nightly run and dispatches.
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/ring-2-cook.yml'
-      - '.github/actions/**'
-      - 'src/**'
-      - 'test/**'
-      - 'scripts/**'
-      - 'public/**'
-      - 'lint/**'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
-      - 'tsconfig*.json'
-      - 'vitest.config.*'
-      - '.npmrc'
-      - '.gitattributes'
-      - '.oxlintrc.author.json'
   schedule:
     - cron: '20 3 * * *'
   workflow_dispatch:
