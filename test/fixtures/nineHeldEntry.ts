@@ -13,10 +13,10 @@ import { heldSwordWorld } from './heldNativeSword';
 import type { HeldMeleeOwner } from '../../src/client/game/loadout/claims';
 import type { ShardRuntime } from '../../src/shared/game/shard/runtime';
 import source from './nine-product-inputs';
-import manifest from '../../src/shards/nine-dragon-stack/discovery.generated';
+import manifest from '../../src/discovery.generated';
 import { nineHeldPresentationBytes } from './nine-held-presentation';
 import { fixtureProductFile, fixtureJsonCheck } from './productFile';
-import { headlessConstants } from '../../src/shards/nine-dragon-stack/generators/headless';
+import { headlessConstants } from '../../src/generators/headless';
 import { legacyDouble } from '@wildshard/engine/test/FakeGame';
 
 export const slottedEnteredRows = { grapple: { item: 'tool.fei-zhua', source: 'fixture/grapple-source.json', presentation: 'weapons/jian-row.json' } };

@@ -8,13 +8,13 @@ import { afterAll, expect, test } from 'vitest';
 import { build } from 'vite';
 import { createProjectGeneration } from '@wildshard/sharddev/projectGeneration';
 import { assertConfigBoundary } from '@wildshard/sharddev/configBoundary';
-import { nineCastsProgram } from '../src/shards/nine-dragon-stack/generators/castsProgram';
-import { nineMap, nineMapPixels, NINE_MAP_INPUTS } from '../src/shards/nine-dragon-stack/generators/mapProgram';
+import { nineCastsProgram } from '../src/generators/castsProgram';
+import { nineMap, nineMapPixels, NINE_MAP_INPUTS } from '../src/generators/mapProgram';
 
 mkdirSync('tmp', { recursive: true });
 const cache = mkdtempSync(resolve('tmp', 'nine-map-cache-'));
 afterAll(() => { rmSync(cache, { recursive: true, force: true }); });
-const context = () => createProjectGeneration(resolve('src/shards/nine-dragon-stack'), '7'.repeat(64), new Map(), cache,
+const context = () => createProjectGeneration(resolve('src'), '7'.repeat(64), new Map(), cache,
   [{ prefix: '/assets/', directory: resolve('public/assets') }]);
 const pixelHash = (pixels: Uint8Array): string => createHash('sha256').update('map-rgba8/1\u00001000x1000\u0000').update(pixels).digest('hex');
 let paints = 0;
@@ -51,13 +51,13 @@ test('missing/extra inputs, altered native bytes and malformed map caches refuse
 });
 
 test('the source map requires an explicit native asset root on cold and hit paths', async () => {
-  await expect(nineMap(createProjectGeneration(resolve('src/shards/nine-dragon-stack'), '7'.repeat(64), new Map(), cache)))
+  await expect(nineMap(createProjectGeneration(resolve('src'), '7'.repeat(64), new Map(), cache)))
     .rejects.toThrow('Generation input needs exactly one declared root');
 });
 
 test('the actual map producer bundles without file, module or compiler services', async () => {
   const result = await build({ configFile: false, logLevel: 'silent', build: { write: false, minify: false,
-    lib: { entry: resolve('src/shards/nine-dragon-stack/generators/mapProgram.ts'), formats: ['es'] },
+    lib: { entry: resolve('src/generators/mapProgram.ts'), formats: ['es'] },
     rolldownOptions: { external: [/^node:/u, 'assemblyscript/dist/asc.js'], output: { codeSplitting: false } } } });
   const output = Array.isArray(result) ? result[0] : result;
   if (output === undefined || !('output' in output)) throw new Error('Missing Nine map program bundle');
@@ -93,6 +93,6 @@ test('every lent cast byte and name participates in admission and cache identity
  await expect(nineMap(hit,new Map())).rejects.toThrow('Nine map cast inventory differs');
  const malformed=new Map(preparedCasts);malformed.set('guard',new Uint8Array([1]));
  await expect(nineMap(hit,malformed)).rejects.toThrow();
- await expect(nineMap(createProjectGeneration(resolve('src/shards/nine-dragon-stack'),'7'.repeat(64),new Map(),cache),preparedCasts))
+ await expect(nineMap(createProjectGeneration(resolve('src'),'7'.repeat(64),new Map(),cache),preparedCasts))
   .rejects.toThrow('Generation input needs exactly one declared root');
 });

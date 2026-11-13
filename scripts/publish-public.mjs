@@ -2,6 +2,6 @@
 import { cpSync, existsSync } from 'node:fs';
 
 for (const slug of ["nine-dragon-stack"]) {
-  const tree = `src/shards/${slug}/assets/public`;
+  const tree = `src/assets/public`;
   if (existsSync(tree)) cpSync(tree, `public/assets/${slug}`, { recursive: true, force: true });
 }

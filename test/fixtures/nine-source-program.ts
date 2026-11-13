@@ -4,7 +4,7 @@ import { mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { createProjectGeneration } from '@wildshard/sharddev/projectGeneration';
 import { prepareAssetDecoders } from '@wildshard/format/product';
-import { generate, type NineGeneratedProject } from '../../src/shards/nine-dragon-stack/generators/generate';
+import { generate, type NineGeneratedProject } from '../../src/generators/generate';
 import { runSnapshot } from './runSnapshot';
 
 /** Run the real program, never a static metadata imitation of its result. */
@@ -12,7 +12,7 @@ export async function nineSourceProgram(): Promise<NineGeneratedProject> {
   await prepareAssetDecoders();
   mkdirSync('tmp', { recursive: true }); const cache = mkdtempSync(resolve('tmp', 'nine-program-fixture-'));
   try {
-    return await generate(createProjectGeneration(resolve('src/shards/nine-dragon-stack'), 'a'.repeat(64), new Map(), cache,
+    return await generate(createProjectGeneration(resolve('src'), 'a'.repeat(64), new Map(), cache,
       [{ prefix: '/assets/', directory: resolve('public/assets') }]));
   } finally { rmSync(cache, { recursive: true, force: true }); }
 }

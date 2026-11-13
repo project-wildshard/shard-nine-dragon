@@ -4,12 +4,12 @@ import { mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 import { resolve } from 'node:path';
 import type { NamedBlob } from '@wildshard/sharddev/blobs';
 import { createProjectGeneration } from '@wildshard/sharddev/projectGeneration';
-import { nineCastsProgram } from '../../src/shards/nine-dragon-stack/generators/castsProgram';
-import { CAST_BLOBS } from '../../src/shards/nine-dragon-stack/generators/castSources';
+import { nineCastsProgram } from '../../src/generators/castsProgram';
+import { CAST_BLOBS } from '../../src/generators/castSources';
 
 async function sourceCasts(): Promise<Awaited<ReturnType<typeof nineCastsProgram>>> {
   mkdirSync('tmp', { recursive: true }); const cache = mkdtempSync(resolve('tmp', 'nine-cast-fixture-'));
-  try { return await nineCastsProgram(createProjectGeneration(resolve('src/shards/nine-dragon-stack'), 'd'.repeat(64), new Map(), cache,
+  try { return await nineCastsProgram(createProjectGeneration(resolve('src'), 'd'.repeat(64), new Map(), cache,
     [{ prefix: '/assets/', directory: resolve('public/assets') }])); }
   finally { rmSync(cache, { recursive: true, force: true }); }
 }

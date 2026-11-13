@@ -24,5 +24,5 @@ Only the scaffold exists:
 
 ## Coming with the import
 
-- `src/shards/nine-dragon-stack/`
+- `src/`
 - `public/assets/nine-dragon-stack/`

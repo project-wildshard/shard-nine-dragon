@@ -6,7 +6,7 @@ import { assertConfigBoundary } from '@wildshard/sharddev/configBoundary';
 
 test('the actual source assembly bundles without filesystem, publication or compiler services', async () => {
   const result = await build({ configFile: false, logLevel: 'silent', build: { write: false, minify: false,
-    lib: { entry: resolve('src/shards/nine-dragon-stack/generators/mapAssemblySource.ts'), formats: ['es'] },
+    lib: { entry: resolve('src/generators/mapAssemblySource.ts'), formats: ['es'] },
     rolldownOptions: { external: [/^node:/u, 'assemblyscript/dist/asc.js'], output: { codeSplitting: false } } } });
   const output = Array.isArray(result) ? result[0] : result;
   if (output === undefined || !('output' in output)) throw new Error('Missing Nine map source bundle');

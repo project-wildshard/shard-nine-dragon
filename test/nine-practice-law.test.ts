@@ -3,8 +3,8 @@ import { ProjectedState, ReturnProgram } from '@wildshard/engine/game/population
 import { ninePracticeRows as program } from './fixtures/nine-practice-product';
 import { lendNinePractice } from './fixtures/nine-practice-modules';
 import {Scope} from '@wildshard/engine/app/scope';
-import course from '../src/shards/nine-dragon-stack/data/grappleCourse.json' with {type:'json'};
-import { practiceFrame } from '../src/shards/nine-dragon-stack/generators/practiceFrame';
+import course from '../src/data/grappleCourse.json' with {type:'json'};
+import { practiceFrame } from '../src/generators/practiceFrame';
 
 const owners:Scope[]=[];afterEach(()=>{for(const owner of owners.splice(0))owner.dispose();});
 

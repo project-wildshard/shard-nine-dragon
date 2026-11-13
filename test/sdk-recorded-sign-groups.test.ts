@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 import { expect, test } from 'vitest';
 import { recordedSignGroups } from '@wildshard/sharddev/bake/signPlacements';
-import { readFixedSlots } from '../src/shards/nine-dragon-stack/generators/casts';
+import { readFixedSlots } from '../src/generators/casts';
 
 const vector = v.tuple([v.number(), v.number(), v.number()]);
 const slot = v.strictObject({ at: vector, normal: vector, size: v.number(), color: v.number(), blade: v.boolean() });

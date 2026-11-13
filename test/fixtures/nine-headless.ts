@@ -1,7 +1,7 @@
 import { NATIVE_ASSEMBLY_FILE, parseNativeAssembly } from '@wildshard/format/nativeAssembly';
 import type { ShardProduct } from '../../src/shared/game/shardfile/shardProduct';
 import type { PrepareHeadlessRuntime } from '@wildshard/engine/host/headlessRuntime';
-import manifest from '../../src/shards/nine-dragon-stack/manifest.json' with { type: 'json' };
+import manifest from '../../src/manifest.json' with { type: 'json' };
 import { prepareProductPlan } from './headless-native';
 import { registerNativeWalkBounds } from './headless/nativeBounds';
 

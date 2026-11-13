@@ -9,10 +9,10 @@ import { build } from 'vite';
 import { createProjectGeneration } from '@wildshard/sharddev/projectGeneration';
 import { assertConfigBoundary } from '@wildshard/sharddev/configBoundary';
 import { prepareAssetDecoders } from '@wildshard/format/product';
-import { nineSourceOutput } from '../src/shards/nine-dragon-stack/generators/sourceOutput';
-import { parseBurstFields } from '../src/shards/nine-dragon-stack/generators/sections';
-import type { NineOutput } from '../src/shards/nine-dragon-stack/generators/productOutput';
-import bursts from '../src/shards/nine-dragon-stack/data/burstFields.json' with { type: 'json' };
+import { nineSourceOutput } from '../src/generators/sourceOutput';
+import { parseBurstFields } from '../src/generators/sections';
+import type { NineOutput } from '../src/generators/productOutput';
+import bursts from '../src/data/burstFields.json' with { type: 'json' };
 
 function sameBytes(actual: Uint8Array, expected: Uint8Array, name: string): void {
   expect(actual.byteLength, name).toBe(expected.byteLength);
@@ -39,7 +39,7 @@ async function prepareColdOutput() {
   await prepareAssetDecoders();
   mkdirSync('tmp', { recursive: true }); const cache = mkdtempSync(resolve('tmp', 'nine-source-output-'));
   try {
-    const project = resolve('src/shards/nine-dragon-stack'), assets = new Map<string, Uint8Array>();
+    const project = resolve('src'), assets = new Map<string, Uint8Array>();
     const context = () => createProjectGeneration(project, 'f'.repeat(64), assets, cache,
       [{ prefix: '/assets/', directory: resolve('public/assets') }]);
     const proofs = { calls: 0 };
@@ -63,7 +63,7 @@ test('hit source output preserves every byte without regeneration and proves ent
 
 test('source output bundles without a filesystem or compiler service and preserves burst refusals', async () => {
   const result = await build({ configFile: false, logLevel: 'silent', build: { write: false, minify: false,
-    lib: { entry: resolve('src/shards/nine-dragon-stack/generators/sourceOutput.ts'), formats: ['es'] }, rolldownOptions: { external: [/^node:/u, 'assemblyscript/dist/asc.js'], output: { codeSplitting: false } } } });
+    lib: { entry: resolve('src/generators/sourceOutput.ts'), formats: ['es'] }, rolldownOptions: { external: [/^node:/u, 'assemblyscript/dist/asc.js'], output: { codeSplitting: false } } } });
   const built = Array.isArray(result) ? result[0] : result;
   if (built === undefined || !('output' in built)) throw new Error('Missing Nine source output bundle');
   const chunks = built.output.filter(row => row.type === 'chunk'); expect(chunks).toHaveLength(1);

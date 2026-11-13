@@ -1,7 +1,7 @@
 import { expect, expectTypeOf, test } from 'vitest';
 import * as v from 'valibot';
 import { cachedBlobSources, type CachedBlobSource } from '@wildshard/sharddev/bake/sourceMetadata';
-import { parseSignSourceRows } from '../src/shards/nine-dragon-stack/generators/signAtlasOutput';
+import { parseSignSourceRows } from '../src/generators/signAtlasOutput';
 import { parseDeviceTierSections } from '@wildshard/sharddev/sections';
 
 const kinds = ['glb', 'ktx2', 'json'] as const;

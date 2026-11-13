@@ -1,6 +1,6 @@
 import { BufferAttribute, BufferGeometry, Color, Vector3 } from 'three';
 import { expect, test } from 'vitest';
-import { bakeSpill, type Emitter } from '../src/shards/nine-dragon-stack/generators/lightSpill';
+import { bakeSpill, type Emitter } from '../src/generators/lightSpill';
 import { originalSpill } from './fixtures/nine-spill/vertexSpill';
 
 function geometry(): BufferGeometry {

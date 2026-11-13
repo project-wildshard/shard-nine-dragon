@@ -142,16 +142,16 @@
   },
   "nine-dragon-stack/fp-rig": {
    "about": "The Nine Dragon first-person arms: hand, gauntlet and guard parts (Blender), rigged with 16 clips into fp-rig.glb by the viewmodel lab's bake (lab P8 round 13, E169); its rig-bake step ran in the deleted dev lab (E357 F7); a rebuild needs a new bake path",
-   "manual": "the rig bake ran in the deleted viewmodel lab page, and fp-rig.glb is the only complete copy: src/shards/nine-dragon-stack/blender/viewmodel/README.md says how to re-derive it",
-   "check": "node --import ./scripts/bake-loader.mjs src/shards/nine-dragon-stack/blender/viewmodel/rig/check-clips.mjs",
-   "script": "src/shards/nine-dragon-stack/blender/viewmodel/hand.py",
+   "manual": "the rig bake ran in the deleted viewmodel lab page, and fp-rig.glb is the only complete copy: src/blender/viewmodel/README.md says how to re-derive it",
+   "check": "node --import ./scripts/bake-loader.mjs src/blender/viewmodel/rig/check-clips.mjs",
+   "script": "src/blender/viewmodel/hand.py",
    "sources": [
-    "src/shards/nine-dragon-stack/blender/viewmodel/hand_lib.py", "src/shards/nine-dragon-stack/blender/viewmodel/hand_model.py", "src/shards/nine-dragon-stack/blender/viewmodel/hand_parts.py",
-    "src/shards/nine-dragon-stack/blender/viewmodel/gauntlet.py", "src/shards/nine-dragon-stack/blender/viewmodel/gauntlet_geo.py", "src/shards/nine-dragon-stack/blender/viewmodel/gauntlet_maps.py",
-    "src/shards/nine-dragon-stack/blender/viewmodel/gauntlet_parts.py", "src/shards/nine-dragon-stack/blender/viewmodel/gauntlet_preview.py", "src/shards/nine-dragon-stack/blender/viewmodel/guard.py",
-    "src/shards/nine-dragon-stack/blender/viewmodel/rig/bake.ts.txt", "src/shards/nine-dragon-stack/blender/viewmodel/rig/moves.ts.txt", "src/shards/nine-dragon-stack/blender/viewmodel/rig/lab-main.ts.txt",
-    "src/shards/nine-dragon-stack/blender/viewmodel/rig/gate_chart.py",
-    "src/shards/nine-dragon-stack/blender/viewmodel/rig/check-clips.mjs"
+    "src/blender/viewmodel/hand_lib.py", "src/blender/viewmodel/hand_model.py", "src/blender/viewmodel/hand_parts.py",
+    "src/blender/viewmodel/gauntlet.py", "src/blender/viewmodel/gauntlet_geo.py", "src/blender/viewmodel/gauntlet_maps.py",
+    "src/blender/viewmodel/gauntlet_parts.py", "src/blender/viewmodel/gauntlet_preview.py", "src/blender/viewmodel/guard.py",
+    "src/blender/viewmodel/rig/bake.ts.txt", "src/blender/viewmodel/rig/moves.ts.txt", "src/blender/viewmodel/rig/lab-main.ts.txt",
+    "src/blender/viewmodel/rig/gate_chart.py",
+    "src/blender/viewmodel/rig/check-clips.mjs"
    ],
    "inputs": ["src/game/client/systems/viewmodel/armRig.ts"],
    "lock": true,
@@ -162,7 +162,7 @@
     "public/assets/nine-dragon/viewmodel/fist-l-maps.webp", "public/assets/nine-dragon/viewmodel/fist-l-nrm.webp",
     "public/assets/nine-dragon/viewmodel/gauntlet-maps.webp", "public/assets/nine-dragon/viewmodel/gauntlet-nrm.webp"
    ],
-   "feeds": ["src/shards/nine-dragon-stack/generators/heldView.ts"]
+   "feeds": ["src/generators/heldView.ts"]
   },
   "driftwood-isle/fp-arms": {
    "about": "Driftwood's first-person castaway arms (E334, board 2 A / 3 A): the arms and both swords modelled round Nine Dragon's round-13 skeleton, which keeps its 16 clips; + 15 finger bones a hand, the swim clips and the skin (bake.mjs), then the rig gate (gate.mjs → gate.json). --preview also writes posed PLYs for preview.py",

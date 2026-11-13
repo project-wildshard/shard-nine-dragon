@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { parseWorldScenes } from '@wildshard/format/worldScenes';
-import { nineSlabProps, nineSlabTransport, nineSlabSourceFiles } from '../src/shards/nine-dragon-stack/generators/refinementAdmission';
+import { nineSlabProps, nineSlabTransport, nineSlabSourceFiles } from '../src/generators/refinementAdmission';
 
 const fine = 'a'.repeat(64), shared = 'b'.repeat(64), baked = 'c'.repeat(64);
 const libraries = parseWorldScenes({ version: 1, materials: [], steps: [], libraries: [

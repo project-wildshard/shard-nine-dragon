@@ -1,8 +1,8 @@
 import { afterEach, expect, test } from 'vitest';
 import type { HookPracticeRow } from '@wildshard/format/practiceCourseRows';
 import { ProjectedState, ReturnProgram } from '@wildshard/engine/game/population/returnProgram';
-import { practiceFrame } from '../src/shards/nine-dragon-stack/generators/practiceFrame';
-import course from '../src/shards/nine-dragon-stack/data/grappleCourse.json' with { type: 'json' };
+import { practiceFrame } from '../src/generators/practiceFrame';
+import course from '../src/data/grappleCourse.json' with { type: 'json' };
 import { ninePracticeRows as program } from './fixtures/nine-practice-product';
 import { lendNinePractice } from './fixtures/nine-practice-modules';
 import {Scope} from '@wildshard/engine/app/scope';

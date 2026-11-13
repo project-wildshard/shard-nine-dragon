@@ -1,15 +1,15 @@
 import { inputs } from './nine-product-inputs';
-import aim from '../../src/shards/nine-dragon-stack/data/grapple.json' with { type: 'json' };
-import bursts from '../../src/shards/nine-dragon-stack/data/burstFields.json' with { type: 'json' };
-import filament from '../../src/shards/nine-dragon-stack/data/filament.json' with { type: 'json' };
-import light from '../../src/shards/nine-dragon-stack/data/light.json' with { type: 'json' };
-import vm from '../../src/shards/nine-dragon-stack/data/viewmodelUniforms.json' with { type: 'json' };
-import { filamentGeometry } from '../../src/shards/nine-dragon-stack/generators/filamentGeometry';
-import { parseBurstFields, parseFilamentRows, parseHaloState } from '../../src/shards/nine-dragon-stack/generators/sections';
-import { heldView } from '../../src/shards/nine-dragon-stack/generators/heldView';
-import { postRows } from '../../src/shards/nine-dragon-stack/generators/postGraphs';
-import { postGraphRow } from '../../src/shards/nine-dragon-stack/generators/composite';
-import { NINE_FRAME_CHANNELS, NINE_FRAME_GROUP } from '../../src/shards/nine-dragon-stack/generators/frameChannels';
+import aim from '../../src/data/grapple.json' with { type: 'json' };
+import bursts from '../../src/data/burstFields.json' with { type: 'json' };
+import filament from '../../src/data/filament.json' with { type: 'json' };
+import light from '../../src/data/light.json' with { type: 'json' };
+import vm from '../../src/data/viewmodelUniforms.json' with { type: 'json' };
+import { filamentGeometry } from '../../src/generators/filamentGeometry';
+import { parseBurstFields, parseFilamentRows, parseHaloState } from '../../src/generators/sections';
+import { heldView } from '../../src/generators/heldView';
+import { postRows } from '../../src/generators/postGraphs';
+import { postGraphRow } from '../../src/generators/composite';
+import { NINE_FRAME_CHANNELS, NINE_FRAME_GROUP } from '../../src/generators/frameChannels';
 
 /** Entry fixtures lend the complete authored document at the same named-file
  * boundary as the producer, including the native view and post contracts. */
