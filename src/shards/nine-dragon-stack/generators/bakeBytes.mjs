@@ -3,7 +3,7 @@
 // reached outside the shard. They are the shard's own now; checks never mutate the output tree.
 import { createHash, randomUUID } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
-import { dirname, relative } from 'node:path';
+import { dirname, isAbsolute, relative, resolve } from 'node:path';
 import { isAnyArrayBuffer } from 'node:util/types';
 
 export const outputHash = (bytes) => createHash('sha256').update(bytes).digest('hex');
@@ -23,13 +23,29 @@ function assertJsonRows(value) {
 
 export const jsonBytes = (value, indent = 2) => { assertJsonRows(value); return Buffer.from(`${JSON.stringify(value, null, indent)}\n`); };
 
+// No binary in JSON (G649): a base64 run or a data: URI belongs in its own file; this shard has no allowance.
+const BINARY_TEXT = /^data:|[A-Za-z0-9+/]{256,}={0,2}$/u;
+
+/** Every JSON write stays inside the repo and holds rows, never bytes. */
+function guardJson(root, path, buf) {
+  if (!path.endsWith('.json')) return;
+  const local = relative(root, resolve(root, path));
+  if (isAbsolute(local) || local.startsWith('../')) throw new Error(`BINARY-JSON ${path}: output escapes its producer`);
+  const pending = [JSON.parse(buf.toString('utf8'))];
+  while (pending.length > 0) {
+    const row = pending.pop();
+    if (typeof row === 'string' && BINARY_TEXT.test(row)) throw new Error(`BINARY-JSON ${local}: bytes require a separate binary file`);
+    if (row !== null && typeof row === 'object') pending.push(...Object.values(row));
+  }
+}
+
 /** Write only changed bytes; with `check`, report them as stale and fail instead. */
-export function byteWriter(check, label) {
+export function byteWriter(check, label, root = process.cwd()) {
   let changed = 0;
   const mismatch = (path) => { changed++; console.log(`${label}: ${check ? 'STALE' : 'changed'} ${relative(process.cwd(), path)}`); };
   return {
     put(path, bytes) {
-      const buf = Buffer.from(bytes);
+      const buf = Buffer.from(bytes); guardJson(root, path, buf);
       if (existsSync(path) && readFileSync(path).equals(buf)) return;
       mismatch(path);
       if (!check) { mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, buf); }

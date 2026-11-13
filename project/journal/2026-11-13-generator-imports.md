@@ -11,8 +11,10 @@ Meta SHARD-AUTHORING SA6 (J170, J317).
   and `bake/bake-nine-decal-atlas.mjs` could not run. Their byte helpers
   (`byteWriter`, `jsonBytes`, `outputHash`, `browserBakeBytes`) are now the
   shard's own `generators/bakeBytes.mjs`, ported from engine's
-  `scripts/bake-output.mjs` without its tool-version log and binary-JSON
-  allowance file (no allowance means none, so the byte-view check stays).
+  `scripts/bake-output.mjs` without its tool-version log. Engine's JSON
+  guard is ported as this shard needs it: no allowance file, so every JSON
+  write must stay in the repo and hold no byte arrays, base64 runs or
+  `data:` URIs.
 - Moving the bakers to `bake/` was tried and dropped: their base64 allowance
   is recorded in engine's `base64-debt.json` under the `generators/` path.
 - The ratchet entries are deleted and the rule is a plain error. The
