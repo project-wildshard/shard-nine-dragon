@@ -9,7 +9,7 @@ import type { SignModelParams } from '../data/signTypes';
 import { BufferAttribute, BufferGeometry, Float32BufferAttribute, MeshStandardMaterial, Vector3 } from 'three';
 import { staticGlb } from '@wildshard/sharddev/bake/glb';
 import { nameBlob, type NamedBlob } from '@wildshard/sharddev/blobs';
-import { hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { hashImmutableBytes } from '@wildshard/format/immutable';
 import type { NineNativeSignInputs } from './nativeSignMetadata';
 
 const signRows = parseSignView(rawSignRows);

@@ -1,5 +1,5 @@
 import type { AuthorWorldScenes } from '@wildshard/sharddev/worldScenes';
-import { parseShardfileField, type Shardfile } from '@wildshard/engine/host/shardfile';
+import { parseShardfileField, type Shardfile } from '@wildshard/format/shardSchema';
 
 /** D179 B's fine library already has a controlled refinement reader and coarse
  * coverage. Keep its otherwise-exclusive bodies out of the eager library copy;

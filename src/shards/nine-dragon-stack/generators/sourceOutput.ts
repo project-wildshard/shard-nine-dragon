@@ -9,7 +9,7 @@ import { parseBurstFields } from './sections';
 import bursts from '../data/burstFields.json' with { type: 'json' };
 import { readNineProductInputs } from './product';
 import { nineProductFrom } from './productDefinition';
-import { hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { hashImmutableBytes } from '@wildshard/format/immutable';
 
 type OutputSources = Pick<NineOutputInputs, 'construction' | 'held' | 'ownedWorld' | 'scenes' | 'casts' | 'signs' | 'courseProgram'>;
 async function sourcesFor(ctx: ProjectGenerationContext): Promise<OutputSources> {

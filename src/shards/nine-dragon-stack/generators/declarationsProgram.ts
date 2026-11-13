@@ -1,5 +1,5 @@
 import type { ProjectGenerationContext } from '@wildshard/sharddev/projectGeneration';
-import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/format/immutable';
 import type { NineSourceWorld } from './worldProgram';
 import { bakedLayout } from './layoutProjection';
 import { worldRows, worldPartitionIds, parseWorldDeclarations, type NineWorldDeclarations } from './worldRows';

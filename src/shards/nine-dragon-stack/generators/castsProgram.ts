@@ -1,6 +1,6 @@
 import { nameBlob, type NamedBlob } from '@wildshard/sharddev/blobs';
 import type { ProjectGenerationContext } from '@wildshard/sharddev/projectGeneration';
-import { hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { hashImmutableBytes } from '@wildshard/format/immutable';
 import { compressGlb, pairedChannelGlb } from '@wildshard/sharddev/bake/glbCompression';
 import { compactPhoneGlb } from '@wildshard/sharddev/bake/compactGlb';
 import { parseGlb } from '@wildshard/sharddev/assets';

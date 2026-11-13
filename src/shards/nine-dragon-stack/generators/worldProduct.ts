@@ -1,7 +1,7 @@
 import { completeEmptyL1Tiles } from '@wildshard/sharddev/bake/tileGrid';
 import { projectNineLayout } from './layoutSource';
 import { parseGlb } from '@wildshard/sharddev/assets';
-import { hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { hashImmutableBytes } from '@wildshard/format/immutable';
 import { compressGlb } from '@wildshard/sharddev/bake/glbCompression';
 import { brotliBytes } from '@wildshard/sharddev/bake/compactGlb';
 import { nineScene } from './scene';

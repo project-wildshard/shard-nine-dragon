@@ -1,7 +1,7 @@
 import type { ProjectGenerationContext } from '@wildshard/sharddev/projectGeneration';
 import { courseProgramInputs, type CourseProgramInputs } from '@wildshard/sharddev/commons/courseProgram';
 import courseSource from '@wildshard/sharddev/commons/scripts/course.as?raw';
-import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/format/immutable';
 import { nameBlob, type NamedBlob } from '@wildshard/sharddev/blobs';
 
 /** The original admitted ABI-1 course row and independently owned raw module. */

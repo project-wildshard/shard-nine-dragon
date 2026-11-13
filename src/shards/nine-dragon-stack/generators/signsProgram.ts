@@ -1,6 +1,6 @@
 import { nameBlob, type NamedBlob } from '@wildshard/sharddev/blobs';
 import type { ProjectGenerationContext } from '@wildshard/sharddev/projectGeneration';
-import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/format/immutable';
 import { signAtlasBlobs, parseSignSourceRows } from './signAtlasOutput';
 import { signSourceRows } from './signAtlasSources';
 import type { NineNativeAtlas, NineNativeSignInputs } from './nativeSignMetadata';

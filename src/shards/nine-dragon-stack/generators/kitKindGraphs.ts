@@ -1,4 +1,4 @@
-import { hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { hashImmutableBytes } from '@wildshard/format/immutable';
 import { assetCost } from '@wildshard/sharddev/assets';
 import type { AuthorGraph as GraphIr } from '@wildshard/sharddev/bake/materialGraph';
 import { kindGraph } from './architectureGraphs';

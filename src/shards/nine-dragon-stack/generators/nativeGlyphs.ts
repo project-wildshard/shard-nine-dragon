@@ -1,5 +1,5 @@
 import type { ProjectGenerationContext } from '@wildshard/sharddev/projectGeneration';
-import { hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { hashImmutableBytes } from '@wildshard/format/immutable';
 import type { NineNativeSignInputs } from './nativeSignMetadata';
 import { parseNativeGlyphs } from './sections';
 

@@ -1,4 +1,4 @@
-import { hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { hashImmutableBytes } from '@wildshard/format/immutable';
 import { assetCost } from '@wildshard/sharddev/assets';
 import { crowdGraph } from './architectureGraphs';
 

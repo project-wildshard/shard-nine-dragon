@@ -9,7 +9,7 @@ import rawSignRows from '../data/signView.json' with { type: 'json' };
 import { parseSignView } from './sections';
 import lantern from '../data/lantern.json' with { type: 'json' };
 import { portalPlanRows } from './portalEntries';
-import { hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { hashImmutableBytes } from '@wildshard/format/immutable';
 
 const signRows = parseSignView(rawSignRows);
 

@@ -1,4 +1,4 @@
-import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/format/immutable';
 import { bakeWholeSlabs, readSlabLibrary } from '@wildshard/sharddev/bake/slabs';
 import { nameBlob } from '@wildshard/sharddev/blobs';
 import { worldSceneRows } from '@wildshard/sharddev/worldScenes';

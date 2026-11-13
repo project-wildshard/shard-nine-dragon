@@ -19,7 +19,7 @@ import { nineAudioForScenes } from './audio';
 import NINE_MODES from '../data/modes.json' with { type: 'json' };
 import NINE_DRAGON_RUNTIME_COST from '../data/runtimeCost.json' with { type: 'json' };
 import { emptyShardfile } from '@wildshard/sharddev/author';
-import { parseShardfile, type Shardfile } from '@wildshard/engine/host/shardfile';
+import { parseShardfile, type Shardfile } from '@wildshard/format/shardSchema';
 import NINE_ITEMS from '../data/items.json' with { type: 'json' };
 import ledgerRows from '../data/ledger.json' with { type: 'json' };
 import { parseLedgerRules } from '@wildshard/sharddev/ledger';

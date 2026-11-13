@@ -12,7 +12,7 @@ import lantern from '../data/lantern.json' with { type: 'json' };
 import rawSignRows from '../data/signView.json' with { type: 'json' };
 import { parseSignView } from './sections';
 import type { NineNativeAtlas } from './nativeSignMetadata';
-import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/format/immutable';
 
 const signRows = parseSignView(rawSignRows);
 

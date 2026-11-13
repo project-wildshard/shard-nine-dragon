@@ -1,5 +1,5 @@
 import type { ProjectGenerationContext } from '@wildshard/sharddev/projectGeneration';
-import { hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { hashImmutableBytes } from '@wildshard/format/immutable';
 import type { BlobOptions } from '@wildshard/sharddev/blobs';
 
 /** Nine's existing fixed-page ABI-2 view contract; SDK admission checks both revisions. */

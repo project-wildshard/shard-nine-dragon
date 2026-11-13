@@ -6,7 +6,7 @@ import { createProjectGeneration } from '@wildshard/sharddev/projectGeneration';
 import { readNineProductInputs } from '../../src/shards/nine-dragon-stack/generators/product';
 import { nineProductFrom } from '../../src/shards/nine-dragon-stack/generators/productDefinition';
 import { courseProgramInputs } from '@wildshard/sharddev/commons/courseProgram';
-import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/format/immutable';
 import { ninePracticeRows, ninePracticeBytes } from './nine-practice-product';
 import { runSnapshot } from './runSnapshot';
 

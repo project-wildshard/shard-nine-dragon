@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import courseSource from '@wildshard/sharddev/commons/scripts/course.as?raw';
 import { courseProgramInputs } from '@wildshard/sharddev/commons/courseProgram';
 import { admitScriptContract } from '@wildshard/format/scriptContract';
-import { hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { hashImmutableBytes } from '@wildshard/format/immutable';
 
 export const ninePracticeBytes = new Uint8Array(readFileSync('test/fixtures/nine-practice-course.wasm'));
 const script = courseProgramInputs('checkpoints', {}, {
