@@ -17,7 +17,7 @@ import {test} from 'node:test';
 
 const {readServerPackBook,serverPackFile}=await import('@wildshard/engine/game/shardfile/serverPack');
 const {loadHeadlessProduct}=await import('@wildshard/engine/host/headlessProduct');
-const {createTrustedHeadlessAdapter}=await import('@wildshard/engine/host/headlessRuntime');
+const {openWorldAdapter}=await import('@wildshard/engine/host/openWorld');
 const {outputDescriptor,serverReadsFile}=await import('@wildshard/engine/game/shardfile/outputDescriptor');
 const {loadRapier}=await import('@wildshard/engine/physics/rapier');
 const require=createRequire(import.meta.url);
@@ -51,7 +51,7 @@ test('the real cooked Nine earns grapple and resumes using only served server fi
    [file.commons===true?`commons:${file.hash}`:file.hash,readFileSync(join(unpacked,file.path))]));
   const engineRequire=createRequire(require.resolve('@wildshard/engine/package.json'));
   const rapier=await loadRapier(readFileSync(engineRequire.resolve('@dimforge/rapier3d-simd/rapier_wasm3d_bg.wasm')));
-  const create=async snapshot=>{const world=await createTrustedHeadlessAdapter({shard,assets,product,rapier},snapshot);worlds.push(world);return world;};
+  const create=async snapshot=>{const world=await openWorldAdapter({shard,assets,product,rapier},snapshot);worlds.push(world);return world;};
   const world=await create(),{default:grapple}=await import('./nine-content.mjs');
   await grapple(product,world);
   const resumed=await create(world.commit().snapshot);

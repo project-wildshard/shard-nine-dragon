@@ -15,7 +15,7 @@ import { join, resolve } from 'node:path';
 import { test } from 'node:test';
 
 const { loadHeadlessProduct } = await import('@wildshard/engine/host/headlessProduct');
-const { createTrustedHeadlessAdapter } = await import('@wildshard/engine/host/headlessRuntime');
+const { openWorldAdapter } = await import('@wildshard/engine/host/openWorld');
 const { outputDescriptor, serverReadsFile } = await import('@wildshard/engine/game/shardfile/outputDescriptor');
 const { loadRapier } = await import('@wildshard/engine/physics/rapier');
 const engineRequire = createRequire(import.meta.resolve('@wildshard/engine/package.json'));
@@ -52,7 +52,7 @@ test('nine-dragon-stack: the Fei Zhua crosses the Well from the south rim and fi
       wait(`${prefix}-fly`, 60), wait(`${prefix}-land`, 240),
     ];
   };
-  const runtime = await createTrustedHeadlessAdapter({ shard, assets, product, rapier });
+  const runtime = await openWorldAdapter({ shard, assets, product, rapier });
   try {
     const approach = await runtime.verbTape({ version: 1, observe: [], segments: [
       wait('spawn', 1),

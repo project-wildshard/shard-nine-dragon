@@ -14,7 +14,7 @@ import { join, resolve } from 'node:path';
 import { test } from 'node:test';
 
 const { loadHeadlessProduct } = await import('@wildshard/engine/host/headlessProduct');
-const { createTrustedHeadlessResident } = await import('@wildshard/engine/host/headlessRuntime');
+const { openWorld } = await import('@wildshard/engine/host/openWorld');
 const { outputDescriptor, serverReadsFile } = await import('@wildshard/engine/game/shardfile/outputDescriptor');
 const { loadRapier } = await import('@wildshard/engine/physics/rapier');
 const { GridAssembly } = await import('@wildshard/engine/game/grid/assembly');
@@ -40,12 +40,12 @@ test('nine-dragon-stack: admits on the shipped grid, checkpoints, unloads frozen
   const cell = assembly.cells.find(row => row.slug === SLUG); assert.ok(cell, 'The shipped grid must name Nine');
   const { instance } = cell;
   // The highway is a second Nine world standing in for the road (the grid server's road is not exported); it only carries the owner between frames.
-  const highway = await createTrustedHeadlessResident(input);
+  const highway = (await openWorld(input, { room: true })).resident;
   let resident, admitted = false, durable = false, loads = 0;
   const saved = new Map();
   const grid = new GridSimulation(assembly, { highway: { host: highway.host, dispose: () => { highway.dispose(); } },
     admitted: () => admitted, read: id => saved.get(id), save: (id, snapshot) => { if (!durable) return false; saved.set(id, structuredClone(snapshot)); return true; },
-    load: async (_cell, snapshot) => { loads++; const own = await createTrustedHeadlessResident(input, snapshot); resident = own; return { host: own.host, dispose: () => { own.dispose(); } }; } });
+    load: async (_cell, snapshot) => { loads++; const own = (await openWorld(input, { room: true, snapshot })).resident; resident = own; return { host: own.host, dispose: () => { own.dispose(); } }; } });
   // Real input on the resident's own step, as the grid server steps an occupied cell.
   const walk = (from, ticks) => {
     for (let tick = 0; tick < ticks; tick++) resident.step([{ kind: 'player', moveX: 0, moveZ: -1, yaw: from[3] }]);

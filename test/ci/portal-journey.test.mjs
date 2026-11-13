@@ -13,7 +13,7 @@ import { join, resolve } from 'node:path';
 import { test } from 'node:test';
 
 const { loadHeadlessProduct } = await import('@wildshard/engine/host/headlessProduct');
-const { createTrustedHeadlessAdapter } = await import('@wildshard/engine/host/headlessRuntime');
+const { openWorldAdapter } = await import('@wildshard/engine/host/openWorld');
 const { outputDescriptor, serverReadsFile } = await import('@wildshard/engine/game/shardfile/outputDescriptor');
 const { loadRapier } = await import('@wildshard/engine/physics/rapier');
 const engineRequire = createRequire(import.meta.resolve('@wildshard/engine/package.json'));
@@ -38,7 +38,7 @@ test('nine-dragon-stack: portal ride out and home, then hook, LOCK and ZIP on re
   assert.ok(landing, 'The square arrival must report a landing fact');
   // Off the deck ring and back: five metres along the road's heading, out of the walk-in volume.
   const [rx, ry, rz] = portal.road.at, out = [rx - 5 * Math.sin(portal.road.yaw), rz - 5 * Math.cos(portal.road.yaw)];
-  const runtime = await createTrustedHeadlessAdapter({ shard, assets, product, rapier });
+  const runtime = await openWorldAdapter({ shard, assets, product, rapier });
   try {
     const report = await runtime.verbTape({ version: 1, observe: [RIDE], segments: [
       wait('spawn', 1),
