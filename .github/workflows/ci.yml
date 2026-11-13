@@ -107,6 +107,9 @@ jobs:
       - name: Build shard products on the runner
         if: github.event_name != 'push'
         run: pnpm build:shards
+      - name: Check the shard source as an author would (TS21)
+        if: github.event_name != 'push'
+        run: pnpm exec wildshard check . tmp/ci/check
       - name: Walk the owned 1800-tick authored route
         if: github.event_name != 'push'
         run: node --experimental-transform-types --test test/ci/owned-journey.test.mjs
@@ -285,6 +288,8 @@ jobs:
           echo "Ring 2 play on this push: $play"
       - name: Build shard products on the runner
         run: pnpm build:shards
+      - name: Check the shard source as an author would (TS21)
+        run: pnpm exec wildshard check . tmp/ci/check
       - name: Walk the owned 1800-tick authored route
         run: node --experimental-transform-types --test test/ci/owned-journey.test.mjs
       - name: Boot, play and resume every built product
