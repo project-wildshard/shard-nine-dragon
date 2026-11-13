@@ -1,10 +1,10 @@
 {
-  "content": "a0b44bc42da23cf71d702e8e51284c7b5f63d2e8b0bc650acbe27db3c0ddf21f",
-  "captured": "2026-11-13T01:06:07.938Z",
-  "base": "stamp-existing: the hero files already in the shard, adopted without a capture",
+  "content": "fe3082ba442911af82c8872fc4b81dfbc9255aec2ade0a0253146f15fd2e6bb0",
+  "captured": "2026-11-13T08:43:05.428Z",
+  "base": "http://127.0.0.1:4791",
   "card": {
-    "thumbs/nine-dragon-stack.jpg": "799b208e8c7b77c5ebce127a5b5d76213b4b061e2117c17f12bd21877e9c290a",
-    "thumbs/nine-dragon-stack-portrait.jpg": "807f77921309f64f1bd2e802e7b769dc8ac2334b863717f2d5dbcf42e6a886c0",
-    "thumbs/nine-dragon-stack-landscape.jpg": "f9a76679619d9d5fee49a0bd450d7a62c1dd582b8738699192be16da4d36a4be"
+    "thumbs/nine-dragon-stack.jpg": "8b5d23a5701c4e4df0ec85319e4ac3627596f784ae7733e5941daa0a195e7496",
+    "thumbs/nine-dragon-stack-portrait.jpg": "6904780729006749425736b131a151b006e7599e4cc303a07fa980b5c6d268d2",
+    "thumbs/nine-dragon-stack-landscape.jpg": "b1c8f639171cc40ceab322b0c4bc4f198a459a84fd1928fa4bd8af41e90958b3"
   }
 }
