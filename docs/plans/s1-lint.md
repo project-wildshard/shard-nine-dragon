@@ -1,6 +1,10 @@
 # S1 byte-preserving lint debt
 
-**Status:** in progress (2026-11-08): four real counts retained.
+**Status:** done (2026-11-13, meta SHARD-AUTHORING SA6, J317): the
+generator-imports ratchet is gone. The SDK rule allows `node:path`, and
+the browser bakers' byte helpers are the shard's own
+(`generators/bakeBytes.mjs`): the repo-root `scripts/bake-output.mjs`
+never came over in the lift. The rest below is history.
 
 Baseline: 317da8825c4e8f19d4ad9e4887fa428da4413fab.
 The zero-allowance AST census confirms both recorded counts in each

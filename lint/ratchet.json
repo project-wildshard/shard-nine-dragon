@@ -1,7 +1,3 @@
 {
-  "budgets": {},
-  "wildshard/generator-imports": {
-    "src/shards/nine-dragon-stack/generators/bake-glyphs.mjs": 2,
-    "src/shards/nine-dragon-stack/generators/bake-sign-atlas.mjs": 2
-  }
+  "budgets": {}
 }

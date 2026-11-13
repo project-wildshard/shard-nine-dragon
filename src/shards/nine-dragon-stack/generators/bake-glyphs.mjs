@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { readBoundedFile } from '@wildshard/sharddev/sourceReader';
 import { openNativeRaster, bundleNativeRaster } from '@wildshard/sharddev/bake/nativeRaster';
 import { decodeBuildDeflate } from '@wildshard/sharddev/bake/byteCodec';
-import { byteWriter, jsonBytes, outputHash, browserBakeBytes } from '../../../../scripts/bake-output.mjs';
+import { byteWriter, jsonBytes, outputHash, browserBakeBytes } from './bakeBytes.mjs';
 
 const root = resolve(import.meta.dirname, '../../../..');
 const outputData = resolve(root, 'public/assets/nine-dragon/authored/glyphs');

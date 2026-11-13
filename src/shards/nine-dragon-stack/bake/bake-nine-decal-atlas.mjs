@@ -1,7 +1,7 @@
 // Native reference pixels, retained as ordinary lossless product images.
 import { resolve } from 'node:path';
 import { openNativeRaster, bundleNativeRaster } from '@wildshard/sharddev/bake/nativeRaster';
-import { byteWriter, outputHash, browserBakeBytes } from '../../../../scripts/bake-output.mjs';
+import { byteWriter, outputHash, browserBakeBytes } from '../generators/bakeBytes.mjs';
 import nativeDecals from '../data/nativeDecals.json' with { type: 'json' };
 import { readImagePixels } from '@wildshard/sharddev/bake/image';
 
