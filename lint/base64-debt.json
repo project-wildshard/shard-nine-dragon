@@ -1,7 +1,0 @@
-{
-  "schema": "no-base64/1",
-  "source": "engine dbc3f7cc lint/base64-debt.json, its nine-dragon-stack row at the single-shard src/ path (SA24)",
-  "files": {
-    "src/generators/bake-glyphs.mjs": 2
-  }
-}

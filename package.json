@@ -33,14 +33,14 @@
     "pack:shards": "node scripts/pack-all.mjs",
     "test:kit": "node --test 'kit/cli/*.test.ts' 'kit/test/**/*.test.ts'",
     "test:shards": "vitest run",
-    "lint:shards": "WILDSHARD_RATCHET_FILE=lint/ratchet.json WILDSHARD_BASE64_FILE=lint/base64-debt.json oxlint -c .oxlintrc.author.json --deny-warnings src"
+    "lint:shards": "WILDSHARD_RATCHET_FILE=lint/ratchet.json oxlint -c .oxlintrc.author.json --deny-warnings src"
   },
   "dependencies": {
     "@gltf-transform/core": "4.5.0",
     "@gltf-transform/extensions": "4.5.0",
-    "@wildshard/engine": "github:project-wildshard/engine#dbc3f7cc50a2d9378f0679f1615484e320b39ec1",
-    "@wildshard/format": "github:project-wildshard/shard-format#8c506e15b03635237c1962bbd380f66db9985b47",
-    "@wildshard/sharddev": "github:project-wildshard/sharddev#7681ecb024cfc025a86d523ba45e79b25c87af5e",
+    "@wildshard/engine": "0.1.18",
+    "@wildshard/format": "npm:@wildshard/shard-format@0.4.9",
+    "@wildshard/sharddev": "npm:@wildshard/sdk@0.2.11",
     "meshoptimizer": "1.2.0",
     "three": "0.186.0",
     "valibot": "1.5.0",
@@ -140,10 +140,10 @@
       "@typescript/typescript-win32-x64"
     ],
     "overrides": {
-      "@wildshard/engine": "github:project-wildshard/engine#dbc3f7cc50a2d9378f0679f1615484e320b39ec1",
+      "@wildshard/engine": "0.1.18",
       "binaryen": "npm:@pre-bundled/binaryen@132.0.0-patch-1",
       "assemblyscript>binaryen": "npm:@pre-bundled/binaryen@131.0.0-nightly.20260721-patch-1",
-      "@wildshard/format": "github:project-wildshard/shard-format#8c506e15b03635237c1962bbd380f66db9985b47"
+      "@wildshard/format": "npm:@wildshard/shard-format@0.4.9"
     }
   }
 }
