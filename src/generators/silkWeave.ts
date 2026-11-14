@@ -1,6 +1,6 @@
 import { Rng } from '@wildshard/sharddev/random';
 
-/** Exact R8 slub weave, baked once into the product instead of rebuilding on entry. */
+/** Exact R8 slub weave, baked once into the shard file instead of rebuilding on entry. */
 export function silkWeaveBytes(size = 256, seed = 77): Uint8Array {
   const N = size, data = new Uint8Array(N * N), raw = new Float32Array(N * N);
   const r = new Rng(seed);

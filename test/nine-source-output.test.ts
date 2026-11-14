@@ -11,7 +11,7 @@ import { assertConfigBoundary } from '@wildshard/sharddev/configBoundary';
 import { prepareAssetDecoders } from '@wildshard/format/product';
 import { nineSourceOutput } from '../src/generators/sourceOutput';
 import { parseBurstFields } from '../src/generators/sections';
-import type { NineOutput } from '../src/generators/productOutput';
+import type { NineOutput } from '../src/generators/outputDefinition';
 import bursts from '../src/data/burstFields.json' with { type: 'json' };
 
 function sameBytes(actual: Uint8Array, expected: Uint8Array, name: string): void {

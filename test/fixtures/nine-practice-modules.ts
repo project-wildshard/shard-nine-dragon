@@ -1,6 +1,6 @@
 import type { Scope } from '@wildshard/engine/app/scope';
 import { ReturnProgram } from '@wildshard/engine/game/population/returnProgram';
-import { ninePracticeBytes, ninePracticeRows } from './nine-practice-product';
+import { ninePracticeBytes, ninePracticeRows } from './nine-practice-program';
 
 const assets = new Map([[ninePracticeRows.script.module.slice('blobs/wasm/'.length, -'.wasm'.length), ninePracticeBytes]]);
 /** The same admitted byte map lent to the test's actual existing native owner. */

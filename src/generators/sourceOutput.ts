@@ -1,5 +1,5 @@
 import type { ProjectGenerationContext } from '@wildshard/sharddev/projectGeneration';
-import { nineOutput, type NineOutput, type NineOutputInputs } from './productOutput';
+import { nineOutput, type NineOutput, type NineOutputInputs } from './outputDefinition';
 import { NINE_MOVERS_CONTRACT, nineMoversProgram } from './moversProgram';
 import { nineEntryProof } from './entryProof';
 import { nineServerFiles } from './nativeServer';
@@ -7,13 +7,13 @@ import { nineNativeDecals } from './nativeDecals';
 import { heldViewSchema } from './heldView';
 import { parseBurstFields } from './sections';
 import bursts from '../data/burstFields.json' with { type: 'json' };
-import { readNineProductInputs } from './product';
-import { nineProductFrom } from './productDefinition';
+import { readNineShardfileInputs } from './shardfile';
+import { nineShardfileFrom } from './shardfileDefinition';
 import { hashImmutableBytes } from '@wildshard/format/immutable';
 
 type OutputSources = Pick<NineOutputInputs, 'construction' | 'held' | 'ownedWorld' | 'scenes' | 'casts' | 'signs' | 'courseProgram'>;
 async function sourcesFor(ctx: ProjectGenerationContext): Promise<OutputSources> {
-  const inputs = await readNineProductInputs(ctx), source = nineProductFrom(inputs, { pages: NINE_MOVERS_CONTRACT.pages });
+  const inputs = await readNineShardfileInputs(ctx), source = nineShardfileFrom(inputs, { pages: NINE_MOVERS_CONTRACT.pages });
   return { courseProgram: inputs.courseProgram, casts: inputs.casts, signs: inputs.signs, held: inputs.held, ownedWorld: inputs.ownedWorld, scenes: inputs.scenes, construction: { seed: source.identity.seed, looks: Object.keys(source.look.materials) } };
 }
 

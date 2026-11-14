@@ -1,4 +1,4 @@
-/** Build-validated rows in the existing weapons/jian-row.json product blob. */
+/** Build-validated rows in the existing weapons/jian-row.json shard file blob. */
 export interface GrappleRows {
   readonly portraitFov: number;
   readonly aim: { readonly ribbon: unknown; readonly filament: {

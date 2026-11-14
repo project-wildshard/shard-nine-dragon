@@ -7,7 +7,7 @@ import { nineWorldProgram } from './worldProgram';
 import { nineWorldScenes } from './worldScenes';
 import { nineSlabScenes } from './slabs';
 import { useLightVolumeEncoder } from './lightVolumes';
-import { nineProductFrom, type NineProductInputs } from './productDefinition';
+import { nineShardfileFrom, type NineShardfileInputs } from './shardfileDefinition';
 import { nineNavigation } from './navigationProgram';
 import { nineHeldProfile } from './heldProfile';
 import { createHeldGraphFiles } from './heldGraphFiles';
@@ -20,7 +20,7 @@ import nativeGlyphInputs from '../data/nativeGlyphs.json' with { type: 'json' };
 const DEFAULT_MOVERS = { pages: 1 };
 
 /** Every declaration input belongs to this invocation's admitted source programs. */
-export async function readNineProductInputs(ctx: ProjectGenerationContext): Promise<NineProductInputs> {
+export async function readNineShardfileInputs(ctx: ProjectGenerationContext): Promise<NineShardfileInputs> {
   const native = await nineNativeSignAtlas(ctx, nativeAtlasInputs), glyphs = await nineNativeGlyphs(ctx, nativeGlyphInputs);
   const profile = await nineHeldProfile(ctx), ownedWorld = await nineWorldProgram(ctx, native.atlas), casts = await nineCastsProgram(ctx, readFixedSlots(ownedWorld.layout)), signs = await nineSignsProgram(ctx, native, glyphs);
   const declarations = await nineDeclarationsProgram(ctx, ownedWorld), courseProgram = await ninePracticeProgram(ctx);
@@ -29,6 +29,6 @@ export async function readNineProductInputs(ctx: ProjectGenerationContext): Prom
 }
 
 /** Build the declaration from this invocation's admitted source results. */
-export async function nineProduct(ctx: ProjectGenerationContext, movers: { readonly pages: number } = DEFAULT_MOVERS): Promise<ReturnType<typeof nineProductFrom>> {
-  return nineProductFrom(await readNineProductInputs(ctx), movers);
+export async function nineShardfile(ctx: ProjectGenerationContext, movers: { readonly pages: number } = DEFAULT_MOVERS): Promise<ReturnType<typeof nineShardfileFrom>> {
+  return nineShardfileFrom(await readNineShardfileInputs(ctx), movers);
 }

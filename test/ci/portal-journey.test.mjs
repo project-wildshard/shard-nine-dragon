@@ -1,4 +1,4 @@
-// J186 SH-nine-1, CI only, never a hook. The built product's portal ride and
+// J186 SH-nine-1, CI only, never a hook. The built output's portal ride and
 // grapple on real inputs: walk the published square route into the way-out
 // ring, ride the fade to the first road deck, step off the deck ring and
 // back in, ride home to the lantern square, then aim, LOCK and ZIP to the

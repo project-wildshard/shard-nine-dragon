@@ -6,7 +6,7 @@ import { compactPhoneGlb } from '@wildshard/sharddev/bake/compactGlb';
 import { parseGlb } from '@wildshard/sharddev/assets';
 import { bakeCasts, bakeFixedKits, readFixedSlots } from './casts';
 import { bakeLods } from './lods';
-import { hookProduct, type HookProduct } from './hookProduct';
+import { hookSpecimen, type HookSpecimen } from './hookSpecimen';
 import { nineLayoutData } from './layoutSource';
 import { deckFloorRows } from './floorRows';
 import { CAST_NAMES } from './castSources';
@@ -23,7 +23,7 @@ export async function nineCastFiles(read: (url: string) => Uint8Array, prepared?
   const slots = prepared === undefined ? undefined : readFixedSlots({ rows: { slots: prepared } });
   const lods = await bakeLods(read);
   const fixed = bakeFixedKits(slots ?? readFixedSlots(layout)), casts = await bakeCasts(read);
-  const packs = new Map([...casts, ...fixed.packs, ...lods]), hook = await hookProduct(read);
+  const packs = new Map([...casts, ...fixed.packs, ...lods]), hook = await hookSpecimen(read);
   const files = new Map<string, Uint8Array>();
   for (const [name, bytes] of packs) { files.set(`raw/${name}.glb`, bytes); files.set(`packed/${name}.glb`, compressGlb(bytes)); }
   // Copy the actual phone-packed channels, so the palette retains the old
@@ -55,7 +55,7 @@ export async function nineCastFiles(read: (url: string) => Uint8Array, prepared?
 export interface NineSourceCasts {
   readonly blobs: readonly NamedBlob[];
   readonly raw: ReadonlyMap<string, Uint8Array>;
-  readonly material: HookProduct['material'];
+  readonly material: HookSpecimen['material'];
 }
 
 /** A cache hit re-admits and publishes every live cast; public paths are authored inputs only. */

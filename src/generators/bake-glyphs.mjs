@@ -1,4 +1,4 @@
-// Run through scripts/browser-lane.sh. Native WebKit pixels are committed; product intake is portable.
+// Run through scripts/browser-lane.sh. Native WebKit pixels are committed; shard file intake is portable.
 import { resolve } from 'node:path';
 import { readBoundedFile } from '@wildshard/sharddev/sourceReader';
 import { openNativeRaster, bundleNativeRaster } from '@wildshard/sharddev/bake/nativeRaster';

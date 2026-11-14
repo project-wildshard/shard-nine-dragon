@@ -4,15 +4,15 @@ import { staticGlb } from '@wildshard/sharddev/bake/glb';
 import { hookGeometry } from './hookGeometry';
 import rows from '../data/hookSpecimen.json' with { type: 'json' };
 
-export interface HookProduct {
+export interface HookSpecimen {
   readonly glb: Uint8Array;
   readonly material: { readonly color: readonly [number, number, number]; readonly side: Side; readonly normalScale: readonly [number, number];
     readonly emissive: readonly [number, number, number]; readonly emissiveIntensity: number; readonly envMapIntensity: number;
     readonly metalness: number; readonly roughness: number };
 }
 
-/** Decode and warm the native specimen offline; product declarations consume only its prepared rows. */
-export async function hookProduct(read: (url: string) => Uint8Array): Promise<HookProduct> {
+/** Decode and warm the native specimen offline; shard file declarations consume only its prepared rows. */
+export async function hookSpecimen(read: (url: string) => Uint8Array): Promise<HookSpecimen> {
   const geometry = await hookGeometry(read), { gltf } = await readSourceModel(read('/assets/nine-dragon/lab/grapple/dragon-hook.glb'));
   const meshes: Mesh[] = [], isMesh = (node: Object3D): node is Mesh => node instanceof Mesh;
   gltf.scene.traverse(node => { if (isMesh(node)) meshes.push(node); });
@@ -22,7 +22,7 @@ export async function hookProduct(read: (url: string) => Uint8Array): Promise<Ho
   brass.color.multiply(new Color(rows.material.tint));
   const material = new MeshStandardMaterial();
   const bytes = staticGlb([{ name: 'dragon-hook', geometry, material, nativeAttributes: true, compactIndex: true }], 'nine-hook');
-  const result: HookProduct = { glb: bytes, material: {
+  const result: HookSpecimen = { glb: bytes, material: {
     color: [brass.color.r, brass.color.g, brass.color.b], side: brass.side, normalScale: [brass.normalScale.x, brass.normalScale.y],
     emissive: [brass.emissive.r, brass.emissive.g, brass.emissive.b], emissiveIntensity: brass.emissiveIntensity, envMapIntensity: brass.envMapIntensity,
     metalness: rows.material.metalness, roughness: rows.material.roughness } };

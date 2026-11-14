@@ -1,4 +1,4 @@
-// J186 SH-nine-2, CI only, never a hook. The built Nine product admits as a
+// J186 SH-nine-2, CI only, never a hook. The built Nine output admits as a
 // cell of the pinned engine's shipped grid: its catalogue names Nine, a
 // prefetched world is not ready until runtime admission says so, the owner
 // enters on the cell's own seat and walks by real input, a refused save keeps

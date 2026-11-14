@@ -1,4 +1,4 @@
-// Native reference pixels, retained as ordinary lossless product images.
+// Native reference pixels, retained as ordinary lossless shard file images.
 import { resolve } from 'node:path';
 import { openNativeRaster, bundleNativeRaster } from '@wildshard/sharddev/bake/nativeRaster';
 import { byteWriter, outputHash, browserBakeBytes } from '../generators/bakeBytes.mjs';

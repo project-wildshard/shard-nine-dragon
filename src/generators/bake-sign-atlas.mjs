@@ -1,6 +1,6 @@
 import { nineLayoutData } from './layoutSource.ts';
 import { fixedKitRows, readFixedSlots } from './casts.ts';
-// Native WebKit reference raster; portable product intake reads these retained bytes.
+// Native WebKit reference raster; portable shard file intake reads these retained bytes.
 import { resolve } from 'node:path';
 import rawSignRows from '../data/signView.json' with { type: 'json' };
 import { encodeBuildBytes } from '@wildshard/sharddev/bake/byteCodec';

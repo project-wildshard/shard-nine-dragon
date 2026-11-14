@@ -5,7 +5,7 @@ import type { ProjectGenerationContext } from '@wildshard/sharddev/projectGenera
 
 const tiers = ['phone', 'desktop'] as const;
 
-/** Admit the pinned native PNGs as real product images, with no generated metadata or source-tree blobs. */
+/** Admit the pinned native PNGs as real shard file images, with no generated metadata or source-tree blobs. */
 export function nineDecalBlobs(files: ReadonlyMap<string, Uint8Array>): readonly NamedBlob[] {
   if (files.size !== tiers.length) throw new Error('Nine native decal inventory differs');
   return tiers.map(tier => {

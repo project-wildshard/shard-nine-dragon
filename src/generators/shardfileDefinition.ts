@@ -42,7 +42,7 @@ const portalEntries = portalEntryRows(), portalFloors = portalFloorRows();
 const DEFAULT_MOVERS = { pages: 1 };
 
 /** Owned source results consumed by the declaration in this same build. */
-export interface NineProductInputs {
+export interface NineShardfileInputs {
   readonly casts: NineSourceCasts;
   readonly signs: NineSourceSigns;
   readonly ownedWorld: NineSourceWorld; readonly scenes: NineSlabScenes;
@@ -60,7 +60,7 @@ interface NineInputFile {
 }
 
 /** Assemble the declaration from owned world/navigation/course results and the fixed-page view contract. */
-export function nineProductFrom(inputs: NineProductInputs, movers: { readonly pages: number } = DEFAULT_MOVERS): Shardfile {
+export function nineShardfileFrom(inputs: NineShardfileInputs, movers: { readonly pages: number } = DEFAULT_MOVERS): Shardfile {
 const { courseProgram, navigation, world, held: { files: heldGraphFiles } } = inputs;
 const fine = nineSlabSourceFiles(inputs.scenes.NINE_WORLD_SCENES.libraries, inputs.scenes.NINE_REFINEMENT_SOURCE);
 const worldFiles = world.shardfile.files.filter(file => !fine.has(file.hash));

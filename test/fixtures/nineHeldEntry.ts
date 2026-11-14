@@ -12,7 +12,7 @@ import { entryOwner } from '../../src/shared/game/shardfile/entryOwners';
 import { heldSwordWorld } from './heldNativeSword';
 import type { HeldMeleeOwner } from '../../src/client/game/loadout/claims';
 import type { ShardRuntime } from '../../src/shared/game/shard/runtime';
-import source from './nine-product-inputs';
+import source from './nine-shardfile-inputs';
 import manifest from '../../src/discovery.generated';
 import { nineHeldPresentationBytes } from './nine-held-presentation';
 import { fixtureProductFile, fixtureJsonCheck } from './productFile';

@@ -3,7 +3,7 @@ import { bakeGlyphField } from './glyphField';
 import { KAI_STACK, GLYPH_LAYOUT } from './signs';
 import { FONT_CHARS } from './words';
 
-/** Native WebKit font output is retained, so portable product builds need neither system fonts nor a canvas. */
+/** Native WebKit font output is retained, so portable shard builds need neither system fonts nor a canvas. */
 export function bakeGlyphPage(tier: keyof typeof GLYPH_LAYOUT): { size: number; layout: (typeof GLYPH_LAYOUT)[keyof typeof GLYPH_LAYOUT]; rects: Record<string, { u0: number; v0: number; u1: number; v1: number }>; packed: Uint8Array<ArrayBuffer>[] } {
   const layout = GLYPH_LAYOUT[tier], field = bakeGlyphField(Array.from(FONT_CHARS), layout, KAI_STACK);
   const packed: Uint8Array<ArrayBuffer>[] = [];

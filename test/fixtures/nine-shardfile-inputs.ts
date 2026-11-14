@@ -3,24 +3,24 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 // oxlint-disable-next-line import/no-nodejs-modules -- Bind only the real author project's source root.
 import { resolve } from 'node:path';
 import { createProjectGeneration } from '@wildshard/sharddev/projectGeneration';
-import { readNineProductInputs } from '../../src/generators/product';
-import { nineProductFrom } from '../../src/generators/productDefinition';
+import { readNineShardfileInputs } from '../../src/generators/shardfile';
+import { nineShardfileFrom } from '../../src/generators/shardfileDefinition';
 import { courseProgramInputs } from '@wildshard/sharddev/commons/courseProgram';
 import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/format/immutable';
-import { ninePracticeRows, ninePracticeBytes } from './nine-practice-product';
+import { ninePracticeRows, ninePracticeBytes } from './nine-practice-program';
 import { runSnapshot } from './runSnapshot';
 
 // DOM suites consume the independently pinned course as a checked cache hit. Real cold
 // compilation remains covered by the Node producer/source-output suites.
 const courseText = readFileSync('src/commons/scripts/course.as', 'utf8'), text = new TextEncoder();
-if (hashImmutableBytes(text.encode(courseText)) !== ninePracticeRows.script.sourceHash) throw new Error('Practice fixture product has stale source');
+if (hashImmutableBytes(text.encode(courseText)) !== ninePracticeRows.script.sourceHash) throw new Error('Practice fixture program has stale source');
 const practiceId = `practice-${hashImmutableBytes(text.encode(encodeCanonicalJson([courseProgramInputs('checkpoints').row, courseText])))}`;
 
-async function sourceInputs(): Promise<Awaited<ReturnType<typeof readNineProductInputs>>> {
+async function sourceInputs(): Promise<Awaited<ReturnType<typeof readNineShardfileInputs>>> {
   mkdirSync('tmp', { recursive: true }); const cache = mkdtempSync(resolve('tmp', 'nine-declaration-'));
   try {
     const ctx = createProjectGeneration(resolve('src'), 'b'.repeat(64), new Map(), cache, [{ prefix: '/assets/', directory: resolve('public/assets') }]);
-    return await readNineProductInputs({ ...ctx, cached: (step, produce) => step.id === practiceId
+    return await readNineShardfileInputs({ ...ctx, cached: (step, produce) => step.id === practiceId
       ? Promise.resolve(new Map([['practice.json', text.encode(encodeCanonicalJson(ninePracticeRows))], ['practice.wasm', Uint8Array.from(ninePracticeBytes)]]))
       : ctx.cached(step, produce) });
   }
@@ -28,7 +28,7 @@ async function sourceInputs(): Promise<Awaited<ReturnType<typeof readNineProduct
 }
 
 // CI7: one source read per CI run (the prepare snapshot), else per importing file.
-export const inputs = await runSnapshot('nine-product-inputs', sourceInputs);
+export const inputs = await runSnapshot('nine-shardfile-inputs', sourceInputs);
 export const casts = inputs.casts;
 export const ownedWorld = inputs.ownedWorld;
 export const world = ownedWorld.metadata;
@@ -39,8 +39,8 @@ export const heldProfile = inputs.held.profile;
 export const heldGraphFiles = inputs.held.files;
 const defaultMovers = { pages: 1 };
 /** Exercise the same pure factory with actual source results and the supplied fixed-page view contract. */
-export function nineProduct(movers: { readonly pages: number } = defaultMovers): ReturnType<typeof nineProductFrom> {
-  return nineProductFrom(inputs, movers);
+export function nineShardfile(movers: { readonly pages: number } = defaultMovers): ReturnType<typeof nineShardfileFrom> {
+  return nineShardfileFrom(inputs, movers);
 }
 // oxlint-disable-next-line import/no-default-export -- Existing declaration-only tests borrow this real source result.
-export default nineProduct();
+export default nineShardfile();

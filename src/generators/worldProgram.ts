@@ -2,7 +2,7 @@ import type { ProjectGenerationContext } from '@wildshard/sharddev/projectGenera
 import { emptyShardfile } from '@wildshard/sharddev/author';
 import { parseShardfile } from '@wildshard/format/shardSchema';
 import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/format/immutable';
-import { nineWorldProduct, nineLayoutWord } from './worldProduct';
+import { nineWorldData, nineLayoutWord } from './worldData';
 import { parseWorldHeader, parseWorldLayout } from './sections';
 import { bakedLayout } from './layoutProjection';
 import type { NineSpillAtlas } from './spillBake';
@@ -32,10 +32,10 @@ export async function nineWorldProgram(ctx: Pick<ProjectGenerationContext, 'cach
     atlas.phone.placed, atlas.phone.lights, atlas.desktop.placed, atlas.desktop.lights, 'piece-meshopt',
   ])))}`;
   const files = await ctx.cached({ id: identity }, () => {
-    const product = nineWorldProduct(atlas);
+    const data = nineWorldData(atlas);
     const encode = (value: unknown, suffix = ''): Uint8Array => new TextEncoder().encode(JSON.stringify(value, nineLayoutWord) + suffix);
-    return new Map([['world.json', encode(product.metadata, '\n')], ['layout.json', encode(product.layout)],
-      ...[...product.assets].map(([hash, bytes]) => [`blobs/${hash}`, bytes] as const)]);
+    return new Map([['world.json', encode(data.metadata, '\n')], ['layout.json', encode(data.layout)],
+      ...[...data.assets].map(([hash, bytes]) => [`blobs/${hash}`, bytes] as const)]);
   });
   const read = (name: string): unknown => {
     const bytes = files.get(name); if (bytes === undefined) throw new Error(`Missing owned Nine world ${name}`);

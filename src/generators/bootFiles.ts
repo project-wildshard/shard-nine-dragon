@@ -8,7 +8,7 @@ export function bootSources(tier: BootTier, tex: BootTextures, world: readonly s
   return {
     sky: [], baked: Object.keys(inventory).filter((url) => url.startsWith(`${root}tex/`) && !url.includes('.phone.')).map(gpu),
     terrain: [], trees: [], cabins: [],
-    // Navigation reads the admitted product's original WSNM file once, outside the legacy boot pack.
+    // Navigation reads the admitted shard file's original WSNM file once, outside the legacy boot pack.
     physics: sharedBootPhysics(),
     props: world.filter((url) => url in inventory).map(gpu), art: [], music: [], sfx: [],
   };

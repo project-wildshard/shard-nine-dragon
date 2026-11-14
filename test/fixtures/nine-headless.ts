@@ -12,7 +12,7 @@ async function flatProduct(product: ShardProduct): Promise<ShardProduct> {
   return { ...product, file: name => name === NATIVE_ASSEMBLY_FILE ? Promise.resolve(bytes) : product.file(name) };
 }
 
-/** The world Nine's product builds, with the walk proofs' bounds lent over it. `rise` false is a negative control. */
+/** The world Nine's shard file builds, with the walk proofs' bounds lent over it. `rise` false is a negative control. */
 export function nineHeadlessRuntime(rise: boolean): PrepareHeadlessRuntime {
   return async preparation => {
     const product = rise ? preparation.product : await flatProduct(preparation.product), plan = await prepareProductPlan({ ...preparation, product });

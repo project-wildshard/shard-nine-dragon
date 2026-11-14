@@ -1,7 +1,7 @@
 /**
  * Nine Dragon's authored square, towers and Well, built with a recording sign sink.
  * worldProgram.ts caches the checked layout rows, float64 records and immutable
- * world GLBs. Product consumers receive those owned values directly.
+ * world GLBs. Shard file consumers receive those owned values directly.
  */
 import { BufferAttribute, BufferGeometry, Float16BufferAttribute, Uint32BufferAttribute, type Color, type Matrix4, type Vector3 } from 'three';
 import { mergeKits } from './kit/sweptKit';

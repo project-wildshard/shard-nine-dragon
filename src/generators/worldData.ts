@@ -8,7 +8,7 @@ import { nineScene } from './scene';
 import type { BakedScene } from '@wildshard/sharddev/bake';
 import type { NineSpillAtlas } from './spillBake';
 
-export interface NineWorldProduct {
+export interface NineWorldData {
   readonly metadata: {
     readonly version: 1;
     readonly notice: string;
@@ -32,7 +32,7 @@ export function nineLayoutWord(_key: string, value: unknown): unknown {
 }
 
 /** Project the source layout without also baking unrelated world GLBs and spill channels. */
-export function nineWorldLayout(layout: ReturnType<typeof nineScene>['layout']): NineWorldProduct['layout'] {
+export function nineWorldLayout(layout: ReturnType<typeof nineScene>['layout']): NineWorldData['layout'] {
   return projectNineLayout(layout);
 }
 
@@ -46,9 +46,9 @@ function wirePiece(glb: Uint8Array): Uint8Array {
 }
 
 /** Original world bake as owned data and bytes, with no file writes or scene publication.
- * The retained file adapter and the source product call this same function. */
-export function nineWorldProduct(atlas: NineSpillAtlas): NineWorldProduct {
-  const product = nineScene(atlas), { baked } = product;
+ * The retained file adapter and the source program call this same function. */
+export function nineWorldData(atlas: NineSpillAtlas): NineWorldData {
+  const scene = nineScene(atlas), { baked } = scene;
   const libraries: Record<'layout' | 'boot' | 'explorer', string[]> = { layout: [], boot: [], explorer: [] };
   const assets = new Map(baked.assets), files = [...baked.shardfile.files];
   for (const part of baked.pieces) {
@@ -57,10 +57,10 @@ export function nineWorldProduct(atlas: NineSpillAtlas): NineWorldProduct {
     const section = part.name.startsWith('layout_sets_') ? 'layout' : part.name.startsWith('specimens_boot_') ? 'boot' : 'explorer';
     libraries[section].push(hash);
   }
-  const layout = nineWorldLayout(product.layout);
+  const layout = nineWorldLayout(scene.layout);
   files.sort((a, b) => a.hash.localeCompare(b.hash));
-  const metadata: NineWorldProduct['metadata'] = { version: 1, notice: 'DO NOT EDIT: generators/bake-nine-layout.mjs through bake(scene, identity).',
-    libraries, specimenBoxes: product.boxes,
+  const metadata: NineWorldData['metadata'] = { version: 1, notice: 'DO NOT EDIT: generators/bake-nine-layout.mjs through bake(scene, identity).',
+    libraries, specimenBoxes: scene.boxes,
     shardfile: { ...baked.shardfile, tiles: completeEmptyL1Tiles(baked.shardfile.tiles), files, library: [...new Set([...libraries.layout, ...libraries.boot, ...libraries.explorer,
       ...(baked.props?.props.tiles.filter(tile => tile.lod === 0).flatMap(tile => [tile.file].concat(tile.additionalFiles ?? [])) ?? [])])].sort((a, b) => a < b ? -1 : a > b ? 1 : 0) }, props: baked.props?.props, report: baked.props?.report };
   return { metadata, layout, assets };

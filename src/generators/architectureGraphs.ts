@@ -227,7 +227,7 @@ function facade(small: boolean): GraphIr {
 }
 
 /**
- * NR12: the coarse L1 parents (generators/scene.ts; the props family, productDefinition.ts), a 5 % sloppy copy whose face
+ * NR12: the coarse L1 parents (generators/scene.ts; the props family, shardfileDefinition.ts), a 5 % sloppy copy whose face
  * coordinates no longer hold: their wall tone, with the facade's far lit-window grid (kind 11 above) laid out on the upright
  * faces, so a tower past the ring reads as walls and lit rooms, not a flat slab.
  */

@@ -1,4 +1,4 @@
-import { inputs } from './nine-product-inputs';
+import { inputs } from './nine-shardfile-inputs';
 import aim from '../../src/data/grapple.json' with { type: 'json' };
 import bursts from '../../src/data/burstFields.json' with { type: 'json' };
 import filament from '../../src/data/filament.json' with { type: 'json' };

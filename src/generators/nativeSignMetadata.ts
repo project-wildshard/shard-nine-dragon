@@ -1,7 +1,7 @@
 import type { GlyphFieldLayout, GlyphRect } from './glyphField';
 import type { PlacedSign } from './signCopies';
 
-/** Retained native raster metadata, supplied by the product's declared input reader. */
+/** Retained native raster metadata, supplied by the program's declared input reader. */
 export interface NineNativeSignInputs {
   readonly glyphs: Readonly<Record<'phone' | 'desktop', {
     readonly size: number; readonly packed: readonly string[];

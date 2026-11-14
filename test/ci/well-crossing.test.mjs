@@ -1,11 +1,11 @@
 // J186 SH-nine-4, CI only, never a hook. The course's own crossing on the
-// built product by real inputs: walk the square to its south front, hop the
+// built output by real inputs: walk the square to its south front, hop the
 // balustrade onto the Well's south rim (the published escape-rim-hop route),
 // and walk the rim. The parapet stops a walk at it and the guard cap above
 // stops a jump over it; neither files anything. Then aim, LOCK the ring over
 // the humped timber bridge and fire: the Fei Zhua lifts over the cap, lands
 // on the bridge and files Over the Well (`nine-dragon-stack.well`) once, and
-// the deck walks on. Course, profile and rings are the product's own server
+// the deck walks on. Course, profile and rings are the shard file's own server
 // files; no flag, pose or grapple state is written.
 import '@wildshard/engine/scripts/sim-node-loader.mjs';
 import assert from 'node:assert/strict';
