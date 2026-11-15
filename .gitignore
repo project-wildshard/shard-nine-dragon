@@ -20,3 +20,4 @@ tmp/
 /public/assets/nine-dragon-stack/map/top.webp
 /public/assets/nine-dragon-stack/entry-reads.json
 /src/discovery.generated.ts
+/.owner
