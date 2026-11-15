@@ -48,5 +48,5 @@ Rerun boards kept in `runs/`, newest last. Captured on the Mac mini (headless Ch
 
 - 2026-11-15, engine `a38e4f7ca8` with the pinned products, build `a38e4f7-mwieo8k8` (mini-goldens, meta SHARD-REPOS
   SH-ALL-11): `runs/2026-11-15-a38e4f7ca8-board.jpg`. 24/24 green, SSIM 0.74 to 0.95, no colour flags, every pose
-  settled. Only the rain streaks and the crowd move. Needed engine `0d8cf62f` (`plan/mini-goldens`): the native
-  residency reader now finds the refinement chunk in the shared `b/c` folder, where J217 LD6 moved it.
+  settled. Only the rain streaks and the crowd move. Needs engine `86a511bb` (on `plan/mini-goldens`, landing): the
+  native residency reader finds the refinement chunk in the shared `b/c` folder, where J217 LD6 moved it.
