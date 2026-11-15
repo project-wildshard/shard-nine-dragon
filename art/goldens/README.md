@@ -41,3 +41,12 @@ midday / clear). Re-encoded at 540 x 915 with a 22 px label strip, JPEG quality 
   `../golden-runs/{far-reach,nine-dragon-stack}/2026-11-04-0bf578e89b-d228-board.jpg`.
 
 Add one line per promotion: date, cameras, ruling, board path.
+
+## Runs
+
+Rerun boards kept in `runs/`, newest last. Captured on the Mac mini (headless Chromium, ANGLE Metal on the M5 Pro's GPU).
+
+- 2026-11-15, engine `a38e4f7ca8` with the pinned products, build `a38e4f7-mwieo8k8` (mini-goldens, meta SHARD-REPOS
+  SH-ALL-11): `runs/2026-11-15-a38e4f7ca8-board.jpg`. 24/24 green, SSIM 0.74 to 0.95, no colour flags, every pose
+  settled. Only the rain streaks and the crowd move. Needed engine `0d8cf62f` (`plan/mini-goldens`): the native
+  residency reader now finds the refinement chunk in the shared `b/c` folder, where J217 LD6 moved it.

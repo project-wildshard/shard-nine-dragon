@@ -42,13 +42,14 @@ PORT=${URL##*:}; PORT=${PORT%/}
 ```bash
 RUN=$ENGINE/tmp/goldens/$(date +%F)-$(git rev-parse --short=10 $SHA)-$SLUG
 scripts/browser-lane.sh --max 20 node scripts/goldens/capture.mjs --base=$URL --sha=$SHA \
-  --cameras=$G/cameras24.json --mode=shardfile --shards=$SLUG --out=$RUN/raw
+  --cameras=$G/cameras24.json --mode=shardfile --shards=$SLUG --direct --out=$RUN/raw
 # WebKit pass (shaders, blending, textures, culling, anything sold as perf):
 scripts/browser-lane.sh --max 25 node scripts/goldens/capture.mjs --base=$URL --sha=$SHA --engine=webkit \
-  --cameras=$G/cameras24.json --mode=shardfile --shards=$SLUG --out=$RUN/raw-webkit
+  --cameras=$G/cameras24.json --mode=shardfile --shards=$SLUG --direct --out=$RUN/raw-webkit
 ```
 
-Check `$RUN/raw/receipts-$SLUG.json`: `status` `complete`, `errors` empty. A pose with `idle.settled: false` or
+`--direct` enters by the shard's own URL: on engine since J300, ENTER WORLD lands in the platform grid and the capture
+refuses without it. Check `$RUN/raw/receipts-$SLUG.json`: `status` `complete`, `errors` empty. A pose with `idle.settled: false` or
 `live.settled: false` was still streaming: re-capture it with `--cams=<n>` before calling it red.
 
 ## 4. Build the board and read every panel
