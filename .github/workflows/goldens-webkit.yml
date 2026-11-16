@@ -1,0 +1,131 @@
+name: goldens-webkit
+
+# SH-nine-3 (meta docs/plans/test-coverage/SHARD-REPOS.md): Nine's 24 golden
+# cameras in WebKit, every night. The iPhone is WebKit on Apple's GPU, and
+# Nine once shipped there with walls and floors missing after Chromium pixel
+# diffs passed. The Mac mini that shoots the Chromium goldens has no logged-in
+# GUI session, so headless WebKit cannot start there (it times out at launch);
+# a hosted macOS runner can. Engine main's build serves the pinned Nine
+# product, built on Linux (macOS builds overrun), shot in WebKit on macOS, and
+# boarded against art/goldens/shardfile. The gate is structure, not colour
+# (engine docs/goldens.md, "The WebKit pass"): every camera captured and
+# settled, and its SSIM above the floor. The board is the artifact to read.
+on:
+  schedule:
+    - cron: '41 8 * * *'
+  workflow_dispatch:
+    inputs:
+      engine:
+        description: Engine commit or branch to build (empty is main)
+        type: string
+        default: ''
+  push:
+    branches: [main]
+    paths: [.github/workflows/goldens-webkit.yml]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: goldens-webkit-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  SLUG: nine-dragon-stack
+  # Lowest structural SSIM a WebKit camera may score against its Chromium
+  # SHARDFILE golden; a missing wall or floor falls well under it.
+  SSIM_FLOOR: '0.45'
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    outputs:
+      sha: ${{ steps.sha.outputs.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: project-wildshard/engine
+          ref: ${{ inputs.engine || 'main' }}
+          fetch-depth: 0
+          persist-credentials: false
+      - id: sha
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - uses: ./.github/actions/ring-setup
+      - run: node scripts/pins.ts install
+      - run: pnpm build:game
+      - run: node scripts/app-build/splitOutput.mjs dist --join
+      - run: tar -cf dist.tar dist
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: goldens-webkit-dist
+          path: dist.tar
+          retention-days: 1
+
+  webkit:
+    needs: build
+    runs-on: macos-15
+    timeout-minutes: 75
+    env:
+      SHA: ${{ needs.build.outputs.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: project-wildshard/engine
+          ref: ${{ needs.build.outputs.sha }}
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: shard
+          persist-credentials: false
+      - uses: ./.github/actions/ring-setup
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: goldens-webkit-dist
+      - run: tar -xf dist.tar && rm dist.tar
+      - run: bash scripts/ci-playwright-install.sh webkit
+      - name: Serve the build
+        run: |
+          nohup node scripts/preview-server.mjs --outDir dist --port 4400 > preview.log 2>&1 &
+          for _ in $(seq 60); do curl -sf http://127.0.0.1:4400/version.json && exit 0; sleep 1; done
+          cat preview.log; exit 1
+      - name: Capture the 24 cameras in WebKit
+        run: |
+          node scripts/goldens/capture.mjs --base=http://127.0.0.1:4400/ --sha="$SHA" --engine=webkit \
+            --cameras=shard/art/goldens/cameras24.json --mode=shardfile --shards="$SLUG" --direct --out=tmp/goldens/raw-webkit
+      - name: Board against the SHARDFILE goldens
+        if: always()
+        run: |
+          python3 -m venv tmp/venv && tmp/venv/bin/pip install --quiet pillow numpy
+          tmp/venv/bin/python scripts/goldens/board.py --goldens shard/art/goldens --shard "$SLUG" \
+            --now tmp/goldens/raw-webkit --out tmp/goldens/board --label "NOW webkit ${SHA:0:7}" | tee tmp/goldens/board.txt
+      - name: Every camera captured, settled and above the floor
+        run: |
+          node --input-type=module -e '
+          import {readFileSync} from "node:fs";
+          const row = JSON.parse(readFileSync(`tmp/goldens/raw-webkit/receipts-${process.env.SLUG}.json`, "utf8"));
+          const bad = [];
+          if (row.status !== "complete") bad.push(`capture ${row.status}: ${row.failure ?? row.errors?.slice(0, 3).join("; ")}`);
+          if (row.poses?.length !== 24) bad.push(`${row.poses?.length ?? 0} of 24 cameras`);
+          row.poses?.forEach((p, i) => { if (p.idle?.settled === false || p.live?.settled === false) bad.push(`camera ${i + 1} still streaming`); });
+          const floor = Number(process.env.SSIM_FLOOR), scores = [];
+          for (const line of readFileSync("tmp/goldens/board.txt", "utf8").split("\n")) {
+            const m = /^(\d\d-\S+)\s+(\d\.\d{3})/.exec(line); if (!m) continue;
+            scores.push(m); if (Number(m[2]) < floor) bad.push(`${m[1]} SSIM ${m[2]} under ${floor}`);
+          }
+          if (scores.length !== 24) bad.push(`${scores.length} of 24 cameras scored`);
+          if (row.missing?.length) bad.push(`missing ${row.missing.join(", ")}`);
+          console.log(bad.length ? bad.join("\n") : `Goldens: ${process.env.SLUG} 24/24 captured and settled in WebKit on ${row.build}`);
+          if (bad.length) process.exit(1);'
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: goldens-webkit-board
+          path: |
+            tmp/goldens/board/board-*.jpg
+            tmp/goldens/board.txt
+            tmp/goldens/raw-webkit/receipts-*.json
+            tmp/goldens/raw-webkit/**/failure.jpg
+            preview.log
+          if-no-files-found: warn
+          retention-days: 14
