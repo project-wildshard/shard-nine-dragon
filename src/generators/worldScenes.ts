@@ -385,20 +385,20 @@ const LAYOUT_PLACEMENTS = [
 ];
 // ── the fabric (C1, G601): the layout's merged kits (opaque then alpha-cut) and the facade's shell as frozen-scene meshes on
 // their looks over the layout's tiles (their neon spill baked in, their bounds the layout bake's: assigned, never scanned),
-// the two kits with a draw distance culled from their box's centre, the catalogue models drawn into them, and the named
+// the catalogue models drawn into them, and the named
 // places' Sets. world/build.ts assembles it where the kits stood; each deck ending's entry decks and the facade's sign
 // boards are the FIXED_STEPS (casts that differ by ending).
 const kitBounds = new Map(projection.geometries.map(row => {
   const b = row.s.slice(0, 6).map(Math.fround), [x0 = 0, y0 = 0, z0 = 0, x1 = 0, y1 = 0, z1 = 0] = b;
-  return [row.id, { sphere: [(x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2, row.s[6]], box: row.box ? b : undefined, reach: Math.hypot(x1 - x0, y1 - y0, z1 - z0) / 2 }] as const;
+  return [row.id, { sphere: [(x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2, row.s[6]], box: row.box ? b : undefined }] as const;
 }));
-const farOf = new Map(projection.farOf), farKits: { id: string; at: number[] }[] = [];
-const kitNode = (id: string, parent: string, name: string, geo: number, material: string, far?: number) => {
+// NB8 (mini-nb8g): no kit keeps the layout's draw distance (`projection.farOf`: stair-terraces 110 m, well-l-deep): a band
+// kept each banded kit's kinds as their own slab keys (3 more draws per kit on the phone, where merged keys draw only their
+// visible, pixel-sized leaves) for geometry the phone's slab cut already thins past it. Both tiers draw the kits whole.
+const kitNode = (id: string, parent: string, name: string, geo: number, material: string) => {
   const b = kitBounds.get(geo); if (b === undefined) throw new Error(`Nine layout geometry ${geo} has no baked bounds`);
   const tiled = libraryOf.get(`layout-${geo}`); if (tiled === undefined) throw new Error(`Nine layout geometry ${geo} has no tiles`);
-  if (far !== undefined) farKits.push({ id, at: b.sphere.slice(0, 3) });
-  return { id, parent, name, kind: 'mesh', geometry: { library: tiled, model: `layout-${geo}` }, material, sphere: b.sphere, ...(b.box === undefined ? {} : { box: b.box }),
-    ...(far === undefined ? {} : { until: far + b.reach }) };
+  return { id, parent, name, kind: 'mesh', geometry: { library: tiled, model: `layout-${geo}` }, material, sphere: b.sphere, ...(b.box === undefined ? {} : { box: b.box }) };
 };
 const shell = projection.shell;
 const fabricPlacements = [...LION_PLACEMENTS, ...SET_PLACEMENTS, ...DRAWN_PLACEMENTS, ...LAYOUT_PLACEMENTS.filter(row => row.id.startsWith('nds-inst-') && row.id.endsWith('@well')),
@@ -409,17 +409,14 @@ const extras: Readonly<Record<string, readonly string[]>> = { square: [...LION_P
 const market = SET_PLACEMENTS.filter(row => row.id !== 'nds-set-balustrade-panel').map(row => row.id);
 const FABRIC = parseWorldSceneWeld({ id: 'fabric', root: 'dressing.root', resources: [], placements: fabricPlacements, nodes: [
   { id: 'fabric.root', parent: 'dressing.root', name: 'fabric', kind: 'group' },
-  ...projection.kits.flatMap(([name, geo]) => geo === null ? [] : [kitNode(`fabric.kit.${name}`, 'fabric.root', `kit:${name}`, geo, 'kit', farOf.get(name))]),
-  ...projection.alphaKits.map(([name, geo]) => kitNode(`fabric.kit.${name}`, 'fabric.root', `kit:${name}`, geo, 'kit-cut', farOf.get(name))),
-  // G5: each kit's split kinds, drawn by their own programs as children of their kit (its cull and band hold them too)
-  // NB8: only a banded kit (a draw distance) keeps its kinds under it; every other kit's kinds hang from the root, so the
-  // slab bake (sharddev bake/slabs.ts: one key per material, parent and cull slot) draws each kind as a few full chunks,
-  // not a chunk or more per kit
-  ...projection.kindKits.map(([name, geo, kind]) => projection.kits.some(([kit, at]) => kit === name && at !== null) && farOf.has(name)
-    ? kitNode(`fabric.kit.${name}.k${kind}`, `fabric.kit.${name}`, `kit:${name}:k${kind}`, geo, kitKind(kind).material)
-    : kitNode(`fabric.kit.${name}.k${kind}`, 'fabric.root', `kit:${name}:k${kind}`, geo, kitKind(kind).material, farOf.get(name))),
+  ...projection.kits.flatMap(([name, geo]) => geo === null ? [] : [kitNode(`fabric.kit.${name}`, 'fabric.root', `kit:${name}`, geo, 'kit')]),
+  ...projection.alphaKits.map(([name, geo]) => kitNode(`fabric.kit.${name}`, 'fabric.root', `kit:${name}`, geo, 'kit-cut')),
+  // G5: each kit's split kinds, drawn by their own programs. NB8: every kit's kinds hang from the root (no kit has a band),
+  // so the slab bake (sharddev bake/slabs.ts: one key per material, parent and cull slot) draws each kind as a few full
+  // chunks, not a chunk or more per kit
+  ...projection.kindKits.map(([name, geo, kind]) => kitNode(`fabric.kit.${name}.k${kind}`, 'fabric.root', `kit:${name}:k${kind}`, geo, kitKind(kind).material)),
   ...shell === null ? [] : [{ id: 'fabric.facade', parent: 'fabric.root', name: 'facade', kind: 'group' }, kitNode('fabric.shell', 'fabric.facade', 'facade-shell', shell, 'facade')],
-], culls: farKits.length === 0 ? [] : [{ roots: farKits.map(row => row.id), origins: farKits.flatMap(row => row.at), units: [], details: [], hosted: [] }],
+], culls: [],
 sets: [...market.length === 0 ? [] : [{ id: 'nine-dragon-stack/night-market', name: 'Lantern Square night market', file: 'src/shards/nine-dragon-stack/generators/stalls.ts', place: 'nine-dragon-stack/night-market', members: market }],
   ...worldRows.rows.regions.flatMap(region => {
     const members = [...DRAWN_PLACEMENTS.filter(row => region.kits.includes(row.kit)).map(row => row.id), ...extras[region.extra] ?? []];
