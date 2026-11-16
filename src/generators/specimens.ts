@@ -55,7 +55,8 @@ function each<P extends object>(profile: SpecimenProfile<P>): P[] {
 export function specimenRecipes(lumps: readonly CanopyLump[]): [string, () => BufferGeometry][] {
   const out = new Map<string, () => BufferGeometry>();
   const add = (key: string, build: () => BufferGeometry): void => { if (!out.has(key)) out.set(key, build); };
-  for (const [name, rings, segs, dressing] of [['near', 6, 8, true], ['far', 4, 6, false], ['dot', 2, 6, false]] as const) add(`lantern:${name}`, () => lanternLathe({ radius: 0.27, halfHeight: 0.24 }, rings, segs, dressing));
+  // NB8: 'pin' is the phone tier's dot past 80 m (12 triangles, not 24; a lantern there is ~2 CSS px)
+  for (const [name, rings, segs, dressing] of [['near', 6, 8, true], ['far', 4, 6, false], ['dot', 2, 6, false], ['pin', 2, 3, false]] as const) add(`lantern:${name}`, () => lanternLathe({ radius: 0.27, halfHeight: 0.24 }, rings, segs, dressing));
   // the stalls (models/stalls.ts): each drawn alone at the origin into its own context's square kit
   const stall = (draw: (c: Ctx) => void): BufferGeometry => {
     const c = new Ctx(new NoSigns());

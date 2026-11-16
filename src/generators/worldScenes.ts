@@ -40,9 +40,13 @@ import { CROWD_LOOK } from './crowdGraph';
 import { lightVolumeRows } from './lightVolumes';
 import paint from '../data/paint.json' with { type: 'json' };
 import canopy from '../data/canopy.json' with { type: 'json' };
-/** NB8: radians; ~3.7 CSS px across on the phone's portrait camera (vertical FOV ~100 deg, 874 px). 0.008 lost the far
- *  towers' lantern dots; the lanterns keep every copy (the targets' red rows) */
-const PHONE_MIN_ANGULAR = 0.005;
+/** NB8: radians; ~5 CSS px across on the phone's portrait camera (vertical FOV ~100 deg, 874 px). 0.008 lost the far
+ *  towers' lantern dots; the lanterns keep every copy (the targets' red rows). 0.005 to 0.007 (mini-nb8c): spawn 1.072 to
+ *  1.046 M, no change a same-pose pair shows */
+const PHONE_MIN_ANGULAR = 0.007;
+/** NB8: a LOD level that takes over the previous one's band on the phone from `metres` (bands must rise, so the previous
+ *  keeps 1 cm) and that the desktop never reaches */
+const PHONE_ONLY_FROM = (metres: number): { phone: number; desktop: number } => ({ phone: metres + 0.01, desktop: 1e6 });
 
 type WorldSceneModels = ReturnType<typeof parseWorldSceneModels>;
 
@@ -128,7 +132,9 @@ models.push(
   one('kowloonStele', 'kowloon-stele', '九龍城 stele', 'props', [draw('main', 'banyan:stele', 'kit')], { specimenYaw: Math.PI },
     [{ kind: 'box', x: 0, y: 1.1, z: 0, hx: 0.6, hy: 1.1, hz: 0.5, surface: 'stone' }]),
   { ...one('paperLantern', 'paper-lantern', 'Red paper lantern', 'props', [draw('main', 'lantern:near', 'lantern')]),
-    choices: [choice('0', [draw('main', 'lantern:near', 'lantern')], {}, [], [{ from: 35, draws: [draw('main', 'lantern:far', 'lantern')] }, { from: 80, draws: [draw('main', 'lantern:dot', 'lantern')] }])] },
+    choices: [choice('0', [draw('main', 'lantern:near', 'lantern')], {}, [], [{ from: 35, draws: [draw('main', 'lantern:far', 'lantern')] }, { from: 80, draws: [draw('main', 'lantern:dot', 'lantern')] },
+      // NB8: the phone draws the 12-triangle pin past 80 m (its dot keeps 1 cm); the desktop never reaches it
+      { from: PHONE_ONLY_FROM(80), draws: [draw('main', 'lantern:pin', 'lantern')] }])] },
   one('monorailTrain', 'monorail-train', 'Monorail train (four cars)', 'props', [draw('main', 'mover:train', 'kit')]),
   one('cableGondola', 'cable-gondola', 'Cable gondola', 'props', [draw('main', 'mover:gondola', 'kit')]),
   // a drone carries its navigation lights (red, white, cyan): neon quads in the sign atlas
@@ -148,16 +154,20 @@ const hook = hookRows, [hookX = 0, hookY = 0, hookZ = 0, hookR = 0] = hookBounds
 models.push({ key: 'feiZhuaHook', id: hook.model.id, name: hook.model.name, category: 'props', pipeline: 'trellis', file: FILE, defaults: {}, variants: [], assembly: 'parts', specimenYaw: hook.specimenYaw,
   choices: [choice('0', [{ ...hookDraw, sphere: [hookX, hookY, hookZ, hookR] as [number, number, number, number] }], {}, [], hook.lods.map(from => {
     const level = `dragon-hook-mid${String(from)}`; return { from, draws: [{ ...hookDraw, library: castLibrary(level), model: level, attributes: { library: 'cast-hook', model: 'dragon-hook' } }] }; }))] });
+/** NB8: a crowd LOD level's start; the phone starts the 22 m copy 1 cm past 12 m (bands must rise), so its 12 m level
+ *  draws nothing */
+const crowdFrom = (from: number, at: number): number | { phone: number; desktop: number } => at === 1 ? { phone: (lodRows.MID_FROM[0] ?? from) + 0.01, desktop: from } : from;
 for (const [key, row] of Object.entries(crowdRows)) {
   const name = key === 'walker' ? 'umbrellaWalker' : 'mahjongSitter';
   models.push({ key: name, id: row.id, name: row.name, category: 'people', pipeline: 'trellis', file: FILE, defaults: row.defaults, variants: [...row.variants, { id: 'table', label: 'Palette table', hidden: true, params: { pick: 'table' } }], assembly: 'parts',
     // The public Explorer variants retain their original independent sources.
     // Only placed crowd copies select the table's internal authored choice.
     choices: [...row.variants.map(variant => { const full = `${key}-${variant.id}`;
-      return choice(variant.id, [cast(full)], variant.params, [], [...lodRows.MID_FROM.map(from => ({ from, draws: [sharing(`${full}-mid${String(from)}`, full)] })),
+      return choice(variant.id, [cast(full)], variant.params, [], [...lodRows.MID_FROM.map((from, at) => ({ from: crowdFrom(from, at), draws: [sharing(`${full}-mid${String(from)}`, full)] })),
         { from: lodRows.LOD_NEAR, draws: [cast(`${full}-far`)] }, { from: lodRows.LOD_FAR, draws: [] }]); }),
     choice('table', [crowdCast(`${key}-table`)], { pick: 'table' }, [], [
-      ...lodRows.MID_FROM.map(from => ({ from, draws: [{ ...sharing(`${key}-table-mid${String(from)}`, `${key}-table`), material: 'crowd' }] })),
+      // NB8: the phone skips the 12 m level (the 22 m copy from 12 m: one draw fewer where both bands are in view)
+      ...lodRows.MID_FROM.map((from, at) => ({ from: crowdFrom(from, at), draws: [{ ...sharing(`${key}-table-mid${String(from)}`, `${key}-table`), material: 'crowd' }] })),
       { from: lodRows.LOD_NEAR, draws: [crowdCast(`${key}-table-far`)] }, { from: lodRows.LOD_FAR, draws: [] }]) ] });
 }
 // the sign (E306 / E315): every shop sign, plaque, paper strip and banner the fragment hangs, one model, its variants the
