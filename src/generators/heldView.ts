@@ -24,7 +24,8 @@ export function heldView({ profile, files }: NineHeldInputs): Readonly<Record<st
     blade: { socket: ARMS.weapon, base: ARMS.bladeBase, tip: ARMS.bladeTip },
     trail: { look: TRAIL, seed: 'seed', samples: 28, subdivisions: 4, movementSq: 1e-6, life: ARMS.trail.life, total: ARMS.trail.total, from: ARMS.trail.from, order: 5 },
     claw: ARMS.claw, params: files.params,
-    meshes: profile.meshes.map(({ name, look, channels, hull, doubleSide, maps }) => maps === '' ? { name, look, channels, hull, doubleSide } : { name, look, channels, hull, doubleSide, maps }),
+    // NB8: the phone rig's merged meshes are rows too; each tier dresses only the meshes its own rig has
+    meshes: [...profile.meshes, ...profile.phoneMeshes].map(({ name, look, channels, hull, doubleSide, maps }) => maps === '' ? { name, look, channels, hull, doubleSide } : { name, look, channels, hull, doubleSide, maps }),
     maps: { base: ARMS_BASE, names: ARMS_MAPS, kinds: { maps: 'uMapsTex', nrm: 'uNrmTex' }, anisotropy: 4 },
     weave: { file: 'looks/plain-weave.r8', size: 256, param: 'uSilk' },
     decal: { files: { phone: 'looks/jian-decal-phone.png', desktop: 'looks/jian-decal-desktop.png' }, param: 'uDecal' },

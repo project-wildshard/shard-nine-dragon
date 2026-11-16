@@ -1,10 +1,10 @@
 {
-  "content": "8ef7b625033e823c71201544b3ca7b19df3fdbd2772a91e4919e29c20539b0c2",
-  "captured": "2026-11-16T00:40:35.510Z",
-  "base": "http://127.0.0.1:4400",
+  "content": "525d9623d191e1f43fba216f5c54bed51c22be41a113b36ccb3e01e8ac380f29",
+  "captured": "2026-11-16T13:44:44.862Z",
+  "base": "http://127.0.0.1:4417",
   "card": {
-    "thumbs/nine-dragon-stack.jpg": "10e9a5fb6c42e2c7a42da7b2aa1a1de83f8d8db94db3852f54346852bb790033",
-    "thumbs/nine-dragon-stack-portrait.jpg": "41045a2c6003e08c3d997332cb3b954e9a4209a6050dd1db8652ac3bc88a6149",
-    "thumbs/nine-dragon-stack-landscape.jpg": "f2b3a48f6bb3e378a52b280ee3880cd2e8bfa8061bd14d5ca39ec021e383d717"
+    "thumbs/nine-dragon-stack.jpg": "0026342a7a0d755c22705b2f4f2db93d9f9b6f113ea0575c85bcf8974b5d0711",
+    "thumbs/nine-dragon-stack-portrait.jpg": "f5cc8a19206b5f3cbcb94a795dfc21bfb90388e492b50cd1dcf31a5ba06ce52e",
+    "thumbs/nine-dragon-stack-landscape.jpg": "ca7033e868a50742a46f9508f3571174dd6540f467c9c7c63b9b98925e6a8036"
   }
 }
