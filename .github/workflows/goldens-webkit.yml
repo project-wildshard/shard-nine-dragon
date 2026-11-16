@@ -87,6 +87,9 @@ jobs:
       - name: Serve the build
         run: |
           nohup node scripts/preview-server.mjs --outDir dist --port 4400 > preview.log 2>&1 &
+          # Nine's settled reader binds to serve-build's registry: a working record names the folder whose dist is served
+          mkdir -p ~/.dev-servers/.shared
+          echo "$! $(( $(date +%s) + 7200 )) $GITHUB_WORKSPACE goldens-webkit goldens-webkit" > ~/.dev-servers/4400
           for _ in $(seq 60); do curl -sf http://127.0.0.1:4400/version.json && exit 0; sleep 1; done
           cat preview.log; exit 1
       - name: Capture the 24 cameras in WebKit
