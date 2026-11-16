@@ -40,6 +40,9 @@ import { CROWD_LOOK } from './crowdGraph';
 import { lightVolumeRows } from './lightVolumes';
 import paint from '../data/paint.json' with { type: 'json' };
 import canopy from '../data/canopy.json' with { type: 'json' };
+/** NB8: radians; ~3.7 CSS px across on the phone's portrait camera (vertical FOV ~100 deg, 874 px). 0.008 lost the far
+ *  towers' lantern dots; the lanterns keep every copy (the targets' red rows) */
+const PHONE_MIN_ANGULAR = 0.005;
 
 type WorldSceneModels = ReturnType<typeof parseWorldSceneModels>;
 
@@ -333,15 +336,18 @@ const SIGN_PLACEMENTS = signAtlas.copies.map(({ neon, boxes, poses: hung }) => (
   drawnInto: { part: neon ? 'dressing.neon-boards' : 'dressing.signs', boxes }, piece: { id: neon ? signRows.model.pieces.neon : signRows.model.pieces.atlas },
   poses: hung.map(({ x, y, z, yaw, variant }) => { const row = signRows.variants.find(entry => entry.id === variant); if (row === undefined) throw new Error(`Nine sign variant ${variant} differs`);
     return { x, y, z, yxz: { yaw, scale: 1 }, variant, params: signParams(row) }; }) }));
+/** NINE-DRAGON-BENCHMAX NB8: the phone tier drops a dressing copy under PHONE_MIN_ANGULAR on screen (radius / distance);
+ *  the desktop draws every copy as before (0 = off) */
+const PHONE_SMALL = { minAngular: { phone: PHONE_MIN_ANGULAR, desktop: 0 } };
 const LAYOUT_PLACEMENTS = [
   ...SIGN_PLACEMENTS,
-  { id: 'nds-inst-ac', model: 'airConBox', name: 'inst:ac', draw: 'instanced' as const, cull: { bounds: 'sphere' as const }, piece: { id: 'nds-inst-ac' }, poses: projection.acs.map(words => posed(words)) },
+  { id: 'nds-inst-ac', model: 'airConBox', name: 'inst:ac', draw: 'instanced' as const, cull: { bounds: 'sphere' as const, ...PHONE_SMALL }, piece: { id: 'nds-inst-ac' }, poses: projection.acs.map(words => posed(words)) },
   ...(['open', 'capped'] as const).map(ending => ({ id: `nds-lanterns-${ending}`, model: 'paperLantern', draw: 'instanced' as const, cull: { bounds: 'sphere' as const },
     piece: { id: 'nds-lanterns' }, poses: hungLanterns(ending === 'capped') })),
   // the wall kit: one instanced placement per piece and region, its copies in their own colours
   ...projection.inst.map(([key, copies]) => {
     const piece = key.slice(0, key.indexOf('@')), model = WALL_KIT[piece]; if (model === undefined) throw new Error(`Nine wall kit has no model for ${piece}`);
-    return { id: `nds-inst-${key}`, model, name: `inst:${key}`, draw: 'instanced' as const, cull: { bounds: 'sphere' as const }, piece: { id: `nds-inst-${key}` },
+    return { id: `nds-inst-${key}`, model, name: `inst:${key}`, draw: 'instanced' as const, cull: { bounds: 'sphere' as const, ...PHONE_SMALL }, piece: { id: `nds-inst-${key}` },
       poses: copies.map(copy => posed(copy.matrix, copy.color)) };
   }),
   // the guardian lions at their frames, and the crowd: walkers and mahjong sitters in their colourways, culled from the
@@ -351,7 +357,7 @@ const LAYOUT_PLACEMENTS = [
   // brackets and collision-free ring anchors stay the world's; the grapple aims at the ring)
   { id: 'nds-fei-zhua-hooks', model: 'feiZhuaHook', name: 'glb:dragon-hook', draw: 'instanced' as const, cull: { bounds: 'sphere' as const }, piece: { id: 'nds-fei-zhua-hooks' }, poses: hungHooks() },
   ...([['walkers', 'umbrellaWalker'], ['sitters', 'mahjongSitter']] as const).map(([group, model]) => ({ id: `nds-crowd-${group}`, model, draw: 'instanced' as const,
-    cull: { bounds: 'sphere' as const, from: 'origin' as const, far: lodRows.LOD_FAR }, piece: { id: `nds-crowd-${group}` },
+    cull: { bounds: 'sphere' as const, from: 'origin' as const, far: lodRows.LOD_FAR, ...PHONE_SMALL }, piece: { id: `nds-crowd-${group}` },
     poses: worldRows.rows.crowd[group].map(row => crowdPose(group, row)) })),
   ...DRAWN_PLACEMENTS.map(({ kit: _kit, ...row }) => row),
   // the facade's baked pieces, drawn into its merged shell (FABRIC): one placement each
@@ -363,7 +369,7 @@ const LAYOUT_PLACEMENTS = [
   // the facade's drawn pieces (the baked shell's are drawn into it): one instanced placement each, small ones within 85 m
   ...worldRows.rows.facade.drawn.map(row => {
     const model = `facade:${row.id}`, name = catalogueName.get(model); if (name === undefined) throw new Error(`Nine facade ${row.id} has no catalogue model`);
-    return { id: `nds-facade-${row.id}`, model, name: `facade-${row.id}`, draw: 'instanced' as const, cull: { bounds: 'sphere' as const, ...(row.small ? { far: 85 } : {}) },
+    return { id: `nds-facade-${row.id}`, model, name: `facade-${row.id}`, draw: 'instanced' as const, cull: { bounds: 'sphere' as const, ...(row.small ? { far: 85 } : {}), ...(row.id === 'lantern' ? {} : PHONE_SMALL) },
       piece: { id: `nds-facade-${row.id}`, name }, poses: facadePoses(row.poses, row.count) };
   }),
 ];
@@ -396,7 +402,10 @@ const FABRIC = parseWorldSceneWeld({ id: 'fabric', root: 'dressing.root', resour
   ...projection.kits.flatMap(([name, geo]) => geo === null ? [] : [kitNode(`fabric.kit.${name}`, 'fabric.root', `kit:${name}`, geo, 'kit', farOf.get(name))]),
   ...projection.alphaKits.map(([name, geo]) => kitNode(`fabric.kit.${name}`, 'fabric.root', `kit:${name}`, geo, 'kit-cut', farOf.get(name))),
   // G5: each kit's split kinds, drawn by their own programs as children of their kit (its cull and band hold them too)
-  ...projection.kindKits.map(([name, geo, kind]) => projection.kits.some(([kit, at]) => kit === name && at !== null)
+  // NB8: only a banded kit (a draw distance) keeps its kinds under it; every other kit's kinds hang from the root, so the
+  // slab bake (sharddev bake/slabs.ts: one key per material, parent and cull slot) draws each kind as a few full chunks,
+  // not a chunk or more per kit
+  ...projection.kindKits.map(([name, geo, kind]) => projection.kits.some(([kit, at]) => kit === name && at !== null) && farOf.has(name)
     ? kitNode(`fabric.kit.${name}.k${kind}`, `fabric.kit.${name}`, `kit:${name}:k${kind}`, geo, kitKind(kind).material)
     : kitNode(`fabric.kit.${name}.k${kind}`, 'fabric.root', `kit:${name}:k${kind}`, geo, kitKind(kind).material, farOf.get(name))),
   ...shell === null ? [] : [{ id: 'fabric.facade', parent: 'fabric.root', name: 'facade', kind: 'group' }, kitNode('fabric.shell', 'fabric.facade', 'facade-shell', shell, 'facade')],
