@@ -5,10 +5,10 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@wildshard/engine': 0.1.18
+  '@wildshard/engine': 0.1.24
   binaryen: npm:@pre-bundled/binaryen@132.0.0-patch-1
   assemblyscript>binaryen: npm:@pre-bundled/binaryen@131.0.0-nightly.20260721-patch-1
-  '@wildshard/format': npm:@wildshard/shard-format@0.4.9
+  '@wildshard/format': npm:@wildshard/shard-format@0.7.0
 
 importers:
 
@@ -21,14 +21,14 @@ importers:
         specifier: 4.5.0
         version: 4.5.0
       '@wildshard/engine':
-        specifier: 0.1.18
-        version: 0.1.18(@types/three@0.186.0)(@typescript/typescript6@6.0.2)(sharp@0.35.5(@types/node@24.3.1))(typescript@7.0.2)(vite@8.3.0(@types/node@24.3.1))
+        specifier: 0.1.24
+        version: 0.1.24(@types/three@0.186.0)(@typescript/typescript6@6.0.2)(playwright@1.65.0)(sharp@0.35.5(@types/node@24.3.1))(typescript@7.0.2)(vite@8.3.0(@types/node@24.3.1))
       '@wildshard/format':
-        specifier: npm:@wildshard/shard-format@0.4.9
-        version: '@wildshard/shard-format@0.4.9(typescript@7.0.2)'
+        specifier: npm:@wildshard/shard-format@0.7.0
+        version: '@wildshard/shard-format@0.7.0(typescript@7.0.2)'
       '@wildshard/sharddev':
-        specifier: npm:@wildshard/sdk@0.2.11
-        version: '@wildshard/sdk@0.2.11(@types/node@24.3.1)(typescript@7.0.2)'
+        specifier: npm:@wildshard/sdk@0.3.4
+        version: '@wildshard/sdk@0.3.4(@opentelemetry/api@1.10.0)(@types/node@24.3.1)(three@0.186.0)(typescript@7.0.2)'
       meshoptimizer:
         specifier: 1.2.0
         version: 1.2.0
@@ -40,7 +40,7 @@ importers:
         version: 1.5.0(typescript@7.0.2)
       vitest:
         specifier: 5.0.1
-        version: 5.0.1(@types/node@24.3.1)(happy-dom@20.14.5)(vite@8.3.0(@types/node@24.3.1))
+        version: 5.0.1(@opentelemetry/api@1.10.0)(@types/node@24.3.1)(happy-dom@20.14.5)(vite@8.3.0(@types/node@24.3.1))
     devDependencies:
       '@types/node':
         specifier: 24.3.1
@@ -298,6 +298,10 @@ packages:
   '@math.gl/types@4.1.0':
     resolution: {integrity: sha512-clYZdHcmRvMzVK5fjeDkQlHUzXQSNdZ7s4xOqC3nJPgz4C/TZkUecTo9YS4PruZqtDda/ag4erndP0MIn40dGA==}
 
+  '@opentelemetry/api@1.10.0':
+    resolution: {integrity: sha512-lMkyes8iHrG+mk6WH7X70MdCLI2RS0FwNBY1PyQ8UemaijE2m5mv5A0Niy3HtbYTFrgkUEQjFMXmSAk2hQDuPQ==}
+    engines: {node: '>=8.0.0'}
+
   '@oxc-project/types@0.156.0':
     resolution: {integrity: sha512-1Duyg48TdJNdyhEB8Xn1L36bT9Pv6GUtlKjHxOys8xkaF/rQq3XJE+bAurSK/AgIz5mGFsb77cn9Pb20+WCScw==}
 
@@ -351,6 +355,10 @@ packages:
 
   '@probe.gl/stats@4.1.2':
     resolution: {integrity: sha512-Hqc0UIHd0IZ2+JbovzTz7lYG7CY9D8yCB81zyP92Zl9UDSPcw2cLbTySW14keAQeAo1sjGjUw0+KHxr0Y2h/hA==}
+
+  '@prometheus-io/client@0.16.1':
+    resolution: {integrity: sha512-XkFPsGFGoSs/UMg/vh0QLDpanl/tsrOV5PLHdpGe8Ho+ir/Llhytr15j6y8ZwLrpIGzK9gTVVpIalA6C4UjUZw==}
+    engines: {node: ^22 || ^24 || >=26}
 
   '@rolldown/binding-android-arm-eabi@1.2.16':
     resolution: {integrity: sha512-ia3DwAs0OsMGS7+IConptSiyk9pEXkOx/AbJ2n/lAGxH3QkWQus1t8d7gnAT38FCU2sQu8lUbeR6AiZFv4JxaA==}
@@ -553,28 +561,33 @@ packages:
   '@vitest/spy@5.0.1':
     resolution: {integrity: sha512-rbto/mF/SGERxEgYOek7Xm6B9b+y+mVoo+f4b2LymYO8zM1b7uB5nHuhVMTP2hxdzgxvGiZYGxGIaMvL5y180Q==}
 
-  '@wildshard/engine@0.1.18':
-    resolution: {integrity: sha512-DqF50oGJjCNmgSwBMO0AeylfPPf2Std99a/SS1GRYCQNpB/HMlH+XDfa7Cudjd5SDmRh5Sm2BMIkzS9FKKqphQ==}
+  '@wildshard/engine@0.1.24':
+    resolution: {integrity: sha512-GVfCGbduApH44RiPQhGIUdEyo2xjmfLnMTi9EvUhGTXmDfN7/KtsQGVYQ+sLwanDYkQ1ICokYE2YrJuy1QXccw==}
     engines: {node: '>=24.18.0'}
     hasBin: true
     peerDependencies:
       '@types/three': '*'
       '@typescript/typescript6': 6.0.2
+      playwright: 1.65.0
       sharp: 0.35.5
       vite: 8.3.0
     peerDependenciesMeta:
       '@types/three':
         optional: true
+      playwright:
+        optional: true
       sharp:
         optional: true
 
-  '@wildshard/sdk@0.2.11':
-    resolution: {integrity: sha512-G52Adkd0zscJ8QuGkGR5YcQZ/9pDkWKb5pURwm+ABc7Hg71wMen01LbirUcp+a1iERHTKgl9getrT+ZT8QZ+qg==}
+  '@wildshard/sdk@0.3.4':
+    resolution: {integrity: sha512-na3XydBj+qiLwEGI+D71C+FU/x6qvKuZfvB80fiNGR5Pnqt4lcuG8Mlcn7OtwkDEchhD9cMooQfp/5ls7UEakA==}
     engines: {node: '>=24.18.0'}
     hasBin: true
+    peerDependencies:
+      three: 0.186.0
 
-  '@wildshard/shard-format@0.4.9':
-    resolution: {integrity: sha512-HbNtrUnsBQHq+q0y95b298kf4w3sQQ1YefzlUbeEOGcXQIB7ww9O6YwQAz4xkRXwaoP5eYDOWBw3J3fSLh2euQ==}
+  '@wildshard/shard-format@0.7.0':
+    resolution: {integrity: sha512-3axxrr/yNVWpV19IvpRVeaMOAbTZy0SqEowRiHmUrsJer9c5gUzwPa7zwPnYXxnRScSt691tEBspPOZvY+93/g==}
     engines: {node: '>=24.18.0'}
     hasBin: true
 
@@ -597,6 +610,9 @@ packages:
   assertion-error@2.0.1:
     resolution: {integrity: sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA==}
     engines: {node: '>=12'}
+
+  bintrees@1.0.2:
+    resolution: {integrity: sha512-VOMgTMwjAaUG580SXn3LacVgjurrbMme7ZZNYGSSV7mmtY6QQRh0Eg3pwIcntQ77DErK1L0NxkbetjcoXzVwKw==}
 
   buffer-image-size@0.6.4:
     resolution: {integrity: sha512-nEh+kZOPY1w+gcCMobZ6ETUp9WfibndnosbpwB1iJk/8Gt5ZF2bhS6+B6bPYz424KtwsR6Rflc3tCz1/ghX2dQ==}
@@ -962,6 +978,9 @@ packages:
 
   std-env@4.3.0:
     resolution: {integrity: sha512-OtU/EgQ1kIm5KwqQpBC6ZEMXrZRui11w8zgfTWp8cdO9B8OaPsbA8bTHO2P+HNo1VlUTGMVBwPhydu6poeXiag==}
+
+  tdigest@0.1.3:
+    resolution: {integrity: sha512-zbRt+lT+/H4fRItHshczHErVCQnitJk8MfMT24MqFJf3YL7SJJPqGIGeuOdvxXxM/AHFzKBl7WoyaYwqO9s3Kw==}
 
   three@0.186.0:
     resolution: {integrity: sha512-cr/fIM2ddMSVbYVgkfD4jLJv7Fh/8ZTjvo+7gQeSVGUZHxpx9FDwoL5iC7hUz/LiRA8wMbqfnb90xKfm1/HHkQ==}
@@ -1422,6 +1441,8 @@ snapshots:
 
   '@math.gl/types@4.1.0': {}
 
+  '@opentelemetry/api@1.10.0': {}
+
   '@oxc-project/types@0.156.0': {}
 
   '@oxfmt/binding-darwin-arm64@0.74.0':
@@ -1453,6 +1474,11 @@ snapshots:
       '@probe.gl/env': 4.1.2
 
   '@probe.gl/stats@4.1.2': {}
+
+  '@prometheus-io/client@0.16.1':
+    dependencies:
+      '@opentelemetry/api': 1.10.0
+      tdigest: 0.1.3
 
   '@rolldown/binding-android-arm-eabi@1.2.16':
     optional: true
@@ -1603,15 +1629,16 @@ snapshots:
 
   '@vitest/spy@5.0.1': {}
 
-  '@wildshard/engine@0.1.18(@types/three@0.186.0)(@typescript/typescript6@6.0.2)(sharp@0.35.5(@types/node@24.3.1))(typescript@7.0.2)(vite@8.3.0(@types/node@24.3.1))':
+  '@wildshard/engine@0.1.24(@types/three@0.186.0)(@typescript/typescript6@6.0.2)(playwright@1.65.0)(sharp@0.35.5(@types/node@24.3.1))(typescript@7.0.2)(vite@8.3.0(@types/node@24.3.1))':
     dependencies:
       '@dimforge/rapier3d-simd': 0.21.0
       '@hono/node-server': 2.1.5(hono@4.13.13)
+      '@prometheus-io/client': 0.16.1
       '@sentry/browser': 11.0.0
       '@sentry/core': 11.0.0
       '@typescript/typescript6': 6.0.2
       '@valibot/to-json-schema': 1.8.0(valibot@1.5.0(typescript@7.0.2))
-      '@wildshard/format': '@wildshard/shard-format@0.4.9(typescript@7.0.2)'
+      '@wildshard/format': '@wildshard/shard-format@0.7.0(typescript@7.0.2)'
       '@wildshard/wire': 0.1.0(typescript@7.0.2)
       ajv: 6.15.0
       fflate: 0.8.3
@@ -1627,6 +1654,7 @@ snapshots:
       ws: 8.22.0
     optionalDependencies:
       '@types/three': 0.186.0
+      playwright: 1.65.0
       sharp: 0.35.5(@types/node@24.3.1)
     transitivePeerDependencies:
       - bufferutil
@@ -1635,7 +1663,7 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@wildshard/sdk@0.2.11(@types/node@24.3.1)(typescript@7.0.2)':
+  '@wildshard/sdk@0.3.4(@opentelemetry/api@1.10.0)(@types/node@24.3.1)(three@0.186.0)(typescript@7.0.2)':
     dependencies:
       '@dimforge/rapier3d-simd': 0.21.0
       '@gltf-transform/core': 4.5.0
@@ -1647,8 +1675,8 @@ snapshots:
       '@types/three': 0.186.0
       '@typescript/typescript6': 6.0.2
       '@valibot/to-json-schema': 1.8.0(valibot@1.5.0(typescript@7.0.2))
-      '@wildshard/engine': 0.1.18(@types/three@0.186.0)(@typescript/typescript6@6.0.2)(sharp@0.35.5(@types/node@24.3.1))(typescript@7.0.2)(vite@8.3.0(@types/node@24.3.1))
-      '@wildshard/format': '@wildshard/shard-format@0.4.9(typescript@7.0.2)'
+      '@wildshard/engine': 0.1.24(@types/three@0.186.0)(@typescript/typescript6@6.0.2)(playwright@1.65.0)(sharp@0.35.5(@types/node@24.3.1))(typescript@7.0.2)(vite@8.3.0(@types/node@24.3.1))
+      '@wildshard/format': '@wildshard/shard-format@0.7.0(typescript@7.0.2)'
       ajv: 6.15.0
       assemblyscript: 0.28.20
       binaryen: '@pre-bundled/binaryen@132.0.0-patch-1'
@@ -1664,7 +1692,7 @@ snapshots:
       three: 0.186.0
       valibot: 1.5.0(typescript@7.0.2)
       vite: 8.3.0(@types/node@24.3.1)
-      vitest: 5.0.1(@types/node@24.3.1)(happy-dom@20.14.5)(vite@8.3.0(@types/node@24.3.1))
+      vitest: 5.0.1(@opentelemetry/api@1.10.0)(@types/node@24.3.1)(happy-dom@20.14.5)(vite@8.3.0(@types/node@24.3.1))
     transitivePeerDependencies:
       - '@edge-runtime/vm'
       - '@opentelemetry/api'
@@ -1695,7 +1723,7 @@ snapshots:
       - utf-8-validate
       - yaml
 
-  '@wildshard/shard-format@0.4.9(typescript@7.0.2)':
+  '@wildshard/shard-format@0.7.0(typescript@7.0.2)':
     dependencies:
       meshoptimizer: 1.2.0
       valibot: 1.5.0(typescript@7.0.2)
@@ -1728,6 +1756,8 @@ snapshots:
       long: 5.3.2
 
   assertion-error@2.0.1: {}
+
+  bintrees@1.0.2: {}
 
   buffer-image-size@0.6.4:
     dependencies:
@@ -2047,6 +2077,10 @@ snapshots:
 
   std-env@4.3.0: {}
 
+  tdigest@0.1.3:
+    dependencies:
+      bintrees: 1.0.2
+
   three@0.186.0: {}
 
   tinybench@6.1.4: {}
@@ -2094,7 +2128,7 @@ snapshots:
       '@types/node': 24.3.1
       fsevents: 2.3.3
 
-  vitest@5.0.1(@types/node@24.3.1)(happy-dom@20.14.5)(vite@8.3.0(@types/node@24.3.1)):
+  vitest@5.0.1(@opentelemetry/api@1.10.0)(@types/node@24.3.1)(happy-dom@20.14.5)(vite@8.3.0(@types/node@24.3.1)):
     dependencies:
       '@types/chai': 5.2.3
       '@vitest/mocker': 5.0.1(vite@8.3.0(@types/node@24.3.1))
@@ -2111,6 +2145,7 @@ snapshots:
       vite: 8.3.0(@types/node@24.3.1)
       why-is-node-running: 2.3.0
     optionalDependencies:
+      '@opentelemetry/api': 1.10.0
       '@types/node': 24.3.1
       happy-dom: 20.14.5
     transitivePeerDependencies:

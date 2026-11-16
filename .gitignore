@@ -21,3 +21,5 @@ tmp/
 /public/assets/nine-dragon-stack/entry-reads.json
 /src/discovery.generated.ts
 /.owner
+# sdk 0.3 `wildshard check` writes its built product here
+/public/shardfiles/

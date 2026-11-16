@@ -8,7 +8,7 @@ import { afterAll, expect, test } from 'vitest';
 import { build } from 'vite';
 import { createProjectGeneration } from '@wildshard/sharddev/projectGeneration';
 import { assertConfigBoundary } from '@wildshard/sharddev/configBoundary';
-import { prepareAssetDecoders } from '@wildshard/format/product';
+import { prepareAssetDecoders } from '@wildshard/format/shardfileAssets';
 import { nineSourceOutput } from '../src/generators/sourceOutput';
 import { parseBurstFields } from '../src/generators/sections';
 import type { NineOutput } from '../src/generators/outputDefinition';
