@@ -50,3 +50,8 @@ Rerun boards kept in `runs/`, newest last. Captured on the Mac mini (headless Ch
   SH-ALL-11): `runs/2026-11-15-a38e4f7ca8-board.jpg`. 24/24 green, SSIM 0.74 to 0.95, no colour flags, every pose
   settled. Only the rain streaks and the crowd move. Needs engine `bc2bd332`: the
   native residency reader finds the refinement chunk in the shared `b/c` folder, where J217 LD6 moved it.
+- 2026-11-16, WebKit, engine `b61d2752c2` with the pinned products, build `b61d2752-mwjc1vwd` (mini-shardvis, meta
+  SHARD-REPOS SH-nine-3): `runs/2026-11-16-b61d2752c2-webkit-board.jpg`. 24/24 green, SSIM 0.70 to 0.94, no colour
+  flags, every pose settled. Shot by `.github/workflows/goldens-webkit.yml` (nightly) in Playwright WebKit, iPhone 16
+  Pro, phone tier, 2x, on a hosted macos-15 runner: the Mac mini has no logged-in GUI session, so headless WebKit
+  times out at launch there. Every panel read: walls, floors, signs and hands match; only rain and crowds move.
