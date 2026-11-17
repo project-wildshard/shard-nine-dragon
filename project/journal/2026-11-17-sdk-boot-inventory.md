@@ -14,4 +14,9 @@ phone/desktop image/KTX2 results against the replacement, including
 GPU aliases, phone fallbacks and absent world files: identical.
 The temporary parity test passed and was removed after the proof.
 Build and wildshard check verify the original one-module refusal.
-No dependency, manifest, hero, pin or renderer changes.
+No dependency, manifest, pin or renderer changes.
+
+The source fingerprint made wildshard check require a fresh hero after
+the helper change. Capture all three slots through the SDK from the
+unchanged full Nine content used by the benchmark; inspect the landscape
+and rerun the author check (pass, 31.2 s). Hero images/stamp change too.
