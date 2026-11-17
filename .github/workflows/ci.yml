@@ -113,6 +113,11 @@ jobs:
       - name: Build shard products on the runner
         if: github.event_name != 'push'
         run: pnpm build:shards
+      - name: Retain CI21 native, walking and grid re-entry proofs
+        if: github.event_name != 'push'
+        run: |
+          pnpm exec vitest run --config test/ci21-runtime/vitest.config.ts --reporter=default --reporter=json --outputFile.json=tmp/ci21/runtime.json
+          node test/ci21-report.mjs runtime tmp/ci21/runtime.json
       - name: Check the shard source as an author would (TS21)
         if: github.event_name != 'push'
         run: pnpm exec wildshard check . tmp/ci/check
@@ -151,6 +156,13 @@ jobs:
             printf '\n### Included commits since %s\n\n~~~text\n%s\n~~~\n' "$previous" "$commits"
             echo 'The checks target the final tree; intermediate SHAs were not executed separately.'
           } >> "$GITHUB_STEP_SUMMARY"
+      - name: Keep raw CI21 proof
+        if: always() && github.event_name != 'push'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ci21-check-${{ github.run_id }}-${{ github.run_attempt }}
+          path: tmp/ci21/*.json
+          if-no-files-found: error
 
   retained-author-tests:
     runs-on: ubuntu-latest
@@ -210,7 +222,16 @@ jobs:
           fi
       # These retained source tests read source/fixtures, not out/.
       # Both mandatory jobs keep the five-minute candidate limit.
-      - run: pnpm test:shards
+      - run: |
+          pnpm exec vitest run --reporter=default --reporter=json --outputFile.json=tmp/ci21/source.json
+          node test/ci21-report.mjs source tmp/ci21/source.json
+      - name: Keep raw CI21 proof
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ci21-source-${{ github.run_id }}-${{ github.run_attempt }}
+          path: tmp/ci21/*.json
+          if-no-files-found: error
 
   # TEST-SPEED TS16e (repo-kit docs/shard-ci.md): on a push this job builds
   # once, runs check's build-dependent steps on that out/, then plays Ring 2
@@ -294,6 +315,10 @@ jobs:
           echo "Ring 2 play on this push: $play"
       - name: Build shard products on the runner
         run: pnpm build:shards
+      - name: Retain CI21 native, walking and grid re-entry proofs
+        run: |
+          pnpm exec vitest run --config test/ci21-runtime/vitest.config.ts --reporter=default --reporter=json --outputFile.json=tmp/ci21/runtime.json
+          node test/ci21-report.mjs runtime tmp/ci21/runtime.json
       - name: Check the shard source as an author would (TS21)
         run: pnpm exec wildshard check . tmp/ci/check
       - name: Walk the owned 1800-tick authored route
@@ -309,6 +334,13 @@ jobs:
       - name: Cook, grapple and restore from server files
         if: steps.ring2.outputs.play == 'true'
         run: node --test test/ci/cook-play.test.mjs
+      - name: Keep raw CI21 proof
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ci21-runtime-${{ github.run_id }}-${{ github.run_attempt }}
+          path: tmp/ci21/*.json
+          if-no-files-found: error
 
   # SHARD-AUTHORING SA40 (J319): generators are arbitrary Node, so build
   # every shard twice from a clean copy of the tree, each with an empty

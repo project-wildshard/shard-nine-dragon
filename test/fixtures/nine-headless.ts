@@ -1,9 +1,9 @@
 import { NATIVE_ASSEMBLY_FILE, parseNativeAssembly } from '@wildshard/format/nativeAssembly';
-import type { ShardProduct } from '../../src/shared/game/shardfile/shardProduct';
+import type { ShardProduct } from '@wildshard/engine/game/shardfile/shardProduct';
 import type { PrepareHeadlessRuntime } from '@wildshard/engine/host/headlessRuntime';
 import manifest from '../../src/manifest.json' with { type: 'json' };
-import { prepareProductPlan } from './headless-native';
-import { registerNativeWalkBounds } from './headless/nativeBounds';
+import { prepareProductPlan } from '@wildshard/engine/test/headless-native';
+import { registerNativeWalkBounds } from '@wildshard/engine/test/headless/nativeBounds';
 
 /** Nine's own plan with the claw's rise turned off: the path a lifting crossing used to take. */
 async function flatProduct(product: ShardProduct): Promise<ShardProduct> {

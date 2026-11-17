@@ -1,0 +1,106 @@
+{
+  "schema": "ci21-nine-ports/1",
+  "sourceRepository": "project-wildshard/engine",
+  "sourceRevision": "66e4edb1405d026efecc17552a531187ff47f805",
+  "destinationBase": "4264fe9864242004e9418275248ef2ebcee0e222",
+  "state": "blocking source and post-build runtime suites; hosted proof pending",
+  "files": [
+    {
+      "source": "test/nine-authored-manifest.test.ts",
+      "sourceBlob": "09aa313c1ea0a46282829da9f19ed55fc1e766b8",
+      "target": "test/nine-authored-manifest.test.ts",
+      "suite": "source",
+      "cases": 2,
+      "partition": "whole"
+    },
+    {
+      "source": "test/nine-decal-binary.test.ts",
+      "sourceBlob": "c980c969186d5cc8d206beb6f8ecf7d011ee2d1f",
+      "target": "test/nine-decal-binary.test.ts",
+      "suite": "source",
+      "cases": 2,
+      "partition": "whole"
+    },
+    {
+      "source": "test/nine-geometry-writer.test.ts",
+      "sourceBlob": "ac221d7d88ad29eaec13177ff35933994a85ea48",
+      "target": "test/nine-geometry-writer.test.ts",
+      "suite": "source",
+      "cases": 2,
+      "partition": "whole"
+    },
+    {
+      "source": "test/nine-product-inputs.test.ts",
+      "sourceBlob": "6f6602084e06a232ac4855468e4867d42878454b",
+      "target": "test/nine-product-inputs.test.ts",
+      "suite": "source",
+      "cases": 2,
+      "partition": "whole"
+    },
+    {
+      "source": "test/nine-slab-bake.test.ts",
+      "sourceBlob": "94f01c76f0bfbac99b84108f2b4695676414449d",
+      "target": "test/nine-slab-bake.test.ts",
+      "suite": "source",
+      "cases": 1,
+      "partition": "whole"
+    },
+    {
+      "source": "test/nine-source-rows.test.ts",
+      "sourceBlob": "27bad9ade237f35ba8efbc1ae87da714cd72d1c9",
+      "target": "test/nine-source-rows.test.ts",
+      "suite": "source",
+      "cases": 10,
+      "partition": "whole"
+    },
+    {
+      "source": "test/native-oracle.test.ts",
+      "sourceBlob": "06d68e9e94ea5850fc9281cebbf7f0f3f5566222",
+      "target": "test/nine-native-oracle.test.ts",
+      "suite": "source",
+      "cases": 3,
+      "partition": "Nine only; retain shared engine original for C10"
+    },
+    {
+      "source": "test/grid-reentry.test.ts",
+      "sourceBlob": "56645b1407b160bfc4edb1797c73fc5e5a1c7ac4",
+      "target": "test/ci21-runtime/grid-reentry.test.ts",
+      "suite": "runtime",
+      "cases": 1,
+      "partition": "Nine only; retain shared engine original for C10"
+    },
+    {
+      "source": "test/nine-headless-assembly.test.ts",
+      "sourceBlob": "0c86aa18dce9804dd399c5e9a2f2b7fd06a33efb",
+      "target": "test/ci21-runtime/nine-headless-assembly.test.ts",
+      "suite": "runtime",
+      "cases": 2,
+      "partition": "whole"
+    },
+    {
+      "source": "test/nine-verb-tape.test.ts",
+      "sourceBlob": "613f352338dda68f0ac39451aa2a43550b29de58",
+      "target": "test/ci21-runtime/nine-verb-tape.test.ts",
+      "suite": "runtime",
+      "cases": 2,
+      "partition": "whole"
+    },
+    {
+      "source": "test/nine-walk-verbs.test.ts",
+      "sourceBlob": "23d925b136e1839dc43005b703153e89cda349e7",
+      "target": "test/ci21-runtime/nine-walk-verbs.test.ts",
+      "suite": "runtime",
+      "cases": 3,
+      "partition": "whole"
+    }
+  ],
+  "adaptations": [
+    "Current single-shard src layout and public installed engine/SDK imports. productDefinition/nineProduct renamed shardfileDefinition/nineShardfile with the same supplied input/refusal assertions.",
+    "NB20 4264fe9864 moves exactly eight parapet inner faces 5 cm outwards. portal-rail-history checks all new center/half-width words and reconstructs only those words before all original historical hashes (including constants). No broad repinning.",
+    "Engine 0.1.32/NB20 proves the same 92 lanes/eight portal transfers with 15956 steps (28 fewer). Headless assembly compares that explicit current count; native constants retain the original 15984 count and full hash.",
+    "Legacy authoredManifestSource is called on current src through a temporary monorepo-layout symlink, composed manifest, and original extraArt declaration; no generated discovery dependency. Runtime data-only entry and every original absent-program-value refusal remain.",
+    "Room crossing traverses public openWorld.step(inputs); an in-memory persistent profile map satisfies the current world owner. All original wire phases, crossing and byte-identical snapshot assertions remain.",
+    "Walking and flat/current LOCK/ZIP tapes run the original native adapter in process against the CI-built out/nine-dragon-stack. Direct errors propagate synchronously instead of a worker quarantine flag; negative variant guard remains in the owning fixture before any foreign product load.",
+    "grid-reentry retains the Nine partition. C10 owns all other shard partitions and the generic DB1 case; native-oracle retains Nalati two-case debt. Neither shared engine original is removable from Nine proof alone."
+  ]
+}

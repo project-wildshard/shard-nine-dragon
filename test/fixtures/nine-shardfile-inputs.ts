@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 import { createProjectGeneration } from '@wildshard/sharddev/projectGeneration';
 import { readNineShardfileInputs } from '../../src/generators/shardfile';
 import { nineShardfileFrom } from '../../src/generators/shardfileDefinition';
+import courseSource from '@wildshard/sharddev/commons/scripts/course.as?raw';
 import { courseProgramInputs } from '@wildshard/sharddev/commons/courseProgram';
 import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/format/immutable';
 import { ninePracticeRows, ninePracticeBytes } from './nine-practice-program';
@@ -12,7 +13,7 @@ import { runSnapshot } from './runSnapshot';
 
 // DOM suites consume the independently pinned course as a checked cache hit. Real cold
 // compilation remains covered by the Node producer/source-output suites.
-const courseText = readFileSync('src/commons/scripts/course.as', 'utf8'), text = new TextEncoder();
+const courseText = courseSource, text = new TextEncoder();
 if (hashImmutableBytes(text.encode(courseText)) !== ninePracticeRows.script.sourceHash) throw new Error('Practice fixture program has stale source');
 const practiceId = `practice-${hashImmutableBytes(text.encode(encodeCanonicalJson([courseProgramInputs('checkpoints').row, courseText])))}`;
 
