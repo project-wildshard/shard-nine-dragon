@@ -15,7 +15,7 @@ import { KEYCHAIN_ARGS } from './chromium-keychain.mjs';
 // One headless Chromium, Metal, muted; take the machine's browser lock around it when other agents capture.
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { chromium } from 'playwright';
+import { chromium } from "./browser-playwright.mjs";
 
 const ROOT = join(import.meta.dirname, '..');
 const argv = process.argv.slice(2);

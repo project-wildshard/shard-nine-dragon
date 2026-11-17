@@ -26,7 +26,7 @@ import { closeSync, existsSync, mkdirSync, openSync, readFileSync, unlinkSync, w
 import { tmpdir } from 'node:os';
 import { join, resolve as resolvePath } from 'node:path';
 
-const { chromium } = await import('playwright');
+const { chromium } = await import("./browser-playwright.mjs");
 const ROOT = resolvePath(new URL('..', import.meta.url).pathname);
 const argv = process.argv.slice(2);
 const flag = (name, dflt) => { const a = argv.find((x) => x.startsWith(`--${name}=`)); return a ? a.slice(name.length + 3) : dflt; };

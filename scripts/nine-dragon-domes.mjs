@@ -20,7 +20,7 @@ import { KEYCHAIN_ARGS } from './chromium-keychain.mjs';
 import { closeSync, existsSync, mkdirSync, openSync, readFileSync, unlinkSync, writeFileSync, writeSync } from 'node:fs';
 import { join, resolve as resolvePath } from 'node:path';
 import { tmpdir } from 'node:os';
-import { chromium } from 'playwright';
+import { chromium } from "./browser-playwright.mjs";
 import { jpegImageRoutes } from './parity/image-routes.mjs';
 import { saveCanvasJpeg } from './parity/canvas-bytes.mjs';
 

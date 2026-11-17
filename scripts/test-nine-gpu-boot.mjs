@@ -5,7 +5,7 @@ import { harnessPins, saveFixture } from './debug-settings.mjs';
 // Run after `pnpm build` with `pnpm exec vite preview --port 4184` up:
 // node scripts/test-nine-gpu-boot.mjs [--url=http://127.0.0.1:4184] [--only=webkit|chromium|all] [--fault=precision|shader|context|texture]
 // A pass requires one failure, an error panel, no second load, and diagnostics in both reporting transports.
-import { chromium, webkit } from 'playwright';
+import { chromium, webkit } from "./browser-playwright.mjs";
 
 const option = (name, fallback) => process.argv.find((part) => part.startsWith(`--${name}=`))?.slice(name.length + 3) ?? fallback;
 const base = option('url', 'http://127.0.0.1:4184').replace(/\/$/, '');

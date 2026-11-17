@@ -2,7 +2,7 @@
 // macOS native WebKit GPU restart during renderer creation (E257).
 // node scripts/test-nine-native-startup.mjs --url=http://127.0.0.1:4184
 // Only the fresh Playwright GPU process is killed; every pre-existing process is excluded.
-import { webkit } from 'playwright';
+import { webkit } from "./browser-playwright.mjs";
 import { saveFixture } from './debug-settings.mjs';
 import { execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';

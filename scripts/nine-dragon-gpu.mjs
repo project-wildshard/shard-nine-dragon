@@ -33,7 +33,7 @@ import { KEYCHAIN_ARGS } from './chromium-keychain.mjs';
 // One headless Chromium on Metal, muted; it holds one of the pass's two browser slots (.git/nine-dragon-browser-{1,2}.lock).
 import { closeSync, existsSync, openSync, readFileSync, unlinkSync, writeSync } from 'node:fs';
 import { join } from 'node:path';
-import { chromium } from 'playwright';
+import { chromium } from "./browser-playwright.mjs";
 import { debugSettings } from './debug-settings.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
