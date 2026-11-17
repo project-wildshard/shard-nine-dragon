@@ -29,17 +29,15 @@ test('the real cooked Nine earns grapple and resumes using only served server fi
  process.env.WILDSHARD_SPAWN_PART_CACHE=join(root,'cold-parts');
  try{
   const {cookShard,servedAsIs}=await import('@wildshard/engine/game/shardCook');
-  // Engine 0.1.24 encodes the phone tier's 6x6 textures on worker threads that import its astc6Wasm.ts, and a worker has
-  // no format hook: Node refuses to strip types under node_modules (QA-FEEDBACK-2026-11-16-mini row 41). Those are
-  // client files; this proof reads only server files, so the cook runs with the tiers off (on this thread, 7x slower
-  // on Linux, it would pass the 300 s cap).
+  // QA41: the pinned engine includes the per-worker format hook. Exercise
+  // the normal phone tiers too; never hide installed-package worker failures.
   const bin=join(dirname(require.resolve('@wildshard/sharddev/package.json')),'bin/wildshard.mjs'),tar=join(root,'dunes.tar');
   const done=spawnSync(process.execPath,[bin,'pack',resolve('out/nine-dragon-stack'),'--out',tar],{encoding:'utf8',timeout:30_000});
   assert.ifError(done.error);assert.equal(done.status,0,done.stderr);
   const cooked=join(root,'cooked'),unpacked=join(root,'server-files');
   // Loose HTTP encoding is an explicit host policy, not a fake part encoder.
   const report=await cookShard(readFileSync(tar),cooked,{now:()=>performance.now(),wireBytes:(url,bytes)=>servedAsIs(url,bytes)?bytes.length:
-   brotliCompressSync(bytes,{params:{[constants.BROTLI_PARAM_QUALITY]:4}}).length,tiers:{}});
+   brotliCompressSync(bytes,{params:{[constants.BROTLI_PARAM_QUALITY]:4}}).length});
   assert.equal(report.slug,'nine-dragon-stack');assert.ok(report.parts.count>0);
   const raw=JSON.parse(readFileSync(join(cooked,report.server.index),'utf8'));
   const pack=readServerPackBook({book:'server',build:'nine-proof',shards:{[report.slug]:raw}}).shards[report.slug];
