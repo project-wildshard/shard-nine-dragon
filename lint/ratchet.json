@@ -1,6 +1,4 @@
 {
   "budgets": {},
-  "wildshard/shard-sandbox": {
-    "src/shards/nine-dragon-stack/generators/bootFiles.ts": 1
-  }
+  "wildshard/shard-sandbox": {}
 }

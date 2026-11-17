@@ -1,10 +1,10 @@
 {
-  "content": "d7368bb0794ae391eef90ccaba565e6519a5bf3758f992bcdf5c5efb2bca53f2",
-  "captured": "2026-11-17T03:42:05.514Z",
-  "base": "https://staging.wildshard.io",
+  "content": "d76b41ec797125f6616084ab1984dac0e57150f5e145124d4472e9bbe6a32569",
+  "captured": "2026-11-17T06:02:52.024Z",
+  "base": "http://127.0.0.1:63110",
   "card": {
-    "thumbs/nine-dragon-stack.jpg": "897c921b41e0d543556769ea4635eb7b6cd798e9eba2b4f81ba724dbfa721f59",
-    "thumbs/nine-dragon-stack-portrait.jpg": "b0267e55f7c6e640380f9dd2e53939b27fbed5cd612ef12885c1e178d87b1638",
-    "thumbs/nine-dragon-stack-landscape.jpg": "b18df1e6b9a0a3e1457539a75e0e9f9ea362536d0edc7279ac312ae56dd328b7"
+    "thumbs/nine-dragon-stack.jpg": "dfaeb1da2e009ddefe402c7c31eb5c85e6b9f9245ce02b331aa27393edd46fed",
+    "thumbs/nine-dragon-stack-portrait.jpg": "b5aac2f84b9e9ec8dff5609d8b80a85237ab8c619f5ecfaae7a81dfd6760a9aa",
+    "thumbs/nine-dragon-stack-landscape.jpg": "9a1db0d441e0449ed20e11586dff4e3d346b48d82bf3abac0acdb10652554f2c"
   }
 }
