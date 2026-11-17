@@ -349,6 +349,11 @@ const SIGN_PLACEMENTS = signAtlas.copies.map(({ neon, boxes, poses: hung }) => (
 /** NINE-DRAGON-BENCHMAX NB8: the phone tier drops a dressing copy under PHONE_MIN_ANGULAR on screen (radius / distance);
  *  the desktop draws every copy as before (0 = off) */
 const PHONE_SMALL = { minAngular: { phone: PHONE_MIN_ANGULAR, desktop: 0 } };
+/** NINE-DRAGON-BENCHMAX NB23 (mini-nb23, the coordinator's call for Jake): the phone draws no drawn facade piece past 100 m;
+ *  the desktop draws every copy. Riding north up the south street drew every balcony, lantern, cage and eave of the square's
+ *  towers (~0.19 M triangles of 1.06 M), nearly all behind nearer walls: a same-instant pair changes 815 px there and 282 px at
+ *  spawn. 80 m lost the dressing of the tower over spawn (3.7 k px), 40 m the nearer towers' too (29 k px) */
+const PHONE_FACADE_FAR = { phone: 100, desktop: 1e6 };
 const LAYOUT_PLACEMENTS = [
   ...SIGN_PLACEMENTS,
   { id: 'nds-inst-ac', model: 'airConBox', name: 'inst:ac', draw: 'instanced' as const, cull: { bounds: 'sphere' as const, ...PHONE_SMALL }, piece: { id: 'nds-inst-ac' }, poses: projection.acs.map(words => posed(words)) },
@@ -376,10 +381,11 @@ const LAYOUT_PLACEMENTS = [
     return { id: `nds-facade-${row.id}`, model, draw: 'merged' as const, drawnInto: { part: 'fabric.shell', boxes: Array.from({ length: row.count * 6 }, (_, k) => record(row.boxes + k)) },
       piece: { id: `nds-facade-${row.id}`, name }, poses: facadePoses(row.poses, row.count) };
   }),
-  // the facade's drawn pieces (the baked shell's are drawn into it): one instanced placement each, small ones within 85 m
+  // the facade's drawn pieces (the baked shell's are drawn into it): one instanced placement each, small ones within 85 m, the
+  // rest within 100 m on the phone (NB23)
   ...worldRows.rows.facade.drawn.map(row => {
     const model = `facade:${row.id}`, name = catalogueName.get(model); if (name === undefined) throw new Error(`Nine facade ${row.id} has no catalogue model`);
-    return { id: `nds-facade-${row.id}`, model, name: `facade-${row.id}`, draw: 'instanced' as const, cull: { bounds: 'sphere' as const, ...(row.small ? { far: 85 } : {}), ...(row.id === 'lantern' ? {} : PHONE_SMALL) },
+    return { id: `nds-facade-${row.id}`, model, name: `facade-${row.id}`, draw: 'instanced' as const, cull: { bounds: 'sphere' as const, far: row.small ? 85 : PHONE_FACADE_FAR, ...(row.id === 'lantern' ? {} : PHONE_SMALL) },
       piece: { id: `nds-facade-${row.id}`, name }, poses: facadePoses(row.poses, row.count) };
   }),
 ];
