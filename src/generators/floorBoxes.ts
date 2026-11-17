@@ -8,6 +8,8 @@ const { DECK } = decks;
 
 const { Y0, PLAZA, STAIR, STREET, WELL, RIM, BALUSTRADE: balustrade } = NINE_FLOOR_PLAN;
 const STAIR_TOP = { x1: STAIR.x1 + 8, y: Y0 + STAIR.rise };
+/** half the balustrade plinth's 0.62 m (squareParts `balustrade`) */
+const BALUSTRADE_HALF = 0.31;
 const LANDING = 4, RISE = STAIR.rise / 60, RUN = (STAIR.x1 - STAIR.x0 - 2 * LANDING) / 60;
 
 function span(name: string, x0: number, y0: number, z0: number, x1: number, y1: number, z1: number): BoxCollider {
@@ -31,6 +33,12 @@ export function floorBoxScene(): Group {
     span('well.parapet', WELL.x0, Y0 + 1.12, RIM.z0 - 0.1, WELL.x1, Y0 + 3.2, RIM.z0 + 0.1),
     span('well.west-wall', WELL.x0 - 1, Y0, RIM.z0 - 0.25, WELL.x0, Y0 + 40, WELL.z1),
     span('well.back-wall', WELL.x0, Y0, WELL.z1, WELL.x1, Y0 + 40, WELL.z1 + 1),
+    // NET-LAG (meta docs/plans/NET-LAG-PLAN.md): the drawn balustrade's stone along the square and the street (squareParts
+    // WELL_RUNS, its 0.62 m plinth up to the caps' +1.12). Without it a walker slid its feet past the slab's edge under the
+    // square's cap and hung on that edge, where the page and the room (never the same collider order) parted by up to a
+    // metre; along the street it walked through the drawn stone into the Well.
+    span('well.square-stone', PLAZA.x0 + 0.2 - BALUSTRADE_HALF, Y0, PLAZA.z0, PLAZA.x0 + 0.2 + BALUSTRADE_HALF, Y0 + 1.12, PLAZA.z1),
+    span('well.street-stone', STREET.x0 + 0.2 - BALUSTRADE_HALF, Y0, WELL.z0, STREET.x0 + 0.2 + BALUSTRADE_HALF, Y0 + 1.12, PLAZA.z0 - 0.1),
   );
   const landings = new Group(); landings.name = 'stairLandings';
   for (const i of [0, 1]) {
