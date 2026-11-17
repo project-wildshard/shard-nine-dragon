@@ -5,6 +5,8 @@ import decks from './decks.json' with { type: 'json' };
 import NINE_FLOOR_PLAN from '../data/layoutPlan.json' with { type: 'json' };
 
 const { DECK, DECK_CAP } = decks;
+/** How far outside the drawn opening each parapet's collider starts (metres). */
+const RAIL_CLEAR = 0.05;
 
 // First Node physics slice: the floors declared in shard.config.ts. The remaining models,
 // crossings and the three tread flights remain open G320 migrations.
@@ -35,12 +37,15 @@ function deckBox(edge: Edge, name: string, a0: number, a1: number, c0: number, c
 export function portalFloorScene(): Group {
   const scene = new Group(); scene.name = 'nine.portal-floors';
   const h = NINE_FLOOR_PLAN.OPENING_HALF, c0 = -h - DECK.railT, c1 = h + DECK.railT;
+  // The parapets collide RAIL_CLEAR outside the drawn opening: engine 0.1.25+'s flat-floor rest makes the entry proof's
+  // outermost capsule lane (its skin flush with an 8 m opening's edge) stall on a parapet face exactly at the opening.
+  const r = h + RAIL_CLEAR;
   for (const edge of EDGES) {
     const deck = new Group(); deck.name = `${NINE_FLOOR_PLAN.IDS.deckPrefix}${edge}`;
     deck.add(
       deckBox(edge, `${deck.name}.slab`, 0, DECK.depth, c0, c1, -DECK.slab, 0),
-      deckBox(edge, `${deck.name}.rail-left`, 0, DECK.depth, -h - DECK.railT, -h, 0, DECK.railH),
-      deckBox(edge, `${deck.name}.rail-right`, 0, DECK.depth, h, h + DECK.railT, 0, DECK.railH),
+      deckBox(edge, `${deck.name}.rail-left`, 0, DECK.depth, -h - DECK.railT, -r, 0, DECK.railH),
+      deckBox(edge, `${deck.name}.rail-right`, 0, DECK.depth, r, h + DECK.railT, 0, DECK.railH),
       deckBox(edge, `${deck.name}.wall`, DECK.depth, DECK.depth + DECK.wallT, c0, c1, -DECK.slab, DECK.wallH),
     );
     scene.add(deck);
