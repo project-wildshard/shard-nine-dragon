@@ -30,6 +30,9 @@ for (const { slug } of expected) test(`${slug}: publishable tarball includes its
     const [, bytes] = discoveries[0], document = JSON.parse(new TextDecoder().decode(bytes));
     assert.equal(document.slug, slug);
     assert.equal(document.data.shardfile ?? document.data.gridShardfile, `/shardfiles/${slug}/shard.json`, 'Discovery must point to the shipped shard');
-    assert.ok(files.has('shard.json'));
+    const header = files.get('shard.json');
+    assert.ok(header, 'The archive must contain the shard header');
+    assert.equal(JSON.parse(new TextDecoder().decode(header)).admission.budgets.tier, 'large',
+      'The packaged Nine runtime must retain its authored tier');
   } finally { rmSync(root, { recursive: true, force: true }); }
 });
