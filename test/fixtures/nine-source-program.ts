@@ -3,6 +3,7 @@ import { mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 // oxlint-disable-next-line import/no-nodejs-modules -- Bind only the same explicit project/public roots as the author CLI.
 import { resolve } from 'node:path';
 import { createProjectGeneration } from '@wildshard/sharddev/projectGeneration';
+import { proveStaticPortalEntries } from '@wildshard/dev/projectEntryProof';
 import { prepareAssetDecoders } from '@wildshard/format/shardfileAssets';
 import { generate, type NineGeneratedProject } from '../../src/generators/generate';
 import { runSnapshot } from './runSnapshot';
@@ -12,8 +13,9 @@ export async function nineSourceProgram(): Promise<NineGeneratedProject> {
   await prepareAssetDecoders();
   mkdirSync('tmp', { recursive: true }); const cache = mkdtempSync(resolve('tmp', 'nine-program-fixture-'));
   try {
-    return await generate(createProjectGeneration(resolve('src'), 'a'.repeat(64), new Map(), cache,
-      [{ prefix: '/assets/', directory: resolve('public/assets') }]));
+    const author = createProjectGeneration(resolve('src'), 'a'.repeat(64), new Map(), cache,
+      [{ prefix: '/assets/', directory: resolve('public/assets') }]);
+    return await generate({ ...author, proveStaticPortalEntries });
   } finally { rmSync(cache, { recursive: true, force: true }); }
 }
 

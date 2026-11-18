@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { Box3, Mesh, Vector3 } from 'three';
+import { Box3, BufferAttribute, Mesh, Vector3 } from 'three';
 // oxlint-disable-next-line import/no-nodejs-modules -- Read the maintained camera catalogue for the offline bake census.
 import { readFileSync } from 'node:fs';
 import * as v from 'valibot';
@@ -25,6 +25,7 @@ test('Nine staged slabs equal the complete original fine joins, with bounded upl
   const declared = new Map(inputs.scenes.NINE_SCENE_BLOBS.map(blob => [blob.file.hash, blob.bytes]));
   const wanted = new Set(source.models.flatMap(model => model.files)), expected = new Map<string, SlabTriangleProof>(), actual = new Map<string, SlabTriangleProof>();
   const handed = new Set<string>(), force = new Map<string, boolean>();
+  const grids = new Map<string, { origin: Vector3; step: number }>();
   for (const node of weld.nodes) if ('geometry' in node && node.geometry.library === source.id && !force.has(node.geometry.model)) {
     const model = source.models.find(row => row.id === node.geometry.model); if (model === undefined) throw new Error('No original model');
     force.set(model.id, handed.has(model.part)); handed.add(model.part);
@@ -34,25 +35,7 @@ test('Nine staged slabs equal the complete original fine joins, with bounded upl
     const { gltf } = await readSourceModel(bytes), meshes: Mesh[] = []; gltf.scene.traverse(node => { if (isMesh(node)) meshes.push(node); }); return meshes;
   };
   const release = (meshes: readonly Mesh[]): void => { for (const mesh of meshes) { mesh.geometry.dispose(); for (const material of [mesh.material].flat()) material.dispose(); } };
-  for (const tile of inputs.ownedWorld.metadata.shardfile.tiles.filter(row => row.lod === 0)) {
-    const files = tile.files.filter(hash => wanted.has(hash)); if (files.length === 0) continue;
-    const meshes: Mesh[] = [];
-    for (const hash of files) { const bytes = inputs.ownedWorld.assets.get(hash); if (bytes === undefined) throw new Error('Missing original fine bytes'); meshes.push(...await decoded(bytes)); }
-    const pieces = wholeGeometryPieces(meshes);
-    try {
-      for (const key of library.keys) for (const id of key.sources) {
-        const model = source.models.find(row => row.id === id); if (model === undefined) throw new Error('Missing covered model');
-        const selected = pieces.filter(piece => piece.part === model.part && model.files.some(hash => files.includes(hash)));
-        if (selected.length === 0) continue;
-        const geometry = joinWholePieces(selected, model.matrix, force.get(model.id) ?? false), proof = expected.get(key.id) ?? newSlabTriangleProof();
-        try {
-          addSlabTriangles(proof, geometry); expected.set(key.id, proof);
-          const frame = frames.get(key.node); if (frame === undefined) throw new Error('Missing slab census frame');
-          addQuadrantVisibility(quadrants, geometry, frame, tile.z * 8 + tile.x, key.id);
-        } finally { geometry.dispose(); }
-      }
-    } finally { for (const piece of pieces) piece.geometry.dispose(); release(meshes); }
-  }
+  expect(library.tiles).toHaveLength(1); // Nine's cell groups all the fine tiles under one resident owner.
   for (const tile of library.tiles) {
     expect(tile.files.length).toBeLessThanOrEqual(16);
     expect(tile.files.reduce((sum, file) => sum + file.chunks.length, 0)).toBeLessThanOrEqual(64);
@@ -66,15 +49,28 @@ test('Nine staged slabs equal the complete original fine joins, with bounded upl
           expect(v.parse(v.looseObject({ slab: v.unknown() }), mesh.userData).slab).toEqual({ key: row.key, tile: tile.tile, chunk: index }); expect(Object.hasOwn(mesh.userData, 'wholePartition')).toBe(false);
           const geometry = nativeWholeGeometry(mesh), proof = actual.get(row.key) ?? newSlabTriangleProof();
           try {
-            expect(slabGeometryBytes(geometry)).toBe(row.bytes); expect(row.bytes).toBeLessThanOrEqual(4_000_000);
+            const position = geometry.getAttribute('position'), point = new Vector3();
+            const packed = position.array instanceof Int16Array && !position.normalized;
+            if (packed) {
+              expect(mesh.scale.y).toBe(mesh.scale.x); expect(mesh.scale.z).toBe(mesh.scale.x);
+              expect(mesh.scale.x).toBeGreaterThan(0); expect(mesh.scale.x).toBeLessThanOrEqual(2 ** -6);
+              expect(mesh.quaternion.toArray()).toEqual([0, 0, 0, 1]);
+              const grid = { origin: mesh.position, step: mesh.scale.x };
+              const earlier = grids.get(row.key);
+              if (earlier === undefined) grids.set(row.key, grid); else expect(grid).toEqual(earlier);
+            }
+            const alignment = packed ? position.count * Int16Array.BYTES_PER_ELEMENT : 0;
+            expect(slabGeometryBytes(geometry) + alignment).toBe(row.bytes);
+            expect(row.bytes).toBeLessThanOrEqual(4_000_000);
             addSlabTriangles(proof, geometry); actual.set(row.key, proof);
             const key = library.keys.find(entry => entry.id === row.key), frame = key === undefined ? undefined : frames.get(key.node);
             if (frame === undefined) throw new Error('Missing slab census key');
             chunkBoxes.push({ box: new Box3(new Vector3(...row.box.slice(0, 3)), new Vector3(...row.box.slice(3))).applyMatrix4(frame), triangles: (geometry.index?.count ?? geometry.getAttribute('position').count) / 3 });
-            const position = geometry.getAttribute('position'), point = new Vector3(), centre = new Vector3(...row.sphere.slice(0, 3));
+            const centre = new Vector3(...row.sphere.slice(0, 3));
             let contained = true;
             for (let vertex = 0; vertex < position.count; vertex++) {
               point.fromBufferAttribute(position, vertex);
+              if (packed) point.multiplyScalar(mesh.scale.x).add(mesh.position);
               contained &&= point.x >= row.box[0] && point.x <= row.box[3] && point.y >= row.box[1] && point.y <= row.box[4] && point.z >= row.box[2] && point.z <= row.box[5]
                 && point.distanceTo(centre) <= row.sphere[3];
             }
@@ -83,6 +79,39 @@ test('Nine staged slabs equal the complete original fine joins, with bounded upl
         }
       } finally { release(meshes); }
     }
+  }
+  for (const tile of inputs.ownedWorld.metadata.shardfile.tiles.filter(row => row.lod === 0)) {
+    const files = tile.files.filter(hash => wanted.has(hash)); if (files.length === 0) continue;
+    const meshes: Mesh[] = [];
+    for (const hash of files) { const bytes = inputs.ownedWorld.assets.get(hash); if (bytes === undefined) throw new Error('Missing original fine bytes'); meshes.push(...await decoded(bytes)); }
+    const pieces = wholeGeometryPieces(meshes);
+    try {
+      for (const key of library.keys) for (const id of key.sources) {
+        const model = source.models.find(row => row.id === id); if (model === undefined) throw new Error('Missing covered model');
+        const selected = pieces.filter(piece => piece.part === model.part && model.files.some(hash => files.includes(hash)));
+        if (selected.length === 0) continue;
+        const geometry = joinWholePieces(selected, model.matrix, force.get(model.id) ?? false), proof = expected.get(key.id) ?? newSlabTriangleProof();
+        try {
+          const frame = frames.get(key.node); if (frame === undefined) throw new Error('Missing slab census frame');
+          const tileId = tile.z * 8 + tile.x;
+          addQuadrantVisibility(quadrants, geometry, frame, tileId, key.id);
+          const grid = grids.get(key.id);
+          if (grid !== undefined) {
+            const position = geometry.getAttribute('position'), words = new Int16Array(position.count * 3);
+            const origin = [grid.origin.x, grid.origin.y, grid.origin.z];
+            for (let vertex = 0; vertex < position.count; vertex++) for (const [axis, start] of origin.entries()) {
+              const value = position.getComponent(vertex, axis);
+              const word = Math.round((value - start) / grid.step);
+              if (word < -32768 || word > 32767) throw new Error('Source position does not fit the declared slab grid');
+              words[vertex * 3 + axis] = word;
+            }
+            geometry.setAttribute('position', new BufferAttribute(words, 3));
+          }
+          addSlabTriangles(proof, geometry);
+          expected.set(key.id, proof);
+        } finally { geometry.dispose(); }
+      }
+    } finally { for (const piece of pieces) piece.geometry.dispose(); release(meshes); }
   }
   expect(expected.size).toBeGreaterThan(0); expect([...actual.keys()].sort()).toEqual([...expected.keys()].sort());
   for (const [key, before] of expected) { const after = actual.get(key); if (after === undefined) throw new Error('Missing slab key'); compareSlabTriangles(before, after); }

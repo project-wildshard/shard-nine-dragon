@@ -7,6 +7,7 @@ import { Buffer } from 'node:buffer';
 import { afterAll, expect, test } from 'vitest';
 import { build } from 'vite';
 import { createProjectGeneration } from '@wildshard/sharddev/projectGeneration';
+import { proveStaticPortalEntries } from '@wildshard/dev/projectEntryProof';
 import { assertConfigBoundary } from '@wildshard/sharddev/configBoundary';
 import { prepareAssetDecoders } from '@wildshard/format/shardfileAssets';
 import { nineSourceOutput } from '../src/generators/sourceOutput';
@@ -40,8 +41,8 @@ async function prepareColdOutput() {
   mkdirSync('tmp', { recursive: true }); const cache = mkdtempSync(resolve('tmp', 'nine-source-output-'));
   try {
     const project = resolve('src'), assets = new Map<string, Uint8Array>();
-    const context = () => createProjectGeneration(project, 'f'.repeat(64), assets, cache,
-      [{ prefix: '/assets/', directory: resolve('public/assets') }]);
+    const context = () => ({ ...createProjectGeneration(project, 'f'.repeat(64), assets, cache,
+      [{ prefix: '/assets/', directory: resolve('public/assets') }]), proveStaticPortalEntries });
     const proofs = { calls: 0 };
     const coldContext = context();
     const cold = await nineSourceOutput({ ...coldContext, proveStaticPortalEntries: (...args) => {
