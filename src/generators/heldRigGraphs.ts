@@ -1,4 +1,5 @@
-import { checkAuthorGraph, type AuthorGraph as GraphIr, type AuthorGraphNode as GraphNode } from '@wildshard/sharddev/bake/materialGraph';
+import { checkAuthorGraph } from './authorGraph';
+import type { AuthorGraph as GraphIr, AuthorGraphNode as GraphNode } from '@wildshard/sharddev/bake/materialGraph';
 import type { NineHeldProfile } from './heldProfile';
 
 /**
