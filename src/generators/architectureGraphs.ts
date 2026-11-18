@@ -2,6 +2,7 @@ import type { AuthorGraph as GraphIr, AuthorGraphRef as GraphRef, AuthorGraphSta
 import { LookGraph } from './lookGraph';
 import { CROWD_LIGHT_DYE } from './crowdPalette';
 import SHARED from '../data/sharedUniforms.json' with { type: 'json' };
+import { SLAB_FLAG_MARKER, SLAB_MISC_SCALE, SLAB_OFFSET_SCALE, SLAB_SPILL_SCALE, SLAB_SPILL_WORD } from './slabGraphChannels';
 
 const shapes = {
   uTime: 'float', uLinePx: 'float', uDpr: 'float', uGroundPx: 'float', uFlagJoint: 'float', uPaintFlag: 'float', uDry: 'float', uLpMax: 'float', uLpAmb: 'float', uInkMid: 'float', uFogBase: 'float', uFogStart: 'float', uWeave: 'float',
@@ -421,8 +422,23 @@ function facadeCell(g: Surface, q: Ref, gu: Ref, gv: Ref, wpx: Ref, rowP: Ref, c
  *  (G5: the kit's flagstones draw apart, kind 3, so their program carries none of the other kinds' registers). */
 function architecture(cut: boolean, nr13: boolean, only?: number, paired = false): GraphIr {
   const g = new Surface(), sw = g.sw.bind(g), mul = g.mul.bind(g), add = g.add.bind(g), sub = g.sub.bind(g), div = g.div.bind(g), max = g.max.bind(g), min = g.min.bind(g), mix = g.mix.bind(g), choose = g.choose.bind(g);
-  const face = g.attr('aFace', 'vec4'), pat = g.attr('aPat', 'vec4', true), misc = g.attr('aMisc', 'vec4', true), off = paired ? [0, 0] : g.attr('aOff', 'vec2'), spill = paired ? [0, 0, 0] : g.attr('aSpill', 'vec3');
-  const kind = only ?? g.floor(add(sw(pat, 'x'), 0.5)), flags = g.floor(add(sw(misc, 'w'), 0.5)), surf = g.floor(div(flags, 4096));
+  const face = g.attr('aFace', 'vec4'), pat = g.flat(g.a('aPat', 'vec4', only === 0 ? [0, 0, 0, 0] : undefined));
+  const rawMisc = g.a('aMisc', 'vec4'), rawFlags = sw(rawMisc, 'w');
+  const packed: Ref = paired ? 0 : g.gt(rawFlags, SLAB_FLAG_MARKER - 1);
+  const unpackedMisc = g.vec(div(sw(rawMisc, 'xyz'), SLAB_MISC_SCALE), sub(rawFlags, SLAB_FLAG_MARKER));
+  const misc = g.flat(paired ? rawMisc : choose(packed, unpackedMisc, rawMisc));
+  const flags = g.floor(add(sw(misc, 'w'), 0.5)), surf = g.floor(div(flags, 4096));
+  let off: Ref = [0, 0], spill: Ref = [0, 0, 0];
+  if (!paired) {
+    const rawOff = g.a('aOff', 'vec2'), rawSpill = g.a('aSpill', 'vec3');
+    off = g.v(choose(packed, div(rawOff, SLAB_OFFSET_SCALE), rawOff));
+    const first = sw(rawSpill, 'x'), second = sw(rawSpill, 'y');
+    const red = g.floor(div(first, 64)), greenLow = g.floor(div(second, SLAB_SPILL_WORD));
+    const green = add(mul(sub(first, mul(red, 64)), 16), greenLow), blue = sub(second, mul(greenLow, SLAB_SPILL_WORD));
+    const unpackedSpill = div(g.vec(mul(red, 2), green, blue), SLAB_SPILL_SCALE);
+    spill = g.v(choose(packed, unpackedSpill, rawSpill));
+  }
+  const kind = only ?? g.floor(add(sw(pat, 'x'), 0.5));
   // EP8 (B5): a dyed walker draws as its base walker's instance, the dye its instance colour: its umbrella (aDye > 0) takes
   // the dye x the factor the cast carries, its other vertices (aDye < 0) their own colour; geometry without the channel
   // reads 0 and keeps vertex x instance colour exactly (a white instance draws the walker's own colours too). The channel

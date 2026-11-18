@@ -13,6 +13,7 @@ import { mistSheetsGeometry, steamPuffsGeometry } from './mistGeometry';
 import worldDressingRows from '../data/worldDressing.json' with { type: 'json' };
 import { WELL_RECTS } from './wellBounds';
 import { banyanOut } from './banyanPlan';
+import { packSlabGraphChannels } from './slabGraphChannels';
 
 const { SHEET_LAYERS, STEAM_PUFFS } = worldDressingRows;
 
@@ -192,7 +193,10 @@ function buildNineScene(atlas: NineSpillAtlas): { baked: BakedScene; layout: Ret
   };
   for (const [i, geometry] of layout.geometries.entries()) {
     if (local.has(i)) continue;
-    const l0 = halfSpillL0(geometry), mesh = new Mesh(l0, materialOf(i)); mesh.name = `layout_${i}`;
+    const half = halfSpillL0(geometry);
+    const l0 = half === geometry && geometry.hasAttribute('aOff') ? geometry.clone() : half;
+    packSlabGraphChannels(l0, materialOf(i).name === kitKind(0).material);
+    const mesh = new Mesh(l0, materialOf(i)); mesh.name = `layout_${i}`;
     scene.add(new WholeShape(mesh.name, mesh, { customAttributes: nineChannels(l0), nativeAttributes: true, partition: 'runs', compact: true, materialName: materialOf(i).name }));
     if (merged.has(i)) continue;
     const result = measuredCoarseGeometry(whole(i, geometry), COARSE_START, 3, { sloppy: true }), coarse = result.geometry;

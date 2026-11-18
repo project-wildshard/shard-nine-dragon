@@ -17,7 +17,7 @@ export async function nineSlabScenes(ctx: Pick<ProjectGenerationContext, 'cached
   const shardfile = { ...world.metadata.shardfile, ring: 'cell' as const };
   const tiles = shardfile.tiles.filter(row => row.lod === 0);
   const identity = hashImmutableBytes(new TextEncoder().encode(encodeCanonicalJson([source, weld, tiles, shardfile.ring])));
-  const cached = await ctx.cached({ id: `nine-slabs-${identity}` }, async () => {
+  const cached = await ctx.cached({ id: `nine-slabl-${identity}` }, async () => {
     const baked = await bakeWholeSlabs({ id: 'native-slabs', library: source, weld, shardfile, assets: world.assets });
     return new Map([['slabs.json', new TextEncoder().encode(JSON.stringify(baked.library))], ...baked.assets]);
   });
