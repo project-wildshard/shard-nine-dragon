@@ -72,7 +72,7 @@ const courseBytes=courseProgram.blob.bytes.byteLength, courseMemory=courseBytes+
 const navigationResident = navigation.files.reduce((sum, file) => sum + file.decoded, 0);
 // the movers view module's memory (behaviour/movers.as, its pages twice: the client lane's image and its rewind copy)
 const viewMemory = movers.pages * 65536 * 2;
-const budgets = { ...base.budgets, sim: { resident: navigationResident+courseMemory, compressed: navigation.files.reduce((sum, file) => sum + file.compressed, 0)+courseBytes }, library: { compressed: charged.reduce((sum, file) => sum + file.compressed, 0), resident: charged.reduce((sum, file) => sum + file.decoded + file.gpu, 0) + viewMemory } };
+const budgets = { ...base.budgets, tier: 'large' as const, sim: { resident: navigationResident+courseMemory, compressed: navigation.files.reduce((sum, file) => sum + file.compressed, 0)+courseBytes }, library: { compressed: charged.reduce((sum, file) => sum + file.compressed, 0), resident: charged.reduce((sum, file) => sum + file.decoded + file.gpu, 0) + viewMemory } };
 // parseShardfile admits each link against the format's PortalLink schema (strict nodes, bound links, the walked route)
 return parseShardfile({ ...base, plumbing, budgets, navigation: navigation.navigation, critical: navigation.critical,
   serverBudget: { ...base.serverBudget, memory: base.serverBudget.memory + navigationResident+courseMemory },
