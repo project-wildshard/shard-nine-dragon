@@ -31,6 +31,10 @@ on:
         description: Exact candidate sharddev commit (empty keeps the pin)
         type: string
         default: ''
+      preparation:
+        description: Engine release tag whose preparation client prepare serves, e.g. server-staging-<sha> (empty keeps the sdk's engine pin)
+        type: string
+        default: ''
       rehearse:
         description: Run every gate, the build and prepare; never upload
         type: boolean
@@ -122,12 +126,23 @@ jobs:
         run: node scripts/publish-shard.mjs version "${{ steps.product.outputs.slug }}" "${{ inputs.version }}"
       - name: Install phone WebKit for prepare
         run: |
-          pw="$(node -e "const {dirname}=require('node:path');const sdk=dirname(require.resolve('@wildshard/sharddev/package.json'));console.log(dirname(require.resolve('playwright/package.json',{paths:[sdk]})))")"
+          # sdk 0.4 (SDK-SPLIT): prepare's playwright is @wildshard/dev's, reached through @wildshard/cli; an older
+          # shard reaches it through the sdk it aliases as @wildshard/sharddev.
+          pw="$(node -e "const {dirname,join}=require('node:path'),{realpathSync,existsSync}=require('node:fs');const bases=[];if(existsSync('node_modules/@wildshard/cli'))bases.push(realpathSync(join(realpathSync('node_modules/@wildshard/cli'),'..','dev')));if(existsSync('node_modules/@wildshard/sharddev'))bases.push(realpathSync('node_modules/@wildshard/sharddev'));for(const b of bases){try{console.log(dirname(require.resolve('playwright/package.json',{paths:[b]})));process.exit(0)}catch{}}console.error('no playwright under @wildshard/cli or @wildshard/sharddev');process.exit(1)")"
           if [ "$RUNNER_OS" = Linux ]; then node "$pw/cli.js" install --with-deps webkit; else node "$pw/cli.js" install webkit; fi
       - name: Prepare in phone WebKit
         env:
           PRODUCT: ${{ steps.product.outputs.product }}
+          PREPARATION: ${{ inputs.preparation }}
         run: |
+          # A shard that overrides @wildshard/engine past the sdk's own pin
+          # (a format feature the pinned client refuses) names the engine
+          # release whose preparation client knows it (SHARD-SOURCE SS-MS1c).
+          if [ -n "$PREPARATION" ]; then
+            [[ "$PREPARATION" =~ ^(v[0-9]+\.[0-9]+\.[0-9]+|server-staging-[0-9a-f]{40})$ ]] || { echo "::error::preparation must be vX.Y.Z or server-staging-<sha>"; exit 1; }
+            export WILDSHARD_PREPARATION_CLIENT_URL="https://github.com/project-wildshard/engine/releases/download/$PREPARATION/preparation-client.tar.gz"
+            echo "prepare: preparation client $PREPARATION" | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
           start=$(date +%s)
           pnpm exec wildshard prepare "$PRODUCT"
           echo "prepare: $(( $(date +%s) - start )) s on $RUNNER_OS/$RUNNER_ARCH" | tee -a "$GITHUB_STEP_SUMMARY"
