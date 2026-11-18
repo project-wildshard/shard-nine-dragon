@@ -1,0 +1,858 @@
+{
+ "version": "mg5-runtime-cost/1",
+ "shard": "nine-dragon-stack",
+ "memoryEpoch": 3,
+ "formatVersion": 2,
+ "rawEngineBaseMB": 299,
+ "method": "Cold Safari per texture form, three alternating rounds (auto, img). Per round the game WebContent [Sim] median of three settled play reads, paired with the same tab GL capacity [L]; the charged round is the one with the highest WebContent + GL. Engine build: local plan/mg8-format-pin 1529371a (engine main plus the shard-format 0.35 move) with engine main 0af7ccd8 inline-mounts fix, product = this source at 823823b (format 0.35, half-float spill 2adef0d), unprepared draft, installed with pins.ts --from-dir (its KTX2 stand-ins served from the pinned Nine engine files). mini-pinemem5 (MEMORY-GATES MG10), mini-pinemem4 cost-sim driver, sim-lane wildshard-iphone under mini-measure.lock.",
+ "sourceHash": "5f776861808a6b66e87741fecd26b927c66cf670202a98372c0925846ba1b9ee",
+ "measured": {
+  "auto": {
+   "charged": "auto-2",
+   "cost": {
+    "webContentMB": 676.49932,
+    "glMB": 162.481028,
+    "engineBaseMB": 299,
+    "rev": "1529371a797e8d2ab09daa172dcd7e4d7a5e1366",
+    "device": "iOS 27.2 iPhone 18 Pro Simulator (wildshard-iphone) Safari, phone Low auto (ktx2), settled WebContent [Sim] and GL [L]",
+    "evidence": "progress/memory/mg10-epoch3-2026-11-18.json",
+    "epoch": 3
+   },
+   "rounds": [
+    {
+     "tag": "auto-1",
+     "build": null,
+     "actualTextureMode": "ktx2",
+     "settled": {
+      "nativeGB": 0.665014136,
+      "inspectorGB": 0.8194024,
+      "minGB": 0.665014136,
+      "maxGB": 0.665079672,
+      "spreadGB": 0.00006553599999992166,
+      "spreadPercent": 0.009854828108484245,
+      "samples": [
+       {
+        "seconds": 1.003,
+        "nativeGB": 0.665014136,
+        "inspectorGB": 0.818779808
+       },
+       {
+        "seconds": 2.004,
+        "nativeGB": 0.665014136,
+        "inspectorGB": 0.820287136
+       },
+       {
+        "seconds": 3.006,
+        "nativeGB": 0.665079672,
+        "inspectorGB": 0.8194024
+       }
+      ],
+      "seconds": 3.006
+     },
+     "ledger": {
+      "totals": {
+       "gpu": 162647795,
+       "ram": 75833790
+      },
+      "unattributed": {
+       "gpu": 52233342,
+       "ram": 0
+      },
+      "texture": {
+       "mode": "ktx2",
+       "why": "auto: images-first playing estimate 1680119906 exceeds 1000000000",
+       "probe": {
+        "ran": true,
+        "note": "8 formats ok",
+        "families": {
+         "astc": true,
+         "etc2": true
+        },
+        "formats": [
+         {
+          "family": "astc",
+          "format": "RGBA_ASTC_4x4",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "SRGB8_ALPHA8_ASTC_4x4",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "RGBA_ASTC_6x6",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "SRGB8_ALPHA8_ASTC_6x6",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "RGB8_ETC2",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "SRGB8_ETC2",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "RGBA8_ETC2_EAC",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "SRGB8_ALPHA8_ETC2_EAC",
+          "ok": true
+         }
+        ],
+        "veto": null
+       }
+      },
+      "byKind": {
+       "ram/wasm": 37552128,
+       "ram/cache-document": 12312020,
+       "gpu/texture": 44533204,
+       "ram/array-buffer": 25329082,
+       "gpu/buffer": 118114591,
+       "ram/canvas": 270336,
+       "ram/wire": 370224
+      }
+     },
+     "phases": {
+      "idle": {
+       "samples": 6,
+       "seconds": 0.6,
+       "gamePid": 11423,
+       "gameHighGB": 0.035,
+       "gameSampledGB": 0.02,
+       "allWebContentGB": 0.034,
+       "gpuProcessGB": 0.014
+      },
+      "loading": {
+       "samples": 117,
+       "seconds": 12.3,
+       "gamePid": 11423,
+       "gameHighGB": 0.782,
+       "gameSampledGB": 0.779,
+       "allWebContentGB": 0.796,
+       "gpuProcessGB": 0.193
+      },
+      "play": {
+       "samples": 103,
+       "seconds": 10.8,
+       "gamePid": 11423,
+       "gameHighGB": 0.78,
+       "gameSampledGB": 0.778,
+       "allWebContentGB": 0.793,
+       "gpuProcessGB": 0.22
+      }
+     },
+     "webContentMB": 665.014136,
+     "glMB": 162.647795
+    },
+    {
+     "tag": "auto-2",
+     "build": null,
+     "actualTextureMode": "ktx2",
+     "settled": {
+      "nativeGB": 0.67649932,
+      "inspectorGB": 0.787093152,
+      "minGB": 0.671321976,
+      "maxGB": 0.681807736,
+      "spreadGB": 0.01048576000000001,
+      "spreadPercent": 1.5500030362188701,
+      "samples": [
+       {
+        "seconds": 1.002,
+        "nativeGB": 0.681807736,
+        "inspectorGB": 0.789976736
+       },
+       {
+        "seconds": 2.005,
+        "nativeGB": 0.67649932,
+        "inspectorGB": 0.786831008
+       },
+       {
+        "seconds": 3.007,
+        "nativeGB": 0.671321976,
+        "inspectorGB": 0.787093152
+       }
+      ],
+      "seconds": 3.007
+     },
+     "ledger": {
+      "totals": {
+       "gpu": 162481028,
+       "ram": 66492745
+      },
+      "unattributed": {
+       "gpu": 52233342,
+       "ram": 0
+      },
+      "texture": {
+       "mode": "ktx2",
+       "why": "auto: images-first playing estimate 1680119906 exceeds 1000000000",
+       "probe": {
+        "ran": true,
+        "note": "8 formats ok",
+        "families": {
+         "astc": true,
+         "etc2": true
+        },
+        "formats": [
+         {
+          "family": "astc",
+          "format": "RGBA_ASTC_4x4",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "SRGB8_ALPHA8_ASTC_4x4",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "RGBA_ASTC_6x6",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "SRGB8_ALPHA8_ASTC_6x6",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "RGB8_ETC2",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "SRGB8_ETC2",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "RGBA8_ETC2_EAC",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "SRGB8_ALPHA8_ETC2_EAC",
+          "ok": true
+         }
+        ],
+        "veto": null
+       }
+      },
+      "byKind": {
+       "ram/wasm": 37617664,
+       "ram/cache-document": 12308216,
+       "gpu/texture": 44533204,
+       "ram/array-buffer": 15926305,
+       "gpu/buffer": 117947824,
+       "ram/canvas": 270336,
+       "ram/wire": 370224
+      }
+     },
+     "phases": {
+      "idle": {
+       "samples": 7,
+       "seconds": 0.6,
+       "gamePid": 18749,
+       "gameHighGB": 0.02,
+       "gameSampledGB": 0.02,
+       "allWebContentGB": 0.034,
+       "gpuProcessGB": 0.013
+      },
+      "loading": {
+       "samples": 92,
+       "seconds": 9.7,
+       "gamePid": 18749,
+       "gameHighGB": 0.787,
+       "gameSampledGB": 0.766,
+       "allWebContentGB": 0.801,
+       "gpuProcessGB": 0.194
+      },
+      "play": {
+       "samples": 103,
+       "seconds": 10.9,
+       "gamePid": 18749,
+       "gameHighGB": 0.775,
+       "gameSampledGB": 0.773,
+       "allWebContentGB": 0.789,
+       "gpuProcessGB": 0.222
+      }
+     },
+     "webContentMB": 676.49932,
+     "glMB": 162.481028
+    },
+    {
+     "tag": "auto-3",
+     "build": null,
+     "actualTextureMode": "ktx2",
+     "settled": {
+      "nativeGB": 0.65741196,
+      "inspectorGB": 0.784111264,
+      "minGB": 0.657264504,
+      "maxGB": 0.659607416,
+      "spreadGB": 0.0023429119999999193,
+      "spreadPercent": 0.3563841460991855,
+      "samples": [
+       {
+        "seconds": 1.002,
+        "nativeGB": 0.659607416,
+        "inspectorGB": 0.784111264
+       },
+       {
+        "seconds": 2.006,
+        "nativeGB": 0.65741196,
+        "inspectorGB": 0.783423136
+       },
+       {
+        "seconds": 3.008,
+        "nativeGB": 0.657264504,
+        "inspectorGB": 0.784193184
+       }
+      ],
+      "seconds": 3.008
+     },
+     "ledger": {
+      "totals": {
+       "gpu": 162481028,
+       "ram": 75834477
+      },
+      "unattributed": {
+       "gpu": 52233342,
+       "ram": 0
+      },
+      "texture": {
+       "mode": "ktx2",
+       "why": "auto: images-first playing estimate 1680119906 exceeds 1000000000",
+       "probe": {
+        "ran": true,
+        "note": "8 formats ok",
+        "families": {
+         "astc": true,
+         "etc2": true
+        },
+        "formats": [
+         {
+          "family": "astc",
+          "format": "RGBA_ASTC_4x4",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "SRGB8_ALPHA8_ASTC_4x4",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "RGBA_ASTC_6x6",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "SRGB8_ALPHA8_ASTC_6x6",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "RGB8_ETC2",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "SRGB8_ETC2",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "RGBA8_ETC2_EAC",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "SRGB8_ALPHA8_ETC2_EAC",
+          "ok": true
+         }
+        ],
+        "veto": null
+       }
+      },
+      "byKind": {
+       "ram/wasm": 37552128,
+       "ram/cache-document": 12312020,
+       "gpu/texture": 44533204,
+       "ram/array-buffer": 25329769,
+       "gpu/buffer": 117947824,
+       "ram/canvas": 270336,
+       "ram/wire": 370224
+      }
+     },
+     "phases": {
+      "idle": {
+       "samples": 7,
+       "seconds": 0.6,
+       "gamePid": 30605,
+       "gameHighGB": 0.038,
+       "gameSampledGB": 0.02,
+       "allWebContentGB": 0.033,
+       "gpuProcessGB": 0.014
+      },
+      "loading": {
+       "samples": 100,
+       "seconds": 10.6,
+       "gamePid": 30605,
+       "gameHighGB": 0.798,
+       "gameSampledGB": 0.795,
+       "allWebContentGB": 0.812,
+       "gpuProcessGB": 0.195
+      },
+      "play": {
+       "samples": 103,
+       "seconds": 11,
+       "gamePid": 30605,
+       "gameHighGB": 0.797,
+       "gameSampledGB": 0.792,
+       "allWebContentGB": 0.81,
+       "gpuProcessGB": 0.221
+      }
+     },
+     "webContentMB": 657.41196,
+     "glMB": 162.481028
+    }
+   ]
+  },
+  "img": {
+   "charged": "img-1",
+   "cost": {
+    "webContentMB": 680.513352,
+    "glMB": 190.847772,
+    "engineBaseMB": 299,
+    "rev": "1529371a797e8d2ab09daa172dcd7e4d7a5e1366",
+    "device": "iOS 27.2 iPhone 18 Pro Simulator (wildshard-iphone) Safari, phone Low img (img), settled WebContent [Sim] and GL [L]",
+    "evidence": "progress/memory/mg10-epoch3-2026-11-18.json",
+    "epoch": 3
+   },
+   "rounds": [
+    {
+     "tag": "img-1",
+     "build": null,
+     "actualTextureMode": "img",
+     "settled": {
+      "nativeGB": 0.680513352,
+      "inspectorGB": 0.816600736,
+      "minGB": 0.675450696,
+      "maxGB": 0.680578888,
+      "spreadGB": 0.005128192000000031,
+      "spreadPercent": 0.7535769849229985,
+      "samples": [
+       {
+        "seconds": 1.003,
+        "nativeGB": 0.680578888,
+        "inspectorGB": 0.816600736
+       },
+       {
+        "seconds": 2.006,
+        "nativeGB": 0.680513352,
+        "inspectorGB": 0.81850128
+       },
+       {
+        "seconds": 3.007,
+        "nativeGB": 0.675450696,
+        "inspectorGB": 0.815027872
+       }
+      ],
+      "seconds": 3.007
+     },
+     "ledger": {
+      "totals": {
+       "gpu": 190847772,
+       "ram": 90580077
+      },
+      "unattributed": {
+       "gpu": 52233342,
+       "ram": 0
+      },
+      "texture": {
+       "mode": "img",
+       "why": "pinned (harness textures: img)",
+       "probe": {
+        "ran": true,
+        "note": "8 formats ok",
+        "families": {
+         "astc": true,
+         "etc2": true
+        },
+        "formats": [
+         {
+          "family": "astc",
+          "format": "RGBA_ASTC_4x4",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "SRGB8_ALPHA8_ASTC_4x4",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "RGBA_ASTC_6x6",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "SRGB8_ALPHA8_ASTC_6x6",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "RGB8_ETC2",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "SRGB8_ETC2",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "RGBA8_ETC2_EAC",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "SRGB8_ALPHA8_ETC2_EAC",
+          "ok": true
+         }
+        ],
+        "veto": null
+       }
+      },
+      "byKind": {
+       "ram/wasm": 37617664,
+       "ram/cache-document": 12312020,
+       "gpu/texture": 72899948,
+       "ram/array-buffer": 25329769,
+       "ram/image-bitmap": 14680064,
+       "gpu/buffer": 117947824,
+       "ram/canvas": 270336,
+       "ram/wire": 370224
+      }
+     },
+     "phases": {
+      "idle": {
+       "samples": 7,
+       "seconds": 0.6,
+       "gamePid": 12152,
+       "gameHighGB": 0.038,
+       "gameSampledGB": 0.02,
+       "allWebContentGB": 0.034,
+       "gpuProcessGB": 0.013
+      },
+      "loading": {
+       "samples": 98,
+       "seconds": 10.4,
+       "gamePid": 12152,
+       "gameHighGB": 0.793,
+       "gameSampledGB": 0.787,
+       "allWebContentGB": 0.807,
+       "gpuProcessGB": 0.21
+      },
+      "play": {
+       "samples": 104,
+       "seconds": 10.9,
+       "gamePid": 12152,
+       "gameHighGB": 0.78,
+       "gameSampledGB": 0.775,
+       "allWebContentGB": 0.794,
+       "gpuProcessGB": 0.235
+      }
+     },
+     "webContentMB": 680.5133519999999,
+     "glMB": 190.847772
+    },
+    {
+     "tag": "img-2",
+     "build": null,
+     "actualTextureMode": "img",
+     "settled": {
+      "nativeGB": 0.66388364,
+      "inspectorGB": 0.806917792,
+      "minGB": 0.662228856,
+      "maxGB": 0.664424312,
+      "spreadGB": 0.002195455999999929,
+      "spreadPercent": 0.33069891585217087,
+      "samples": [
+       {
+        "seconds": 1.001,
+        "nativeGB": 0.664424312,
+        "inspectorGB": 0.806917792
+       },
+       {
+        "seconds": 2.003,
+        "nativeGB": 0.66388364,
+        "inspectorGB": 0.80695056
+       },
+       {
+        "seconds": 3.003,
+        "nativeGB": 0.662228856,
+        "inspectorGB": 0.805476
+       }
+      ],
+      "seconds": 3.003
+     },
+     "ledger": {
+      "totals": {
+       "gpu": 191014539,
+       "ram": 90579390
+      },
+      "unattributed": {
+       "gpu": 52233342,
+       "ram": 0
+      },
+      "texture": {
+       "mode": "img",
+       "why": "pinned (harness textures: img)",
+       "probe": {
+        "ran": true,
+        "note": "8 formats ok",
+        "families": {
+         "astc": true,
+         "etc2": true
+        },
+        "formats": [
+         {
+          "family": "astc",
+          "format": "RGBA_ASTC_4x4",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "SRGB8_ALPHA8_ASTC_4x4",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "RGBA_ASTC_6x6",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "SRGB8_ALPHA8_ASTC_6x6",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "RGB8_ETC2",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "SRGB8_ETC2",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "RGBA8_ETC2_EAC",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "SRGB8_ALPHA8_ETC2_EAC",
+          "ok": true
+         }
+        ],
+        "veto": null
+       }
+      },
+      "byKind": {
+       "ram/wasm": 37617664,
+       "ram/cache-document": 12312020,
+       "gpu/texture": 72899948,
+       "ram/array-buffer": 25329082,
+       "ram/image-bitmap": 14680064,
+       "gpu/buffer": 118114591,
+       "ram/canvas": 270336,
+       "ram/wire": 370224
+      }
+     },
+     "phases": {
+      "idle": {
+       "samples": 7,
+       "seconds": 0.6,
+       "gamePid": 17548,
+       "gameHighGB": 0.037,
+       "gameSampledGB": 0.019,
+       "allWebContentGB": 0.033,
+       "gpuProcessGB": 0.014
+      },
+      "loading": {
+       "samples": 99,
+       "seconds": 10.4,
+       "gamePid": 17548,
+       "gameHighGB": 0.781,
+       "gameSampledGB": 0.777,
+       "allWebContentGB": 0.795,
+       "gpuProcessGB": 0.212
+      },
+      "play": {
+       "samples": 104,
+       "seconds": 10.9,
+       "gamePid": 17548,
+       "gameHighGB": 0.81,
+       "gameSampledGB": 0.806,
+       "allWebContentGB": 0.824,
+       "gpuProcessGB": 0.236
+      }
+     },
+     "webContentMB": 663.88364,
+     "glMB": 191.014539
+    },
+    {
+     "tag": "img-3",
+     "build": null,
+     "actualTextureMode": "img",
+     "settled": {
+      "nativeGB": 0.662277984,
+      "inspectorGB": 0.795121312,
+      "minGB": 0.656920416,
+      "maxGB": 0.662638432,
+      "spreadGB": 0.0057180160000001035,
+      "spreadPercent": 0.8633860913607093,
+      "samples": [
+       {
+        "seconds": 1,
+        "nativeGB": 0.662638432,
+        "inspectorGB": 0.795121312
+       },
+       {
+        "seconds": 2.003,
+        "nativeGB": 0.662277984,
+        "inspectorGB": 0.795678368
+       },
+       {
+        "seconds": 3.005,
+        "nativeGB": 0.656920416,
+        "inspectorGB": 0.7948264
+       }
+      ],
+      "seconds": 3.005
+     },
+     "ledger": {
+      "totals": {
+       "gpu": 190847772,
+       "ram": 90576273
+      },
+      "unattributed": {
+       "gpu": 52233342,
+       "ram": 0
+      },
+      "texture": {
+       "mode": "img",
+       "why": "pinned (harness textures: img)",
+       "probe": {
+        "ran": true,
+        "note": "8 formats ok",
+        "families": {
+         "astc": true,
+         "etc2": true
+        },
+        "formats": [
+         {
+          "family": "astc",
+          "format": "RGBA_ASTC_4x4",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "SRGB8_ALPHA8_ASTC_4x4",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "RGBA_ASTC_6x6",
+          "ok": true
+         },
+         {
+          "family": "astc",
+          "format": "SRGB8_ALPHA8_ASTC_6x6",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "RGB8_ETC2",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "SRGB8_ETC2",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "RGBA8_ETC2_EAC",
+          "ok": true
+         },
+         {
+          "family": "etc2",
+          "format": "SRGB8_ALPHA8_ETC2_EAC",
+          "ok": true
+         }
+        ],
+        "veto": null
+       }
+      },
+      "byKind": {
+       "ram/wasm": 37617664,
+       "ram/cache-document": 12308216,
+       "gpu/texture": 72899948,
+       "ram/array-buffer": 25329769,
+       "ram/image-bitmap": 14680064,
+       "gpu/buffer": 117947824,
+       "ram/canvas": 270336,
+       "ram/wire": 370224
+      }
+     },
+     "phases": {
+      "idle": {
+       "samples": 7,
+       "seconds": 0.6,
+       "gamePid": 31169,
+       "gameHighGB": 0.02,
+       "gameSampledGB": 0.02,
+       "allWebContentGB": 0.034,
+       "gpuProcessGB": 0.013
+      },
+      "loading": {
+       "samples": 91,
+       "seconds": 9.6,
+       "gamePid": 31169,
+       "gameHighGB": 0.771,
+       "gameSampledGB": 0.762,
+       "allWebContentGB": 0.784,
+       "gpuProcessGB": 0.213
+      },
+      "play": {
+       "samples": 104,
+       "seconds": 10.9,
+       "gamePid": 31169,
+       "gameHighGB": 0.767,
+       "gameSampledGB": 0.763,
+       "allWebContentGB": 0.781,
+       "gpuProcessGB": 0.237
+      }
+     },
+     "webContentMB": 662.2779840000001,
+     "glMB": 190.847772
+    }
+   ]
+  }
+ }
+}
