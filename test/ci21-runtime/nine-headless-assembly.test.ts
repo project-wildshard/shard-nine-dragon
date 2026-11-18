@@ -13,7 +13,7 @@ import { directLoopback } from '../fixtures/netLoopback';
 import { hasNativeAssembly } from '@wildshard/engine/game/shardfile/nativeAssembly';
 import { GRAPPLE_PHASES, grappleRow, NO_HOOK } from '../fixtures/grapple-wire';
 import { outputDescriptor } from '@wildshard/engine/game/shardfile/outputDescriptor';
-import { loadHeadlessProduct } from '@wildshard/engine/host/headlessProduct';
+import { loadHeadlessFolder } from '@wildshard/engine/host/headlessFolder';
 import type { CreatureRewardState } from '@wildshard/engine/game/saves';
 import { openWorld } from '@wildshard/engine/host/openWorld';
 import { nineRuntimeInput } from '../fixtures/nine-product-session';
@@ -42,9 +42,9 @@ test('the product ships the facts the fixture lent, as server files only', async
   expect(JSON.parse(await text(product, 'server/portal-ride.json'))).toEqual({ director: constants.portalRide.director, trigger: constants.portalRide.trigger, fade: constants.portalRide.fade, landings: constants.portalRide.landings });
   const plan = parseNativeAssembly(JSON.parse(await text(product, NATIVE_ASSEMBLY_FILE)));
   expect(plan.level.stand).toBe(constants.spawnY);
-  // Engine 0.1.32 plus NB20's 5 cm parapet clearance proves the same
-  // 92 lanes and eight transfers in 28 fewer ticks. All other facts stay pinned.
-  expect(plan.entries.proven).toEqual({ ...constants.entryProof, steps: 15956 });
+  // Engine 0.1.42 proves the same 92 lanes and eight transfers in
+  // four fewer ticks than 0.1.32. The other assembly facts stay pinned.
+  expect(plan.entries.proven).toEqual({ ...constants.entryProof, steps: 15952 });
   expect(plan.features.map(row => row.host)).toEqual(['collision.pieces', 'item.swept', 'portal.ride', 'grapple']);
   const server = index.admission.server ?? [];
   expect(server.map(row => row.name)).toEqual(['server/grapple-profile.json', 'server/hooks.json', 'server/jian.json', 'server/native-assembly.json', 'server/pieces.json', 'server/portal-ride.json']);

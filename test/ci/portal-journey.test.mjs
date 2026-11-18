@@ -12,7 +12,7 @@ import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 import { test } from 'node:test';
 
-const { loadHeadlessProduct } = await import('@wildshard/engine/host/headlessProduct');
+const { loadHeadlessFolder } = await import('@wildshard/engine/host/headlessFolder');
 const { openWorldAdapter } = await import('@wildshard/engine/host/openWorld');
 const { outputDescriptor, serverReadsFile } = await import('@wildshard/engine/game/shardfile/outputDescriptor');
 const { loadRapier } = await import('@wildshard/engine/physics/rapier');
@@ -26,7 +26,7 @@ const wait = (id, ticks) => ({ id, ticks, commands: [] });
 const near = (at, [x, y, z], limit = 1.5) => Math.hypot(at[0] - x, at[1] - y, at[2] - z) < limit;
 
 test('nine-dragon-stack: portal ride out and home, then hook, LOCK and ZIP on real inputs', { timeout: 9_500 }, async () => {
-  const started = performance.now(), directory = resolve('out/nine-dragon-stack'), product = await loadHeadlessProduct(directory), shard = product.shardfile;
+  const started = performance.now(), directory = resolve('out/nine-dragon-stack'), product = await loadHeadlessFolder(directory), shard = product.shardfile;
   const descriptor = outputDescriptor(shard); assert.ok(descriptor, 'The built shard must pass admission');
   const assets = new Map(descriptor.index.files.filter(file => serverReadsFile(file, shard.terrain?.collider) && (file.name === undefined || file.kind === 'wasm' || file.kind === 'tile'))
     .map(file => [file.commons === true ? `commons:${file.hash}` : file.hash, readFileSync(join(directory, file.path))]));

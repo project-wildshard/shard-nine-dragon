@@ -1,12 +1,12 @@
 import { NATIVE_ASSEMBLY_FILE, parseNativeAssembly } from '@wildshard/format/nativeAssembly';
-import type { ShardProduct } from '@wildshard/engine/game/shardfile/shardProduct';
+import type { ShardFolder } from '@wildshard/engine/game/shardfile/shardFolder';
 import type { PrepareHeadlessRuntime } from '@wildshard/engine/host/headlessRuntime';
 import manifest from '../../src/manifest.json' with { type: 'json' };
-import { prepareProductPlan } from '@wildshard/engine/test/headless-native';
+import { prepareFolderPlan } from '@wildshard/engine/test/headless-native';
 import { registerNativeWalkBounds } from '@wildshard/engine/test/headless/nativeBounds';
 
 /** Nine's own plan with the claw's rise turned off: the path a lifting crossing used to take. */
-async function flatProduct(product: ShardProduct): Promise<ShardProduct> {
+async function flatProduct(product: ShardFolder): Promise<ShardFolder> {
   const plan = parseNativeAssembly(await product.json(NATIVE_ASSEMBLY_FILE));
   const bytes = new TextEncoder().encode(JSON.stringify({ ...plan, features: plan.features.map(row => row.host === 'grapple' ? { ...row, rise: false } : row) }));
   return { ...product, file: name => name === NATIVE_ASSEMBLY_FILE ? Promise.resolve(bytes) : product.file(name) };
@@ -15,7 +15,7 @@ async function flatProduct(product: ShardProduct): Promise<ShardProduct> {
 /** The world Nine's shard file builds, with the walk proofs' bounds lent over it. `rise` false is a negative control. */
 export function nineHeadlessRuntime(rise: boolean): PrepareHeadlessRuntime {
   return async preparation => {
-    const product = rise ? preparation.product : await flatProduct(preparation.product), plan = await prepareProductPlan({ ...preparation, product });
+    const product = rise ? preparation.product : await flatProduct(preparation.product), plan = await prepareFolderPlan({ ...preparation, product });
     return { ...plan, install: (host, context) => { registerNativeWalkBounds(host, manifest.bounds); plan.install(host, context); } };
   };
 }

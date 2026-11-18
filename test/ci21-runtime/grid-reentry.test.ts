@@ -4,15 +4,15 @@ import { expect, test, vi } from 'vitest';
 import { loadRapier } from '@wildshard/engine/physics/rapier';
 import { snapshotSimHost, serializeSimSnapshot, decodeSimSnapshot } from '@wildshard/engine/sim/snapshot';
 import { restoreSimHost } from '@wildshard/engine/sim/restore';
-import { loadHeadlessProduct } from '@wildshard/engine/host/headlessProduct';
+import { loadHeadlessFolder } from '@wildshard/engine/host/headlessFolder';
 import { nineRuntimeInput } from '../fixtures/nine-product-session';
 import { outputDescriptor } from '@wildshard/engine/game/shardfile/outputDescriptor';
 import { createShardfileSim, bindShardfileSim, prepareShardfileSimRestore } from '@wildshard/engine/game/plugin/simulation';
 import { createTrustedHeadlessResident, type PrepareHeadlessRuntime } from '@wildshard/engine/host/headlessRuntime';
 import { hasDeclaredClientPage } from '@wildshard/format/runtimeBinds';
 import { ScriptHost } from '@wildshard/engine/script/host';
-import { productHeadlessSections } from '@wildshard/engine/host/headlessSections';
-import { createNativeProofResident, prepareProductPlan } from '@wildshard/engine/test/headless-native';
+import { folderHeadlessSections } from '@wildshard/engine/host/headlessSections';
+import { createNativeProofResident, prepareFolderPlan } from '@wildshard/engine/test/headless-native';
 import { prepareHeadlessRuntime as ninePlan } from '../fixtures/nine-headless';
 import { leadPlayer } from '@wildshard/engine/sim/leadPlayer';
 
@@ -26,7 +26,7 @@ for (const slug of shards) test(`${slug}: evict and re-enter with kit, held item
   const preparation = await nineRuntimeInput(), { product, shard, assets, rapier } = preparation;
   const trusted = product.has('sim/runtime-plan');
   const direct = trusted ? undefined : directPlans.get(slug);
-  const sections = productHeadlessSections(product);
+  const sections = folderHeadlessSections(product);
   const questPorts = { fact: () => undefined, coins: () => undefined };
   const first = direct !== undefined ? await createNativeProofResident(preparation, direct) : trusted ? await createTrustedHeadlessResident(preparation)
     : createShardfileSim(shard, assets, { rapier, sections, quest: questPorts });

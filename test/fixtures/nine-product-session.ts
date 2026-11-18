@@ -1,13 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { loadHeadlessProduct } from '@wildshard/engine/host/headlessProduct';
+import { loadHeadlessFolder } from '@wildshard/engine/host/headlessFolder';
 import { loadRapier } from '@wildshard/engine/physics/rapier';
 import { outputDescriptor } from '@wildshard/engine/game/shardfile/outputDescriptor';
 import { createNativeProofAdapter } from '@wildshard/engine/test/headless-native';
 import { nineHeadlessRuntime } from './nine-headless';
 
 export async function nineRuntimeInput() {
-  const directory = 'out/nine-dragon-stack', product = await loadHeadlessProduct(directory);
+  const directory = 'out/nine-dragon-stack', product = await loadHeadlessFolder(directory);
   const descriptor = outputDescriptor(product.shardfile);
   if (descriptor === undefined) throw new Error('Missing admitted Nine output');
   const assets = new Map(descriptor.index.files.map(file => [file.commons === true ? `commons:${file.hash}` : file.hash,
