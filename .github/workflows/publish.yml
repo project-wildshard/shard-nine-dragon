@@ -126,9 +126,27 @@ jobs:
         run: node scripts/publish-shard.mjs version "${{ steps.product.outputs.slug }}" "${{ inputs.version }}"
       - name: Install phone WebKit for prepare
         run: |
-          # sdk 0.4 (SDK-SPLIT): prepare's playwright is @wildshard/dev's, reached through @wildshard/cli; an older
-          # shard reaches it through the sdk it aliases as @wildshard/sharddev.
-          pw="$(node -e "const {dirname,join}=require('node:path'),{realpathSync,existsSync}=require('node:fs');const bases=[];if(existsSync('node_modules/@wildshard/cli'))bases.push(realpathSync(join(realpathSync('node_modules/@wildshard/cli'),'..','dev')));if(existsSync('node_modules/@wildshard/sharddev'))bases.push(realpathSync('node_modules/@wildshard/sharddev'));for(const b of bases){try{console.log(dirname(require.resolve('playwright/package.json',{paths:[b]})));process.exit(0)}catch{}}console.error('no playwright under @wildshard/cli or @wildshard/sharddev');process.exit(1)")"
+          # Prepare uses the directly installed dev package or CLI's dev package.
+          # Older shards still carry Playwright in the sharddev alias.
+          pw="$(node --input-type=commonjs <<'JS'
+          const { dirname, join } = require('node:path');
+          const { existsSync, realpathSync } = require('node:fs');
+          const scope = 'node_modules/@wildshard';
+          const cli = join(scope, 'cli');
+          const candidates = [join(scope, 'dev')];
+          if (existsSync(cli)) candidates.push(join(realpathSync(cli), '..', 'dev'));
+          candidates.push(join(scope, 'sharddev'));
+          for (const candidate of candidates) {
+            if (!existsSync(candidate)) continue;
+            try {
+              console.log(dirname(require.resolve('playwright/package.json', { paths: [realpathSync(candidate)] })));
+              process.exit(0);
+            } catch {}
+          }
+          console.error('cannot resolve Playwright from @wildshard/dev, @wildshard/cli, or @wildshard/sharddev');
+          process.exit(1);
+          JS
+          )"
           if [ "$RUNNER_OS" = Linux ]; then node "$pw/cli.js" install --with-deps webkit; else node "$pw/cli.js" install webkit; fi
       - name: Prepare in phone WebKit
         env:
