@@ -1,8 +1,18 @@
 {
-  "webContentMB": 399.21624,
-  "glMB": 278.256291,
+  "webContentMB": 689.131312,
+  "glMB": 217.443946,
   "engineBaseMB": 299,
-  "rev": "5357804745121cdda8f9492b62d3266244f4ac1b",
-  "device": "iOS Simulator iPhone 17 Pro Safari + desktop labelled GL census",
-  "evidence": "progress/memory/sf22a-runtime-homes-535780474/summary.json"
+  "rev": "4a7ba050e2f71276d90d61aa15109a32f80813ec",
+  "device": "iOS 27.2 iPhone 17 Pro Simulator Safari, phone Low auto (img), settled WebContent [Sim] and GL [L]",
+  "evidence": "progress/memory/mg5-epoch3-2026-11-17.json",
+  "epoch": 3,
+  "imagesFirst": {
+    "webContentMB": 697.077528,
+    "glMB": 217.443946,
+    "engineBaseMB": 299,
+    "rev": "4a7ba050e2f71276d90d61aa15109a32f80813ec",
+    "device": "iOS 27.2 iPhone 17 Pro Simulator Safari, phone Low img (img), settled WebContent [Sim] and GL [L]",
+    "evidence": "progress/memory/mg5-epoch3-2026-11-17.json",
+    "epoch": 3
+  }
 }
