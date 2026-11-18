@@ -4,7 +4,8 @@ import { fixedKitRows, readFixedSlots } from './casts.ts';
 import { resolve } from 'node:path';
 import rawSignRows from '../data/signView.json' with { type: 'json' };
 import { encodeBuildBytes } from '@wildshard/sharddev/bake/byteCodec';
-import { openNativeRaster, bundleNativeRaster } from '@wildshard/sharddev/bake/nativeRaster';
+// oxlint-disable-next-line wildshard/layer -- Engine 0.1.42 predates the SDK dev package layer.
+import { openNativeRaster, bundleNativeRaster } from '@wildshard/dev/bake/nativeRaster';
 import { byteWriter, outputHash, browserBakeBytes } from './bakeBytes.mjs';
 import { readImagePixels } from '@wildshard/sharddev/bake/image';
 import { parseSignView } from './sections.ts';

@@ -1,4 +1,4 @@
-import { withPortableMath } from '@wildshard/sharddev/commons/bake/portableMath';
+import { withPortableMath } from '@wildshard/sharddev/math/portableMath';
 import { nineLayoutSource } from './layout';
 
 /** Original ordered layout rows, float64 records and measured geometry bounds. */

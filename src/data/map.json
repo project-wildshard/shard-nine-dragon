@@ -11,7 +11,7 @@
     "../../sharddev/bake/mapRaster.ts",
     "../../sharddev/bake/groundMap.ts",
     "../../sharddev/kit/geometryPack.ts",
-    "../../commons/bake/portableMath.ts"
+    "../../sharddev/math/portableMath.ts"
   ],
   "clipAbove": 153,
   "style": {

@@ -1,4 +1,5 @@
-import { bootFilePolicy, sharedBootPhysics, type BootSources, type BootTextures, type BootTier } from '@wildshard/sharddev/bootInventory';
+// oxlint-disable-next-line wildshard/layer -- Engine 0.1.42 predates the SDK dev package layer.
+import { bootFilePolicy, sharedBootPhysics, type BootSources, type BootTextures, type BootTier } from '@wildshard/dev/bootInventory';
 import { GPU_FILES } from '../ktx2.generated';
 
 /** The structure-first world's original counted inventory, authored beside its manifest. */

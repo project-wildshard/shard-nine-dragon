@@ -1,4 +1,4 @@
-import { withPortableMath } from '@wildshard/sharddev/commons/bake/portableMath';
+import { withPortableMath } from '@wildshard/sharddev/math/portableMath';
 import { BufferAttribute, BufferGeometry, DataUtils, Float16BufferAttribute, InstancedMesh, Matrix4, Mesh, MeshStandardMaterial, Scene, Vector3 } from 'three';
 import { drawSpill, withSpill, type NineSpillAtlas } from './spillBake';
 import { bakeOwned, BakedPiece, WholeShape, type BakedScene } from '@wildshard/sharddev/bake';

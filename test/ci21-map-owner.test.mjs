@@ -42,8 +42,8 @@ if (owner.slug === 'nine-dragon-stack') test('Nine retains every extra map sourc
   }
   assert.ok(settings.inputs.includes('../../sharddev/kit/geometryPack.ts'));
   assert.ok(existsSync(sdkFile('kit/geometryPack.ts')));
-  assert.ok(settings.inputs.includes('../../commons/bake/portableMath.ts'));
-  assert.ok(existsSync(resolve(sdk, 'src/commons/bake/portableMath.ts')));
+  assert.ok(settings.inputs.includes('../../sharddev/math/portableMath.ts'));
+  assert.ok(existsSync(resolve(sdk, 'src/sharddev/math/portableMath.ts')));
   assert.equal(mapFile, resolve(source, 'data/map.json'));
   assert.ok(!settings.inputs.includes('../../../scripts/map-painter.mjs'));
 });

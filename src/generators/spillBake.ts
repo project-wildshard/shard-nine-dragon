@@ -1,6 +1,6 @@
 import { BufferAttribute, type BufferGeometry, Color, Matrix4, Quaternion, Vector3 } from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import { withPortableMath } from '@wildshard/sharddev/commons/bake/portableMath';
+import { withPortableMath } from '@wildshard/sharddev/math/portableMath';
 import { nineLayoutSource } from './layout';
 import { bakeFixedKits, readFixedSlots } from './casts';
 import { canopyGeometries } from './canopyGeometry';

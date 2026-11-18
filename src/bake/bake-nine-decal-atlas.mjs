@@ -1,6 +1,7 @@
 // Native reference pixels, retained as ordinary lossless shard file images.
 import { resolve } from 'node:path';
-import { openNativeRaster, bundleNativeRaster } from '@wildshard/sharddev/bake/nativeRaster';
+// oxlint-disable-next-line wildshard/layer -- Engine 0.1.42 predates the SDK dev package layer.
+import { openNativeRaster, bundleNativeRaster } from '@wildshard/dev/bake/nativeRaster';
 import { byteWriter, outputHash, browserBakeBytes } from '../generators/bakeBytes.mjs';
 import nativeDecals from '../data/nativeDecals.json' with { type: 'json' };
 import { readImagePixels } from '@wildshard/sharddev/bake/image';
