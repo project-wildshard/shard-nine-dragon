@@ -1,5 +1,5 @@
 import { withPortableMath } from '@wildshard/sharddev/commons/bake/portableMath';
-import { BufferAttribute, BufferGeometry, DataUtils, InstancedMesh, Matrix4, Mesh, MeshStandardMaterial, Scene, Vector3 } from 'three';
+import { BufferAttribute, BufferGeometry, DataUtils, Float16BufferAttribute, InstancedMesh, Matrix4, Mesh, MeshStandardMaterial, Scene, Vector3 } from 'three';
 import { drawSpill, withSpill, type NineSpillAtlas } from './spillBake';
 import { bakeOwned, BakedPiece, WholeShape, type BakedScene } from '@wildshard/sharddev/bake';
 import { compactWholeChannels, gridPositions, objectSpaceLooks, partitionWholeGeometry, wholeGrid, wholePartitionRuns, type PropWhole } from '@wildshard/sharddev/bake/props';
@@ -121,6 +121,22 @@ function fitCoarse(input: readonly BufferGeometry[], parent: string, triangles: 
   return sets;
 }
 
+/**
+ * MG10 / ONE-FORMAT OF-EM28b1 (mini-ninecontent): an L0 node's light spill as half floats, four to a vertex. The spill is
+ * 0 to 5.1 (half's step there is under 0.004, far under one 8-bit step of the lit colour); the fourth half is 0 and never
+ * read (the graph's `aSpill` is a vec3), and it keeps the channel at 8 bytes a vertex: Metal reads attributes only at a
+ * 4-byte stride, so a tight half triple (6 bytes) would make ANGLE hold a converted copy beside it. 12 -> 8 bytes a
+ * vertex on the GPU. The coarse copy keeps its float spill: the program reads the same values from either.
+ */
+export function halfSpillL0(geometry: BufferGeometry): BufferGeometry {
+  const spill = geometry.getAttribute('aSpill');
+  if (spill === undefined) return geometry;
+  if (spill.itemSize !== 3 || !(spill.array instanceof Float32Array)) throw new Error('Nine L0 spill is not a float triple');
+  const out = geometry.clone(), words = new Uint16Array(spill.count * 4), from = spill.array;
+  for (let v = 0; v < spill.count; v++) for (let k = 0; k < 3; k++) words[v * 4 + k] = DataUtils.toHalfFloat(from[v * 3 + k] ?? 0);
+  return out.setAttribute('aSpill', new Float16BufferAttribute(words, 4));
+}
+
 /** Static fabric is drawn from whole L0 nodes; local specimens are standard instanced-kind library GLBs. */
 function buildNineScene(atlas: NineSpillAtlas): { baked: BakedScene; layout: ReturnType<typeof nineLayoutSource>; keys: { boot: string[]; explorer: string[] }; boxes: Record<string, boolean> } {
   const layout = nineLayoutSource(), scene = new Scene(); scene.name = 'nine-dragon-stack';
@@ -176,8 +192,8 @@ function buildNineScene(atlas: NineSpillAtlas): { baked: BakedScene; layout: Ret
   };
   for (const [i, geometry] of layout.geometries.entries()) {
     if (local.has(i)) continue;
-    const mesh = new Mesh(geometry, materialOf(i)); mesh.name = `layout_${i}`;
-    scene.add(new WholeShape(mesh.name, mesh, { customAttributes: nineChannels(geometry), nativeAttributes: true, partition: 'runs', compact: true, materialName: materialOf(i).name }));
+    const l0 = halfSpillL0(geometry), mesh = new Mesh(l0, materialOf(i)); mesh.name = `layout_${i}`;
+    scene.add(new WholeShape(mesh.name, mesh, { customAttributes: nineChannels(l0), nativeAttributes: true, partition: 'runs', compact: true, materialName: materialOf(i).name }));
     if (merged.has(i)) continue;
     const result = measuredCoarseGeometry(whole(i, geometry), COARSE_START, 3, { sloppy: true }), coarse = result.geometry;
     errors.set(coarse, result.errorMetres);
