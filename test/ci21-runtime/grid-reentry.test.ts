@@ -8,7 +8,7 @@ import { loadHeadlessFolder } from '@wildshard/engine/host/headlessFolder';
 import { nineRuntimeInput } from '../fixtures/nine-product-session';
 import { outputDescriptor } from '@wildshard/engine/game/shardfile/outputDescriptor';
 import { createShardfileSim, bindShardfileSim, prepareShardfileSimRestore } from '@wildshard/engine/game/plugin/simulation';
-import { createTrustedHeadlessResident, type PrepareHeadlessRuntime } from '@wildshard/engine/host/headlessRuntime';
+import { createNativeHeadlessResident, type PrepareHeadlessRuntime } from '@wildshard/engine/host/headlessRuntime';
 import { hasDeclaredClientPage } from '@wildshard/format/runtimeBinds';
 import { ScriptHost } from '@wildshard/engine/script/host';
 import { folderHeadlessSections } from '@wildshard/engine/host/headlessSections';
@@ -28,7 +28,7 @@ for (const slug of shards) test(`${slug}: evict and re-enter with kit, held item
   const direct = trusted ? undefined : directPlans.get(slug);
   const sections = folderHeadlessSections(product);
   const questPorts = { fact: () => undefined, coins: () => undefined };
-  const first = direct !== undefined ? await createNativeProofResident(preparation, direct) : trusted ? await createTrustedHeadlessResident(preparation)
+  const first = direct !== undefined ? await createNativeProofResident(preparation, direct) : trusted ? await createNativeHeadlessResident(preparation)
     : createShardfileSim(shard, assets, { rapier, sections, quest: questPorts });
   let saved;
   try {
@@ -54,7 +54,7 @@ for (const slug of shards) test(`${slug}: evict and re-enter with kit, held item
   } finally { first.dispose(); }
   // Nothing from the old native world survives; a fresh installer must recreate
   // its full adapter kit before strict restore accepts the held/quest state.
-  const again = direct !== undefined ? await createNativeProofResident(preparation, direct, saved) : trusted ? await createTrustedHeadlessResident(preparation, saved)
+  const again = direct !== undefined ? await createNativeProofResident(preparation, direct, saved) : trusted ? await createNativeHeadlessResident(preparation, saved)
     : { host: restoreSimHost(first.host.level, { rapier }, saved,
       host => { bindShardfileSim(host, shard, assets, { rapier, sections, quest: questPorts, restoring: true }); }), dispose() { this.host.dispose(); } };
   try {

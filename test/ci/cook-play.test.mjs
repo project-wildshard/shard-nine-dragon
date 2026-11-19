@@ -31,7 +31,7 @@ test('the real cooked Nine earns grapple and resumes using only served server fi
   const {cookShard,servedAsIs}=await import('@wildshard/engine/game/shardCook');
   // QA41: the pinned engine includes the per-worker format hook. Exercise
   // the normal phone tiers too; never hide installed-package worker failures.
-  const bin=join(dirname(require.resolve('@wildshard/dev/package.json')),'bin/wildshard.mjs'),tar=join(root,'dunes.tar');
+  const bin=join(dirname(require.resolve('@wildshard/cli/package.json')),'bin/wildshard.mjs'),tar=join(root,'dunes.tar');
   const done=spawnSync(process.execPath,[bin,'pack',resolve('out/nine-dragon-stack'),'--out',tar],{encoding:'utf8',timeout:30_000});
   assert.ifError(done.error);assert.equal(done.status,0,done.stderr);
   const cooked=join(root,'cooked'),unpacked=join(root,'server-files');
