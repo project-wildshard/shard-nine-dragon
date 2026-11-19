@@ -28,5 +28,11 @@
   },
   "0.1.44 linux-x64": {
     "nine-dragon-stack": "5357cf4d1121d82b1f06520adf935c894a32d372153b24321dd84f49daf355e5"
+  },
+  "0.1.50 darwin-arm64": {
+    "nine-dragon-stack": "5357cf4d1121d82b1f06520adf935c894a32d372153b24321dd84f49daf355e5"
+  },
+  "0.1.50 linux-x64": {
+    "nine-dragon-stack": "5357cf4d1121d82b1f06520adf935c894a32d372153b24321dd84f49daf355e5"
   }
 }

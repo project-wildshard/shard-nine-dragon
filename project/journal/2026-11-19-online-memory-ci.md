@@ -20,3 +20,8 @@ The published SDK build and author check passed locally. The matching client
 booted Nine online on the Mac with a 769 MB loading renderer peak at modules,
 which the 2.086 factor estimates at 1,604 MB. The hosted Linux verdict is
 the qualification for MG2.
+
+The first hosted run reached the 241-tick checkpoint and printed a missing
+0.1.50 Linux key. Its digest matches the prior engine’s Linux checkpoint
+and the freshly recorded 0.1.50 Darwin checkpoint. Record both new keys
+for the play-and-resume test. [Hosted checkpoint](https://github.com/project-wildshard/shard-nine-dragon/actions/runs/44578830164/job/135753568893).
