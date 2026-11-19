@@ -37,7 +37,8 @@ function observe(page) {
   return page;
 }
 
-if (process.argv[1]?.endsWith('/scripts/memory-product.mjs')) {
+// The launcher imports memory-product in this process after the preload runs.
+if (process.argv[1]?.endsWith('/bin/wildshard.mjs') && process.argv[2] === 'memory') {
   const caller = createRequire(resolve('package.json'));
   const engine = createRequire(caller.resolve('@wildshard/engine/package.json'));
   const { chromium } = engine('playwright');
