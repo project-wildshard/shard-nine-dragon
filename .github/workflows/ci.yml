@@ -343,6 +343,20 @@ jobs:
         run: node --test test/ci/grid-ready.test.mjs
       - name: Cross the Well on the Fei Zhua from the south rim
         run: node --test test/ci/well-crossing.test.mjs
+      - name: Install Chromium for the pinned engine
+        if: steps.ring2.outputs.play == 'true'
+        run: |
+          pw_cli="$(node --input-type=commonjs <<'JS'
+          const { createRequire } = require('node:module');
+          const { dirname, join } = require('node:path');
+          const engine = createRequire(require.resolve('@wildshard/engine/package.json'));
+          console.log(join(dirname(engine.resolve('playwright/package.json')), 'cli.js'));
+          JS
+          )"
+          node "$pw_cli" install --only-shell chromium
+      - name: Measure Nine's online phone loading peak
+        if: steps.ring2.outputs.play == 'true'
+        run: pnpm exec wildshard memory out/nine-dragon-stack --out=tmp/ci21/nine-memory.json
       - name: Cook, grapple and restore from server files
         if: steps.ring2.outputs.play == 'true'
         run: node --test test/ci/cook-play.test.mjs

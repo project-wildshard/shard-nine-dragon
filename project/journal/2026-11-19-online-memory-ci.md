@@ -1,0 +1,22 @@
+# Read Nine’s online loading peak in CI
+
+> Written by: Codex
+>
+> **State:** MG2, 2026-11-19.
+
+SDK 0.4.17 runs the published preparation client with a local Node world and
+proves that the browser reaches control online without a server worker. Nine
+installs the Chromium shell resolved by its pinned engine and runs the SDK
+meter on the Ring 2 product. Keep its byte readings and verdict with the CI21
+artifacts. The standard CLI compares the loading renderer peak at EM11’s
+factor with the 1.5 GB phone line.
+
+The engine pin is 0.1.50 and the format pin is 0.48.0. The restored scroll
+textures from `8486d0d` are in the built mounts. Mossgate is the under-line
+control from the release source. It reached control online at 716 MB in
+sharddev CI. [Mossgate proof](https://github.com/project-wildshard/sharddev/actions/runs/44570100199/job/135725006166).
+
+The published SDK build and author check passed locally. The matching client
+booted Nine online on the Mac with a 769 MB loading renderer peak at modules,
+which the 2.086 factor estimates at 1,604 MB. The hosted Linux verdict is
+the qualification for MG2.
