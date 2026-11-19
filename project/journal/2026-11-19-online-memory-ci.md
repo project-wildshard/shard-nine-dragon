@@ -36,3 +36,10 @@ Explicit SwiftShader boots the exact same product and released client
 locally at 625 MB renderer and 1,304 MB phone. Use the engine Ring 1
 software renderer on hosted Linux and keep the existing verdict threshold.
 [Hosted diagnostic](https://github.com/project-wildshard/shard-nine-dragon/actions/runs/44582526660/job/135766674859).
+
+With explicit SwiftShader, the hosted page reported a complete document,
+a canvas and no loading card. The published probe was still waiting for
+the Developer game object. Wait for the game’s `ws:control-ready` event
+and the loader to leave. The event follows the gameplay and frame gate in
+engine 0.1.50. Use the same event to exclude settled samples from the
+loading estimate. [Hosted page state](https://github.com/project-wildshard/shard-nine-dragon/actions/runs/44585125149/job/135775879397).

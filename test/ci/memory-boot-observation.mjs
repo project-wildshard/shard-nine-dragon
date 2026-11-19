@@ -4,7 +4,16 @@ import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
 import { setTimeout } from 'node:timers/promises';
 
-function observe(page) {
+async function observe(page) {
+  await page.addInitScript(() => {
+    document.addEventListener('ws:control-ready', () => {
+      document.documentElement.dataset.memoryProbeControl = 'ready';
+      const step = globalThis.__bootMemoryStep;
+      if (typeof step === 'function') {
+        globalThis.__bootMemoryStep = () => document.querySelector('.ws-load') === null ? 'ready' : step();
+      }
+    }, { once: true });
+  });
   const failedReads = new Set();
   page.on('response', response => {
     if (response.status() < 400 || failedReads.size >= 20) return;
@@ -13,6 +22,12 @@ function observe(page) {
   });
   const wait = page.waitForFunction.bind(page);
   page.waitForFunction = async (...args) => {
+    // The v0.1.50 direct-entry probe waits on a Developer object. The
+    // game's control event comes from gameplay with the frame gate open.
+    if (String(args[0]).includes('window.__wildshard?.world?.game')) {
+      args[0] = () => Boolean(document.querySelector('#wserr .msg')?.textContent) ||
+        (document.querySelector('.ws-load') === null && document.documentElement.dataset.memoryProbeControl === 'ready');
+    }
     try {
       return await wait(...args);
     } catch (error) {
@@ -29,6 +44,7 @@ function observe(page) {
             document: document.readyState,
             canvas: document.querySelector('canvas') !== null,
             game: Boolean(globalThis.__wildshard?.world?.game),
+            control: document.documentElement.dataset.memoryProbeControl,
           };
         }).catch(() => null);
         const boot = await Promise.race([snapshot, setTimeout(2000, null, { ref: false })]);
