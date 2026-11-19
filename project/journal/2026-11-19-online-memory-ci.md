@@ -30,3 +30,9 @@ The next hosted run downloaded the matching client and timed out waiting for
 control after 240 seconds. The Ring 2 probe now reports the last loading
 step, error card and failed local asset paths before the published engine
 closes the browser. [Hosted timeout](https://github.com/project-wildshard/shard-nine-dragon/actions/runs/44580026170/job/135757843233).
+
+The diagnostic run showed no loading card and no failed local reads.
+Explicit SwiftShader boots the exact same product and released client
+locally at 625 MB renderer and 1,304 MB phone. Use the engine Ring 1
+software renderer on hosted Linux and keep the existing verdict threshold.
+[Hosted diagnostic](https://github.com/project-wildshard/shard-nine-dragon/actions/runs/44582526660/job/135766674859).

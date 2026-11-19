@@ -26,6 +26,9 @@ function observe(page) {
             last: [...(loader?.querySelectorAll('.ws-load-log li') ?? [])].slice(-6).map(item => item.textContent),
             card: document.querySelector('#wserr .msg')?.textContent,
             title: document.documentElement.classList.contains('title-first'),
+            document: document.readyState,
+            canvas: document.querySelector('canvas') !== null,
+            game: Boolean(globalThis.__wildshard?.world?.game),
           };
         }).catch(() => null);
         const boot = await Promise.race([snapshot, setTimeout(2000, null, { ref: false })]);
@@ -42,6 +45,15 @@ if (process.argv[1]?.endsWith('/bin/wildshard.mjs') && process.argv[2] === 'memo
   const caller = createRequire(resolve('package.json'));
   const engine = createRequire(caller.resolve('@wildshard/engine/package.json'));
   const { chromium } = engine('playwright');
+  if (process.platform === 'linux') {
+    // Use the software renderer that engine Ring 1 selects on hosted Linux.
+    const launch = chromium.launchServer.bind(chromium);
+    chromium.launchServer = options => launch({
+      ...options,
+      args: [...options.args.filter(arg => !arg.startsWith('--use-angle=')),
+        '--use-angle=swiftshader', '--enable-unsafe-swiftshader'],
+    });
+  }
   const connect = chromium.connectOverCDP.bind(chromium);
   chromium.connectOverCDP = async (...args) => {
     const browser = await connect(...args);
