@@ -32,7 +32,7 @@ on:
         type: string
         default: ''
       preparation:
-        description: Engine release tag whose preparation client prepare serves, e.g. server-staging-<sha> (empty keeps the sdk's engine pin)
+        description: Preparation client release tag (defaults to v0.1.47 for pinned builds, or the engine candidate's client)
         type: string
         default: ''
       rehearse:
@@ -114,6 +114,19 @@ jobs:
           else
             pnpm install --frozen-lockfile --config.ci=false
           fi
+      # The phone atlases' Basis encoder is built once per host and cached
+      # (S12f3). Its key names the C library: a basisu built on a newer
+      # runner image (ubuntu-26.04, glibc 2.43) fails on an older one
+      # (ubuntu-24.04, glibc 2.39), so their caches never mix (NET-LAG NL12).
+      - name: Name the C library the Basis encoder links against
+        id: libc
+        run: echo "libc=$(node -p "process.report.getReport().header.glibcVersionRuntime ?? 'none'")" >> "$GITHUB_OUTPUT"
+      - name: Keep the pinned Basis encoder the phone atlases need (S12f3)
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/.cache/wildshard/basis
+          key: basis-${{ runner.os }}-${{ runner.arch }}-glibc${{ steps.libc.outputs.libc }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: basis-${{ runner.os }}-${{ runner.arch }}-glibc${{ steps.libc.outputs.libc }}-
       # As each shard repo's ci.yml does: build:shards first (its
       # publish-public step lays out public/assets), then check.
       - name: Build, and name the product
@@ -151,7 +164,9 @@ jobs:
       - name: Prepare in phone WebKit
         env:
           PRODUCT: ${{ steps.product.outputs.product }}
-          PREPARATION: ${{ inputs.preparation }}
+          PREPARATION: ${{ inputs.preparation || (inputs.engine == '' && inputs.sharddev == '' && 'v0.1.47') || '' }}
+          # `gh run rerun <id> --debug` turns on the recorder's full output (NET-LAG NL12).
+          WILDSHARD_PREPARATION_DEBUG: ${{ runner.debug }}
         run: |
           # A shard that overrides @wildshard/engine past the sdk's own pin
           # (a format feature the pinned client refuses) names the engine
@@ -182,7 +197,8 @@ jobs:
     needs: build
     if: ${{ !inputs.rehearse && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    # Leave room for setup, transfer and the CLI verdict timeout.
+    timeout-minutes: 30
     environment: ${{ inputs.channel }}
     env:
       APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
