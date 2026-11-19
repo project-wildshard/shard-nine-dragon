@@ -25,3 +25,8 @@ The first hosted run reached the 241-tick checkpoint and printed a missing
 0.1.50 Linux key. Its digest matches the prior engine’s Linux checkpoint
 and the freshly recorded 0.1.50 Darwin checkpoint. Record both new keys
 for the play-and-resume test. [Hosted checkpoint](https://github.com/project-wildshard/shard-nine-dragon/actions/runs/44578830164/job/135753568893).
+
+The next hosted run downloaded the matching client and timed out waiting for
+control after 240 seconds. The Ring 2 probe now reports the last loading
+step, error card and failed local asset paths before the published engine
+closes the browser. [Hosted timeout](https://github.com/project-wildshard/shard-nine-dragon/actions/runs/44580026170/job/135757843233).

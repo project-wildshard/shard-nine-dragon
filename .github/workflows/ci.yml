@@ -356,7 +356,9 @@ jobs:
           node "$pw_cli" install --only-shell chromium
       - name: Measure Nine's online phone loading peak
         if: steps.ring2.outputs.play == 'true'
-        run: pnpm exec wildshard memory out/nine-dragon-stack --out=tmp/ci21/nine-memory.json
+        run: |
+          NODE_OPTIONS="--import=./test/ci/memory-boot-observation.mjs" \
+            pnpm exec wildshard memory out/nine-dragon-stack --out=tmp/ci21/nine-memory.json
       - name: Cook, grapple and restore from server files
         if: steps.ring2.outputs.play == 'true'
         run: node --test test/ci/cook-play.test.mjs
