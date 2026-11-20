@@ -18,3 +18,10 @@ Proof on the MacBook: build, `wildshard check` pass, 27 of 27 vitest
 files, ci21 8 of 8, owned, portal, grid-ready, well-crossing and
 cook-play journeys pass; product-play records its walk checkpoint for
 0.1.53 (darwin and linux carry the same digest).
+
+## SDK 0.4.18 (opus-of21-drift2)
+
+SDK 0.4.18 reached npm, so the pins move to it (cli, dev, sdk) and to the
+format it pins, 0.55.0, beside engine 0.1.53 from npm `next`; the lockfile
+now resolves from npm, not the packed engine. The whole CI set passed
+locally on the new pins and the product-play checkpoint kept its digest.
