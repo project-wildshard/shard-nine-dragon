@@ -19,11 +19,12 @@ afterAll(() => rmSync(root, { recursive: true, force: true }));
 
 test('Nine compiles a data-only entry without retired runtime imports', () => {
   expect(Object.hasOwn(manifest, 'trustedRuntime')).toBe(false);
-  expect(manifest.bindings.entry.platform).toBe('client-plan');
+  // OF21 r6: an ordinary upload names no client-plan entry (the engine admits it as data)
+  expect(Object.hasOwn(manifest.bindings, 'entry')).toBe(false);
   expect(() => authoredManifestSource(root, 'nine-dragon-stack', { composed: manifest, metadataOnly: true })).toThrow('missing or invalid program discovery value boot.explore');
   const source = authoredManifestSource(root, 'nine-dragon-stack', { composed: manifest, metadataOnly: true, discovery: parseDiscoveryValues({ ...bootDiscovery, navigation: { ...inputs.navigation } }) });
   expect(source).not.toContain('navigation.generated');
-  expect(source).toContain('.declaredClientPlanEntry(');
+  expect(source).not.toContain('.declaredClientPlanEntry(');
   expect(source).not.toContain('nativeModule');
   expect(source).not.toContain('./plugin');
   expect(source).not.toContain('./runtime/index');

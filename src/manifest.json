@@ -444,11 +444,6 @@
       "explore": {
         "program": true
       }
-    },
-    "entry": {
-      "platform": "client-plan",
-      "retainHomeRuntime": true,
-      "stagesOwner": "declared"
     }
   }
 }

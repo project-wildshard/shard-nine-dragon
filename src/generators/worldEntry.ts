@@ -16,34 +16,19 @@ const deckFloors = deckFloorRows();
  * the portals, the banyan crown's looks and its dressing root, the square's lions and sets, the fabric and this ending's
  * decks and sign boards, the hung lanterns, the facade's drawn pieces, window bindings and sign boards, the wet floor's
  * reflection cards with the streak and halo looks they draw in, the wall kit and air conditioners, the hook and the crowd
- * (the world assembly's entry stages, generators/worldAssembly.ts), and the square's stone pieces (`pieces`, the
- * world/scenes section's entry, run in the entered world once the assembly stands).
+ * (the world assembly's entry stages, generators/worldAssembly.ts), and the square's floor rows (`pieces`, the
+ * world/scenes section's entry, run in the entered world once the assembly stands; its solids are prop rows).
  */
 function nineEntryBlocks({ worldRows, LAYOUT_PLACEMENTS, LION_PLACEMENTS, SET_PLACEMENTS }: NineWorldScenes): WorldEntryRows['blocks'] {
-  // the walkable square and stacks as one piece: its stone colliders for the ending, the world's floors then the decks' (first)
+  // OF21 r6: the walkable square and stacks' floor rows only (footsteps and placement read them). Their solids are the
+  // shard's prop collider rows (headless.ts ninePropColliders), which the page and the room both build, so no piece
+  // here carries a collider: the assembly built the same solids a second time over the props (engine side-parity).
   const install = nineWorldInstallRows();
   const floors = (variant: 'capped' | 'open', rows: readonly NinePhysicsPlacement[]) => {
     const row = rows.find(entry => entry.id === 'nds-floors'); if (row === undefined) throw new Error('Missing Nine floors piece');
-    return { kind: 'piece', when: { variant }, id: row.id, name: row.name, file: row.file, category: 'buildings', surface: 'stone', colliders: row.colliders,
+    return { kind: 'piece', when: { variant }, id: row.id, name: row.name, file: row.file, category: 'buildings', surface: 'stone', colliders: [],
       floors: [...worldRows.rows.floors, ...deckFloors], floorPolicy: 'first', solidFloor: true };
   };
-  // the ending's other stone pieces (the decks, the square, the fronts) with no scene object; the grapple guard follows its
-  // gate's live state, declared separately as the final piece
-  const stone = (variant: 'capped' | 'open', rows: readonly NinePhysicsPlacement[]) => rows.filter(row => row.id !== 'nds-floors' && row.id !== 'nds-grapple-guard')
-    .map(row => {
-      const piece: Record<string, unknown> = { kind: 'piece', when: { variant }, id: row.id, name: row.name, file: row.file, category: 'buildings', surface: 'stone',
-        colliders: row.colliders, floors: [], floorPolicy: 'first', solidFloor: false, object: null };
-      if (row.colliderOwner !== undefined) piece['colliderOwner'] = row.colliderOwner;
-      return piece;
-    });
-  const guard = (variant: 'capped' | 'open', rows: readonly NinePhysicsPlacement[]) => {
-    const row = rows.find(entry => entry.id === 'nds-grapple-guard'); if (row === undefined) throw new Error('Missing Nine grapple guard');
-    return { kind: 'piece', when: { variant }, id: row.id, name: row.name, file: row.file, category: 'buildings', surface: 'stone',
-      colliders: row.colliders, floors: [], floorPolicy: 'first', solidFloor: false, object: null, active: 'tool-closed' };
-  };
-  // the Well's crossings (both endings): stone, timber and metal walkways
-  const crossings = { kind: 'piece', ...install.crossings, category: 'buildings', surface: 'stone', surfaces: ['stone', 'wood', 'metal'], colliders: worldRows.rows.crossings,
-    floors: [], floorPolicy: 'first', solidFloor: false, object: null };
   // a world-scene placement put under the world root (scenes.place publishes `<id>.root`), optionally renamed
   const placed = (id: string, name?: string, variant?: 'capped' | 'open') => {
     const when = variant === undefined ? {} : { when: { variant } };
@@ -53,7 +38,7 @@ function nineEntryBlocks({ worldRows, LAYOUT_PLACEMENTS, LION_PLACEMENTS, SET_PL
   // under the fabric's facade group: its drawn pieces (worldScenes.ts LAYOUT_PLACEMENTS) and this ending's lit windows
   const facade = (id: string, variant?: 'capped' | 'open') => ({ kind: 'attach', id, as: 'object', parent: 'fabric.facade', ...(variant === undefined ? {} : { when: { variant } }) });
   return parseWorldEntry({ blocks: {
-    pieces: [floors('capped', install.standalone), floors('open', install.cell), ...stone('capped', install.standalone), ...stone('open', install.cell), crossings, guard('capped', install.standalone), guard('open', install.cell)],
+    pieces: [floors('capped', install.standalone), floors('open', install.cell)],
     portals: [{ kind: 'attach', id: 'portals.root', as: 'group' }],
     canopy: canopy.draws.map(draw => ({ kind: 'look', look: draw.look, state: draw.state })),
     dressing: [{ kind: 'attach', id: 'dressing.root', as: 'group' }],
@@ -81,7 +66,7 @@ function nineEntryBlocks({ worldRows, LAYOUT_PLACEMENTS, LION_PLACEMENTS, SET_PL
   } }).blocks;
 }
 
-/** The world/scenes section's entry: the square's stone pieces, run in the entered world once the assembly stands. */
+/** The world/scenes section's entry: the square's floor rows, run in the entered world once the assembly stands. */
 export function nineWorldEntry(scenes: NineWorldScenes): WorldEntryRows {
   const pieces = nineEntryBlocks(scenes)['pieces']; if (pieces === undefined) throw new Error('Missing Nine pieces block');
   return parseWorldEntry({ blocks: { pieces } });
