@@ -34,7 +34,7 @@
       "sourceBlob": "6f6602084e06a232ac4855468e4867d42878454b",
       "target": "test/nine-product-inputs.test.ts",
       "suite": "source",
-      "cases": 2,
+      "cases": 3,
       "partition": "whole"
     },
     {
