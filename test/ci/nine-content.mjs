@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 export default async function grapple(product, runtime, observe = []) {
   const initial = await runtime.verbTape({ version: 1, observe, segments: [{ id: 'feet', ticks: 1, commands: [] }] });
   const [x, y, z] = initial.observations[0].position;
-  const hooks = await product.json('server/hooks.json'), profile = await product.json('server/grapple-profile.json');
+  const { profile, hooks } = product.shardfile.modes.grapple.find(row => row.profile !== undefined);
   const hook = hooks.find(row => row.x > x + 15 && Math.abs(row.z - z) < 10 && row.y > y + 4 && Math.hypot(row.x - x, row.z - z, row.y - y) < 38);
   assert.ok(hook, 'Nine must publish a reachable bridge-side grapple ring');
   const dx = hook.x - x, dz = hook.z - z, yaw = Math.atan2(-dx, -dz);
@@ -14,7 +14,7 @@ export default async function grapple(product, runtime, observe = []) {
   const player = { kind: 'player', moveX: 0, moveZ: 0, yaw };
   const report = await runtime.verbTape({ version: 1, observe, segments: [
     { id: 'aim', ticks: 1, commands: [player, { kind: 'script', actorId: profile.headless.aim, value: aim }] },
-    { id: 'lock', ticks: 1, commands: [{ kind: 'script', actorId: profile.headless.lock, value: 1 }] },
+    { id: 'lock', ticks: 1, commands: [{ kind: 'script', actorId: profile.headless.lock, value: hooks.indexOf(hook) + 2 }] },
     { id: 'fire', ticks: 1, commands: [{ ...player, jump: true }] },
     { id: 'bite', ticks: 24, commands: [] },
     { id: 'zip', ticks: 36, commands: [] },

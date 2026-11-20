@@ -3,8 +3,7 @@ import { createRequire } from 'node:module';
 import { loadHeadlessFolder } from '@wildshard/engine/host/headlessFolder';
 import { loadRapier } from '@wildshard/engine/physics/rapier';
 import { outputDescriptor } from '@wildshard/engine/game/shardfile/outputDescriptor';
-import { createNativeProofAdapter } from '@wildshard/engine/test/headless-native';
-import { nineHeadlessRuntime } from './nine-headless';
+import { openNineDataWorld } from '../ci/nine-data-world.mjs';
 
 export async function nineRuntimeInput() {
   const directory = 'out/nine-dragon-stack', product = await loadHeadlessFolder(directory);
@@ -17,12 +16,14 @@ export async function nineRuntimeInput() {
   return { product, shard: product.shardfile, assets, rapier };
 }
 
-/** The original native adapter and flat control, running this CI build's own product.
- * Direct adapters throw on errors; no worker quarantine can mask a failure. */
+/** Real product simulation, with a flat-path control for the claw's rise. */
 export async function openNineSession(variant?: 'nine-flat', slug = 'nine-dragon-stack') {
-  if (variant === 'nine-flat' && slug !== 'nine-dragon-stack') throw new Error('Native proof variant does not match product');
+  if (variant === 'nine-flat' && slug !== 'nine-dragon-stack') throw new Error('Grapple proof variant does not match product');
   const input = await nineRuntimeInput();
-  if (input.product.slug !== slug) throw new Error('Native product identity differs');
-  const sim = await createNativeProofAdapter(input, nineHeadlessRuntime(variant !== 'nine-flat'));
-  return { product: input.product, sim };
+  if (input.product.slug !== slug) throw new Error('Nine product identity differs');
+  const { shard } = input;
+  if (variant !== 'nine-flat') return { product: input.product, sim: openNineDataWorld(input) };
+  if (shard.modes?.grapple === undefined) throw new Error('Missing Nine grapple mode');
+  const flat = { ...shard, modes: { ...shard.modes, grapple: shard.modes.grapple.map(row => ({ ...row, rise: false })) } };
+  return { product: input.product, sim: openNineDataWorld({ ...input, shard: flat }) };
 }

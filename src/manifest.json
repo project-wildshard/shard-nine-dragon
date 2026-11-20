@@ -1,6 +1,6 @@
 {
   "api": 1,
-  "gridShardfile": "/shardfiles/nine-dragon-stack/shard.json",
+  "shardfile": "/shardfiles/nine-dragon-stack/shard.json",
   "cellGround": "world",
   "kitLook": "pbr",
   "creatures": {

@@ -9,9 +9,7 @@ import { test } from 'node:test';
 const { questSource } = await import('./quest-source.mjs');
 
 const { loadHeadlessFolder } = await import('@wildshard/engine/host/headlessFolder');
-const { openWorldAdapter } = await import('@wildshard/engine/host/openWorld');
-const { HeadlessSimulation } = await import('@wildshard/engine/host/headless');
-const { folderHeadlessSections } = await import('@wildshard/engine/host/headlessSections');
+const { openNineDataWorld } = await import('./nine-data-world.mjs');
 const { outputDescriptor, serverReadsFile } = await import('@wildshard/engine/game/shardfile/outputDescriptor');
 const { loadRapier } = await import('@wildshard/engine/physics/rapier');
 const { manifestFolders, builtShardFolders } = await import('@wildshard/engine/scripts/shard-outputs.mjs');
@@ -33,20 +31,26 @@ for (const slug of products) test(`${slug}: enters and walks 1800 actual authore
   const started = performance.now(), directory = resolve('out', slug), product = await loadHeadlessFolder(directory), shard = product.shardfile;
   assert.deepEqual(shard.quests,questSource(slug),'The real product must preserve its authored quest inventory');
   const descriptor = outputDescriptor(shard); assert.ok(descriptor);
-  const declared = shard.runtime === null && !product.has('sim/runtime-plan');
-  const assets = new Map(descriptor.index.files.filter(file => declared || serverReadsFile(file,shard.terrain?.collider) && (file.name === undefined || file.kind === 'wasm' || file.kind === 'tile'))
+  assert.equal(shard.runtime, null);
+  const assets = new Map(descriptor.index.files.filter(file => serverReadsFile(file,shard.terrain?.collider) && (file.name === undefined || file.kind === 'wasm' || file.kind === 'tile'))
     .map(file=>[file.commons === true ? `commons:${file.hash}` : file.hash,readFileSync(join(directory,file.path))]));
-  const rapier = declared ? undefined : await loadRapier(readFileSync(engineRequire.resolve('@dimforge/rapier3d-simd/rapier_wasm3d_bg.wasm')));
-  const runtime = declared
-    ? await HeadlessSimulation.create(shard,assets,undefined,{deadline:'advisory',sections:folderHeadlessSections(product)})
-    : await openWorldAdapter({shard,assets,product,rapier});
+  const rapier = await loadRapier(readFileSync(engineRequire.resolve('@dimforge/rapier3d-simd/rapier_wasm3d_bg.wasm')));
+  let runtime = openNineDataWorld({shard,assets,product,rapier});
   try {
-    const route = routeFor(slug,shard.spawn), report = await runtime.journey({ticks:1800,points:route.points});
+    const route = routes[slug].find(row => row.name === 'stair-street');
+    assert.ok(route, 'The authored stair-street route is available');
+    const { observations: [climbed] } = await runtime.verbTape({ version: 1, observe: [], segments: [
+      { id: 'stair-street', ticks: 1800, commands: [], route: [shard.spawn, route.start, ...route.waypoints].map(({ x, z }) => ({ x, z })) },
+    ] });
+    assert.ok(climbed.grounded && Math.abs(climbed.position[1] - route.expect.y) < 0.5, `The stair-street lands at y=${route.expect.y}: ${climbed.position}`);
+    const nearby = routeFor(slug, shard.spawn);
+    runtime.dispose();
+    runtime = openNineDataWorld({ shard, assets, product, rapier });
+    const report = await runtime.journey({ ticks: 1800, points: nearby.points });
     assert.equal(report.ticks,1800); assert.equal(report.settledTicks,60);
     assert.ok(report.distance>0); assert.ok(report.visited>1, `The real journey must reach multiple route points: ${JSON.stringify(report)}`);
     assert.equal(report.final.grounded,true); assert.ok(report.final.position.every(Number.isFinite));
-    if (declared) assert.equal(runtime.quarantined,false);
-    console.log(`owned-journey ${slug} ${JSON.stringify({route:route.name,...report,elapsedMs:performance.now()-started})}`);
+    console.log(`owned-journey ${slug} ${JSON.stringify({route:nearby.name,climbed:climbed.position,...report,elapsedMs:performance.now()-started})}`);
   } finally { await runtime.dispose(); }
   await assert.rejects(async () => runtime.step([]));
   assert.ok(performance.now()-started<9500,'The complete journey must remain under the quick proof budget');

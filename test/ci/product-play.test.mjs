@@ -9,9 +9,7 @@ import { test } from 'node:test';
 import { assertCheckpointBaseline, snapshotDigest } from './checkpoint-baseline.mjs';
 
 const { loadHeadlessFolder } = await import('@wildshard/engine/host/headlessFolder');
-const { openWorldAdapter } = await import('@wildshard/engine/host/openWorld');
-const { HeadlessSimulation } = await import('@wildshard/engine/host/headless');
-const { folderHeadlessSections } = await import('@wildshard/engine/host/headlessSections');
+const { openNineDataWorld } = await import('./nine-data-world.mjs');
 const { outputDescriptor, serverReadsFile } = await import('@wildshard/engine/game/shardfile/outputDescriptor');
 const { loadRapier } = await import('@wildshard/engine/physics/rapier');
 const { manifestFolders, builtShardFolders } = await import('@wildshard/engine/scripts/shard-outputs.mjs');
@@ -22,30 +20,17 @@ assert.ok(products.length, 'Build this shard before running its product proof');
 assert.deepEqual(products.map(row => row.name).sort(), builtShardFolders(process.cwd(), manifestFolders(process.cwd())).map(row => row.slug).sort(), 'Every declared product must be built');
 const tapes = existsSync('test/ci/content-tapes.json') ? JSON.parse(readFileSync('test/ci/content-tapes.json', 'utf8')) : {};
 
-async function play(runtime, plan, declared) {
-  if (!declared) return { report: await runtime.verbTape(plan), commit: runtime.commit() };
-  const report = { ticks: 0, observations: [] };
-  let commit;
-  for (const segment of plan.segments) {
-    const part = await runtime.verbTapePart({ ...plan, segments: [segment] });
-    report.ticks += part.report.ticks; report.observations.push(...part.report.observations); commit = part.commit;
-  }
-  return { report, commit };
-}
-
 for (const { name: slug } of products) test(`${slug}: boot, walk and resume on the installed engine`, { timeout: 9_500 }, async () => {
   const directory = resolve('out', slug), product = await loadHeadlessFolder(directory), shard = product.shardfile;
   const descriptor = outputDescriptor(shard);
   assert.ok(descriptor, 'The built shard must pass admission');
-  const declared = shard.runtime === null && !product.has('sim/runtime-plan');
-  const assets = new Map(descriptor.index.files.filter(file => declared || serverReadsFile(file, shard.terrain?.collider) && (file.name === undefined || file.kind === 'wasm' || file.kind === 'tile'))
+  assert.equal(shard.runtime, null);
+  const assets = new Map(descriptor.index.files.filter(file => serverReadsFile(file, shard.terrain?.collider) && (file.name === undefined || file.kind === 'wasm' || file.kind === 'tile'))
     .map(file => [file.commons === true ? `commons:${file.hash}` : file.hash, readFileSync(join(directory, file.path))]));
   const owned = [];
-  const rapier = declared ? undefined : await loadRapier(readFileSync(engineRequire.resolve('@dimforge/rapier3d-simd/rapier_wasm3d_bg.wasm')));
+  const rapier = await loadRapier(readFileSync(engineRequire.resolve('@dimforge/rapier3d-simd/rapier_wasm3d_bg.wasm')));
   const create = async snapshot => {
-    const runtime = declared
-      ? await HeadlessSimulation.create(shard, assets, snapshot, { deadline: 'advisory', sections: folderHeadlessSections(product) })
-      : await openWorldAdapter({ shard, assets, product, rapier }, snapshot);
+    const runtime = openNineDataWorld({ shard, assets, product, rapier }, snapshot);
     owned.push(runtime);
     return runtime;
   };
@@ -55,7 +40,7 @@ for (const { name: slug } of products) test(`${slug}: boot, walk and resume on t
     await grapple(product, runtime);
     if (tapes[slug]) {
       const { plan: content, expect } = tapes[slug];
-      const { report: played } = await play(runtime, content, declared);
+      const played = await runtime.verbTape(content);
       for (const fact of expect) {
         const at = played.observations.find(row => row.id === fact.at);
         assert.ok(at, `Missing real observation ${fact.at}`);
@@ -68,7 +53,7 @@ for (const { name: slug } of products) test(`${slug}: boot, walk and resume on t
       { id: 'walk', ticks: 120, commands: [{ kind: 'player', moveX: 0, moveZ: -1, yaw: 0 }] },
       { id: 'turn', ticks: 120, commands: [{ kind: 'player', moveX: 1, moveZ: 0, yaw: Math.PI / 2 }] },
     ] };
-    const { report, commit: checkpoint } = await play(runtime, plan, declared);
+    const report = await runtime.verbTape(plan), checkpoint = runtime.commit();
     assert.equal(report.ticks, 241);
     const [spawn, walk, turn] = report.observations;
     assert.ok([spawn, walk, turn].every(row => row.position.every(Number.isFinite)));
@@ -77,16 +62,8 @@ for (const { name: slug } of products) test(`${slug}: boot, walk and resume on t
     const resumed = await create(checkpoint.snapshot);
     for (let tick = 0; tick < 5; tick++) {
       const commands = [{ kind: 'player', moveX: 0, moveZ: -1, yaw: 0 }];
-      if (declared) {
-        const suffix = { version: 1, observe: [], segments: [{ id: `resume-${tick}`, ticks: 1, commands }] };
-        const control = await runtime.verbTapePart(suffix), restored = await resumed.verbTapePart(suffix);
-        assert.equal(restored.commit.snapshot, control.commit.snapshot, 'A saved world must continue identically');
-        assert.deepEqual(restored.commit.effects, control.commit.effects);
-        assert.deepEqual(restored.report, control.report);
-      } else {
-        runtime.step(commands); resumed.step(commands);
-        assert.deepEqual(resumed.commit(), runtime.commit(), 'A saved world must continue identically');
-      }
+      runtime.step(commands); resumed.step(commands);
+      assert.deepEqual(resumed.commit(), runtime.commit(), 'A saved world must continue identically');
     }
   } finally { for (const runtime of owned) await runtime.dispose(); }
 });

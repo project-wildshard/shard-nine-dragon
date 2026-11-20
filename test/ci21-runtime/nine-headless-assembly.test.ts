@@ -1,6 +1,5 @@
 // oxlint-disable-next-line import/no-nodejs-modules -- The room runs the shipped product bytes and physics module.
 import { readFileSync } from 'node:fs';
-import { parseNativeAssembly, NATIVE_ASSEMBLY_FILE } from '@wildshard/format/nativeAssembly';
 import { expect, test } from 'vitest';
 import { NetClient } from '@wildshard/engine/net/client';
 import { NetRoom } from '@wildshard/engine/net/room';
@@ -13,16 +12,12 @@ import { directLoopback } from '../fixtures/netLoopback';
 import { hasNativeAssembly } from '@wildshard/engine/game/shardfile/nativeAssembly';
 import { GRAPPLE_PHASES, grappleRow, NO_HOOK } from '../fixtures/grapple-wire';
 import { outputDescriptor } from '@wildshard/engine/game/shardfile/outputDescriptor';
-import { loadHeadlessFolder } from '@wildshard/engine/host/headlessFolder';
 import type { CreatureRewardState } from '@wildshard/engine/game/saves';
 import { openWorld } from '@wildshard/engine/host/openWorld';
 import { nineRuntimeInput } from '../fixtures/nine-product-session';
-import { encodeCanonicalJson } from '@wildshard/engine/host/immutable';
 import { nineNativeConstants } from '../fixtures/nine-native-constants';
-import { nineNativeOracle } from '../fixtures/nine-native-oracle';
 
-// P1-E3.1b's row for Nine Dragon: its world from the built product alone. It has no terrain and no creatures, so what this
-// proves is its pieces, its hooks and its claw, over the wire, as a client plays them.
+// OF21: the ordinary product keeps its pieces, hooks and claw path over the wire.
 
 async function shipped() {
   const input = await nineRuntimeInput(), { product, shard } = input;
@@ -30,33 +25,27 @@ async function shipped() {
   if (descriptor === undefined) throw new Error('Missing admitted Nine output');
   return { product, shard, index: descriptor.index, input };
 }
-const text = async (product: Awaited<ReturnType<typeof shipped>>['product'], name: string): Promise<string> => new TextDecoder().decode(await product.file(name));
-
-test('the product ships the facts the fixture lent, as server files only', async () => {
-  const { product, index } = await shipped(), [constants, oracle] = await Promise.all([nineNativeConstants(), nineNativeOracle()]);
-  expect(hasNativeAssembly(product)).toBe(true);
-  expect(await text(product, 'server/pieces.json')).toBe(encodeCanonicalJson(constants.pieces));
-  expect(await text(product, 'server/hooks.json')).toBe(encodeCanonicalJson(constants.hooks));
-  expect(await text(product, 'server/grapple-profile.json')).toBe(encodeCanonicalJson(constants.grappleProfile));
-  expect(await text(product, 'server/jian.json')).toBe(encodeCanonicalJson(oracle.constants.jianPolicy));
-  expect(JSON.parse(await text(product, 'server/portal-ride.json'))).toEqual({ director: constants.portalRide.director, trigger: constants.portalRide.trigger, fade: constants.portalRide.fade, landings: constants.portalRide.landings });
-  const plan = parseNativeAssembly(JSON.parse(await text(product, NATIVE_ASSEMBLY_FILE)));
-  expect(plan.level.stand).toBe(constants.spawnY);
-  // Engine 0.1.42 proves the same 92 lanes and eight transfers in
-  // four fewer ticks than 0.1.32. The other assembly facts stay pinned.
-  expect(plan.entries.proven).toEqual({ ...constants.entryProof, steps: 15952 });
-  expect(plan.features.map(row => row.host)).toEqual(['collision.pieces', 'item.swept', 'portal.ride', 'grapple']);
-  const server = index.admission.server ?? [];
-  expect(server.map(row => row.name)).toEqual(['server/grapple-profile.json', 'server/hooks.json', 'server/jian.json', 'server/native-assembly.json', 'server/pieces.json', 'server/portal-ride.json']);
-  expect(server.reduce((sum, row) => sum + row.bytes, 0), 'J134: under 1 MB a shard').toBeLessThan(1_000_000);
-  const client = new Set([...index.files.map(file => file.hash), ...(index.packs ?? []).flatMap(pack => pack.entries.map(entry => entry.hash))]);
-  expect(server.filter(row => client.has(row.hash))).toEqual([]);
+test('the ordinary product keeps the shipped rope, landing and collision declarations', async () => {
+  const { product, shard, index } = await shipped(), constants = await nineNativeConstants();
+  expect(shard.runtime).toBeNull();
+  expect(hasNativeAssembly(product)).toBe(false);
+  expect(index.admission.server ?? []).toEqual([]);
+  const grapple = shard.modes?.grapple?.find(row => row.profile !== undefined);
+  const { id: _id, course: { mode: _mode, ...course }, ...profile } = constants.grappleProfile;
+  expect(grapple?.profile).toEqual({ ...profile, course });
+  expect(grapple?.hooks).toEqual(constants.hooks);
+  expect(shard.props?.colliders.find(row => row.id === 'nds-grapple-guard')?.shapes).toHaveLength(2);
+  expect(shard.props?.colliders.find(row => row.id === 'nds-banyan.paifang')?.shapes[0]).toMatchObject({ kind: 'hull', surface: 'stone' });
+  const portal = product.section('client/plan').features.find(row => row.kind === 'portal.ride');
+  expect(portal).toMatchObject({ kind: 'portal.ride', rows: { director: constants.portalRide.director, landings: constants.portalRide.landings } });
 }, 120_000);
 
 test('a client locks a hook and rides it over the wire, and the save holds the crossing', async () => {
   const profilesById = new Map<string, CreatureRewardState>();
   const profiles = { read: (id: string) => profilesById.get(id) ?? null, write: (id: string, state: CreatureRewardState) => { profilesById.set(id, structuredClone(state)); return true; } };
-  const { input } = await shipped(), { hooks } = await nineNativeConstants(), live = await openWorld(input, { room: true, profiles }), { host } = live, lead = leadPlayer(host);
+  const { input, shard } = await shipped(), hooks = shard.modes?.grapple?.find(row => row.profile !== undefined)?.hooks;
+  if (hooks === undefined) throw new Error('Missing declared grapple rings');
+  const live = await openWorld(input, { room: true, profiles }), { host } = live, lead = leadPlayer(host);
   const room = new NetRoom({ world: new SimNetWorld(host), step: inputs => { live.step(inputs); } }), link = directLoopback(), client = new NetClient(link.client);
   let back;
   try {

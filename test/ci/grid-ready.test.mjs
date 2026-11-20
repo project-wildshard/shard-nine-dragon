@@ -40,15 +40,16 @@ test('nine-dragon-stack: admits on the shipped grid, checkpoints, unloads frozen
   const cell = assembly.cells.find(row => row.slug === SLUG); assert.ok(cell, 'The shipped grid must name Nine');
   const { instance } = cell;
   // The highway is a second Nine world standing in for the road (the grid server's road is not exported); it only carries the owner between frames.
-  const highway = (await openWorld(input, { room: true })).resident;
+  const highway = await openWorld(input, { room: true });
   let resident, admitted = false, durable = false, loads = 0;
   const saved = new Map();
   const grid = new GridSimulation(assembly, { highway: { host: highway.host, dispose: () => { highway.dispose(); } },
     admitted: () => admitted, read: id => saved.get(id), save: (id, snapshot) => { if (!durable) return false; saved.set(id, structuredClone(snapshot)); return true; },
-    load: async (_cell, snapshot) => { loads++; const own = (await openWorld(input, { room: true, snapshot })).resident; resident = own; return { host: own.host, dispose: () => { own.dispose(); } }; } });
+    load: async (_cell, snapshot) => { loads++; const own = await openWorld(input, { room: true, snapshot }); resident = own; return { host: own.host, dispose: () => { own.dispose(); } }; } });
   // Real input on the resident's own step, as the grid server steps an occupied cell.
   const walk = (from, ticks) => {
-    for (let tick = 0; tick < ticks; tick++) resident.step([{ kind: 'player', moveX: 0, moveZ: -1, yaw: from[3] }]);
+    for (let tick = 0; tick < ticks; tick++) resident.step([{ client: 0, player: leadPlayer(resident.host).id, still: false, extra: null, acts: [],
+      command: { seq: tick, viewTick: 0, steer: { keyX: 0, keyY: -1, stickX: 0, stickY: 0 }, yaw: from[3], pitch: 0, buttons: 0 } }]);
     for (let tick = 0; tick < 30; tick++) resident.step([]);
     assert.ok(finite(resident.host), 'The walked world stays finite');
     const to = pose(resident.host);

@@ -1,0 +1,20 @@
+# Nine Dragon moves to the one format (ONE-FORMAT OF21)
+
+> Written by: Claude (opus-of21-drift)
+
+Nine Dragon was the last shard with a client-plan runtime binding its
+props, items, ledger and modes. It now ships as an ordinary upload:
+collision is plain prop rows, the Jian is a `kit.melee` row with the
+`kit.sword` view, the Fei Zhua grapple and the portals ride M7's
+primitives, and `shardfile` names the shard file. The practice course
+stays parked.
+
+The candidate is codex-netlag's diff, held through opus-of9b, opus-of22
+and opus-of22b. It waited on engine v0.1.53: `wildshard check` needs
+`e9068f78e` (the author worker rides plan portals), which v0.1.52 lacks.
+
+Pins: engine 0.1.53, SDK 0.4.17, format 0.54.0 (the engine's own).
+Proof on the MacBook: build, `wildshard check` pass, 27 of 27 vitest
+files, ci21 8 of 8, owned, portal, grid-ready, well-crossing and
+cook-play journeys pass; product-play records its walk checkpoint for
+0.1.53 (darwin and linux carry the same digest).

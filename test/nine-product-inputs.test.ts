@@ -25,3 +25,16 @@ test('the declaration factory admits supplied inputs instead of consulting a gen
     expect(generatorImportViolation(path, node.source.value), node.source.value).toBeNull();
   }
 });
+
+test('Nine activates the ordinary grapple, portal and melee rows', () => {
+  expect(product.runtime).toBeNull();
+  expect(product.entryways.every(row => row.kind === 'portalLink')).toBe(true);
+  expect(product.modes?.grapple?.[0]).toMatchObject({ id: 'fei-zhua', guard: 'nds-grapple-guard', rise: true });
+  expect(product.modes?.grapple?.[0]?.hooks?.length).toBeGreaterThan(0);
+  const guard = product.props?.colliders.find(row => row.id === 'nds-grapple-guard');
+  expect(guard?.shapes).toHaveLength(2);
+  const banyan = product.props?.colliders.find(row => row.id === 'nds-banyan.paifang');
+  expect(banyan?.shapes[0]).toMatchObject({ kind: 'hull', surface: 'stone' });
+  const jian = product.items.rows.find(row => row.id === 'weapon.jian');
+  expect(jian).toMatchObject({ family: 'kit.melee', light: { damage: 12 }, heavy: { damage: 24 } });
+});

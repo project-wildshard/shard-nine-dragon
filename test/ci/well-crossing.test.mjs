@@ -15,7 +15,7 @@ import { join, resolve } from 'node:path';
 import { test } from 'node:test';
 
 const { loadHeadlessFolder } = await import('@wildshard/engine/host/headlessFolder');
-const { openWorldAdapter } = await import('@wildshard/engine/host/openWorld');
+const { openNineDataWorld } = await import('./nine-data-world.mjs');
 const { outputDescriptor, serverReadsFile } = await import('@wildshard/engine/game/shardfile/outputDescriptor');
 const { loadRapier } = await import('@wildshard/engine/physics/rapier');
 const engineRequire = createRequire(import.meta.resolve('@wildshard/engine/package.json'));
@@ -32,7 +32,7 @@ test('nine-dragon-stack: the Fei Zhua crosses the Well from the south rim and fi
   const assets = new Map(descriptor.index.files.filter(file => serverReadsFile(file, shard.terrain?.collider) && (file.name === undefined || file.kind === 'wasm' || file.kind === 'tile'))
     .map(file => [file.commons === true ? `commons:${file.hash}` : file.hash, readFileSync(join(directory, file.path))]));
   const rapier = await loadRapier(readFileSync(engineRequire.resolve('@dimforge/rapier3d-simd/rapier_wasm3d_bg.wasm')));
-  const profile = await product.json('server/grapple-profile.json'), hooks = await product.json('server/hooks.json');
+  const { profile, hooks } = shard.modes.grapple.find(row => row.profile !== undefined);
   const { clearance } = profile.course, fact = profile.fact.name;
   assert.equal(clearance?.axis, 'z', 'Nine publishes a well clearance across z');
   const hump = routes['crossing-timber-hump'], hop = routes['escape-rim-hop'], rim = routes['well-rim'].waypoints[1]; // mid-span of the south rim
@@ -52,7 +52,7 @@ test('nine-dragon-stack: the Fei Zhua crosses the Well from the south rim and fi
       wait(`${prefix}-fly`, 60), wait(`${prefix}-land`, 240),
     ];
   };
-  const runtime = await openWorldAdapter({ shard, assets, product, rapier });
+  const runtime = openNineDataWorld({ shard, assets, product, rapier });
   try {
     const approach = await runtime.verbTape({ version: 1, observe: [], segments: [
       wait('spawn', 1),

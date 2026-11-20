@@ -17,20 +17,32 @@ import { streakGraph } from './streakGraph';
 import plumbing from '../data/plumbing.json' with { type: 'json' };
 import { nineAudioForScenes } from './audio';
 import NINE_MODES from '../data/modes.json' with { type: 'json' };
-import NINE_DRAGON_RUNTIME_COST from '../data/runtimeCost.json' with { type: 'json' };
+import { headlessConstants, ninePropColliders } from './headless';
 import { emptyShardfile } from '@wildshard/sharddev/author';
+import { lowerMaterialGraphs } from '@wildshard/sharddev/internal/materialGraphFiles';
 import { parseShardfile, type Shardfile } from '@wildshard/format/shardSchema';
 import NINE_ITEMS from '../data/items.json' with { type: 'json' };
 import ledgerRows from '../data/ledger.json' with { type: 'json' };
 import { parseLedgerRules } from '@wildshard/sharddev/ledger';
 import portalStages from '../data/portalStages.json' with { type: 'json' };
 import { portalEntryRows } from './portalEntries';
-import { portalFloorRows } from './portalFloors';
 import lookGraphs from '../data/lookGraphs.json' with { type: 'json' };
 import presentationGraphs from '../data/scrollGraph.json' with { type: 'json' };
 
 const NINE_LEDGER = parseLedgerRules(ledgerRows);
-const portalEntries = portalEntryRows(), portalFloors = portalFloorRows();
+const portalEntries = portalEntryRows();
+const { id: _tool, course: { mode: _mode, ...course }, ...grappleProfile } = headlessConstants.grappleProfile;
+const grapple = { id: 'fei-zhua', profile: { ...grappleProfile, course }, hooks: headlessConstants.hooks, guard: 'nds-grapple-guard', rise: true };
+const authoredJian = NINE_ITEMS.rows.find(row => row.kind === 'weapon');
+if (authoredJian === undefined) throw new Error('Missing authored Jian');
+const { profile: strike, ...jian } = authoredJian;
+const firstSlash = strike.moves.combo[0];
+if (firstSlash === undefined) throw new Error('Missing authored Jian strike');
+const items = { ...NINE_ITEMS, rows: [{ ...jian, family: 'kit.melee', view: { ...jian.view, recipe: 'kit.sword' },
+  light: { ...jian.light, damage: strike.damage * firstSlash.damage, cooldown: firstSlash.total + strike.cooldown, range: strike.reach, width: 0.35 },
+  heavy: { ...jian.heavy, damage: strike.damage * strike.moves.heavy.damage, cooldown: strike.moves.heavy.total + strike.cooldown, range: strike.reach, width: 0.55 } }],
+  loadout: { ...NINE_ITEMS.loadout, tools: [] } };
+const modes = { ...NINE_MODES, grapple: [{ ...NINE_MODES.grapple[0], ...grapple }] };
 
 // The trusted runtime preserves today's fragment geometry; audio is selected by its declared section. G285: its two feats
 // are ledger rows (data/ledger.ts) the runtime emits as they are played (world/feats.ts); the platform grants each once.
@@ -60,7 +72,7 @@ interface NineInputFile {
 }
 
 /** Assemble the declaration from owned world/navigation/course results and the fixed-page view contract. */
-export function nineShardfileFrom(inputs: NineShardfileInputs, movers: { readonly pages: number } = DEFAULT_MOVERS): Shardfile {
+function nineShardfileDeclaration(inputs: NineShardfileInputs, movers: { readonly pages: number } = DEFAULT_MOVERS) {
 const { courseProgram, navigation, world, held: { files: heldGraphFiles } } = inputs;
 const fine = nineSlabSourceFiles(inputs.scenes.NINE_WORLD_SCENES.libraries, inputs.scenes.NINE_REFINEMENT_SOURCE);
 const worldFiles = world.shardfile.files.filter(file => !fine.has(file.hash));
@@ -74,10 +86,10 @@ const navigationResident = navigation.files.reduce((sum, file) => sum + file.dec
 const viewMemory = movers.pages * 65536 * 2;
 const budgets = { ...base.budgets, tier: 'large' as const, sim: { resident: navigationResident+courseMemory, compressed: navigation.files.reduce((sum, file) => sum + file.compressed, 0)+courseBytes }, library: { compressed: charged.reduce((sum, file) => sum + file.compressed, 0), resident: charged.reduce((sum, file) => sum + file.decoded + file.gpu, 0) + viewMemory } };
 // parseShardfile admits each link against the format's PortalLink schema (strict nodes, bound links, the walked route)
-return parseShardfile({ ...base, plumbing, budgets, navigation: navigation.navigation, critical: navigation.critical,
+return { ...base, plumbing, budgets, navigation: navigation.navigation, critical: navigation.critical,
   serverBudget: { ...base.serverBudget, memory: base.serverBudget.memory + navigationResident+courseMemory },
   files: [...worldFiles, ...navigation.files, ...heldGraphFiles.files, ...kinds.map(row => row.file), crowd.file].sort((a, b) => a.hash.localeCompare(b.hash)), tiles: nineSlabTransport(world.shardfile.tiles, world.shardfile.files, inputs.scenes.NINE_WORLD_SCENES.libraries, inputs.scenes.NINE_REFINEMENT_SOURCE), library: [...library],
-  accent: 'iris', runtime: { kind: 'client-plan', binds: ['props', 'items', 'ledger', 'modes'], cost: NINE_DRAGON_RUNTIME_COST }, audio: nineAudioForScenes(inputs.scenes), modes: NINE_MODES, items: NINE_ITEMS, ledger: NINE_LEDGER, spawn: { x: 0.95, y: 125, z: 7.5, yaw: -12 * (Math.PI / 180) },
+  accent: 'iris', audio: nineAudioForScenes(inputs.scenes), modes, items, ledger: NINE_LEDGER, spawn: { x: 0.95, y: 125, z: 7.5, yaw: -12 * (Math.PI / 180) },
   entryways: portalEntries, directors: [portalStages],
   // QC1 (E510): the city is in view from everywhere and its whole L0 is 81.6 MB of GPU, so the whole cell stays resident
   // as Far Reach's does: no tile retires in play, and no retire re-joins a held refine union mid-walk
@@ -86,8 +98,18 @@ return parseShardfile({ ...base, plumbing, budgets, navigation: navigation.navig
   look: { ...base.look, materials: { ...base.look.materials, ...Object.fromEntries(Object.entries({ ...lookGraphs, ...presentationGraphs, ...architectureGraphs(), 'nine-streaks': streakGraph(), 'nine-halo': haloGraph(), 'nine-filament': filamentGraph(), ...burstGraphs() }).map(([id, graph]) => [id, { family: 'graph' as const, graph }])), ...heldGraphFiles.materials, ...Object.fromEntries(kinds.map(row => [row.look, row.material])), [CROWD_LOOK]: crowd.material } },
   // NR12: the props family draws only the coarse L1 parents (the whole libraries draw the L0 and library pieces), so it is
   // the coarse graph: the towers past the ring read as walls and lit rooms, not flat pbr slabs
-  props: { ...nineSlabProps(world.props, inputs.scenes.NINE_WORLD_SCENES.libraries, inputs.scenes.NINE_REFINEMENT_SOURCE), family: 'nine-coarse-facade', wholeLibrary: worldLibrary, colliders: portalFloors,
+  props: { ...nineSlabProps(world.props, inputs.scenes.NINE_WORLD_SCENES.libraries, inputs.scenes.NINE_REFINEMENT_SOURCE), family: 'nine-coarse-facade', wholeLibrary: worldLibrary, colliders: ninePropColliders(),
     // EP12: the props GLB materials by look (scene.ts names them): L0 and the coarse L1 copy draw with the city's own graphs; the
     // shells keep the coarse facade look, whose lit block windows read as Nine at night (G941 board ruling, D)
-    materials: { shape: { id: 'nine-coarse-facade' }, kit: { id: 'nine-architecture' }, 'kit-cut': { id: 'nine-architecture-cut' }, ...Object.fromEntries(KIT_KINDS.map(row => [row.material, { id: row.look }])), facade: { id: 'nine-coarse-facade' } } } });
+    materials: { shape: { id: 'nine-coarse-facade' }, kit: { id: 'nine-architecture' }, 'kit-cut': { id: 'nine-architecture-cut' }, ...Object.fromEntries(KIT_KINDS.map(row => [row.material, { id: row.look }])), facade: { id: 'nine-coarse-facade' } } } };
+}
+
+/** Lower unchanged graph bytes into immutable files before admitting the larger collision section. */
+export function nineShardfileProduct(inputs: NineShardfileInputs, movers: { readonly pages: number } = DEFAULT_MOVERS): { shard: Shardfile; assets: ReadonlyMap<string, Uint8Array> } {
+  const lowered = lowerMaterialGraphs(nineShardfileDeclaration(inputs, movers));
+  return { shard: parseShardfile(lowered.declaration), assets: lowered.assets };
+}
+
+export function nineShardfileFrom(inputs: NineShardfileInputs, movers: { readonly pages: number } = DEFAULT_MOVERS): Shardfile {
+  return nineShardfileProduct(inputs, movers).shard;
 }

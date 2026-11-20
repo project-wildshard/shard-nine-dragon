@@ -34,16 +34,13 @@ function withoutCaps(colliders: readonly ColliderDesc[]): ColliderDesc[] {
   return left;
 }
 
-/** Grid collision in the original registry order, admitted before publication.
- * Treads expand with the engine's own law; hull floats retain their original
- * float32 payload. No runtime adapter filters or rewrites this payload. */
-export const headlessConstants: { readonly spawnY: number; readonly hooks: readonly { readonly x: number; readonly y: number; readonly z: number }[]; readonly grappleProfile: typeof grappleProfile; readonly portalRide: { readonly director: string; readonly trigger: typeof portals.trigger; readonly fade: typeof portals.fade; readonly veil: typeof portals.veil; readonly landings: typeof portals.landings }; readonly pieces: unknown } = {
-  spawnY: plan.Y0 + 0.1, hooks: NINE_HOOKS, grappleProfile,
-  portalRide: { director: portals.director, trigger: portals.trigger, fade: portals.fade, veil: portals.veil, landings: portals.landings },
-  pieces: NINE_PIECES.filter(piece => piece.active && !piece.file.startsWith(PRACTICE)).map(piece => ({
+const gridPieces = NINE_PIECES.filter(piece => piece.active && !piece.file.startsWith(PRACTICE)).map(piece => ({
     id: piece.id, name: piece.name, category: 'buildings', file: piece.file, active: true,
     surface: piece.surface ?? 'wood', owner: piece.colliderOwner ?? piece.id,
-    colliders: (piece.id === FLOORS ? withoutCaps(piece.colliders.map(bakedColliderDesc)) : piece.colliders.map(bakedColliderDesc))
+    colliders: piece.id === FLOORS ? withoutCaps(piece.colliders.map(bakedColliderDesc)) : piece.colliders.map(bakedColliderDesc),
+  }));
+
+const nativePieces = gridPieces.map(piece => ({ ...piece, colliders: piece.colliders
       .flatMap(c => c.kind === 'treads' ? treadBoxes(c) : [c])
       .map(c => {
         if (c.kind !== 'hull') return c;
@@ -51,6 +48,38 @@ export const headlessConstants: { readonly spawnY: number; readonly hooks: reado
         Object.assign(row, c);
         row['points'] = Array.from(c.points);
         return row;
-      }),
-  })),
+      }) }));
+
+type PropShape = Extract<ColliderDesc, { kind: 'box' | 'treads' }> | (Omit<Extract<ColliderDesc, { kind: 'hull' }>, 'points'> & { points: number[] });
+interface PropCollisionRow { id: string; panel: null; initialActive: boolean; shapes: PropShape[] }
+
+function declaredShape(shape: ColliderDesc, fallback: ContactSurface): PropShape {
+  const surface = shape.surface ?? fallback;
+  if (shape.kind === 'hull') return { ...shape, points: Array.from(shape.points), surface };
+  if (shape.kind === 'box' || shape.kind === 'treads') return { ...shape, surface };
+  throw new Error(`Unsupported Nine prop collision ${shape.kind}`);
+}
+
+/** Ordinary rows retain the grid's collider shapes and the Well guard's owner. */
+export function ninePropColliders(): PropCollisionRow[] {
+  const shapesPerRow = 256;
+  return gridPieces.flatMap(piece => {
+    const id = piece.owner.replaceAll('@', '.');
+    const normalized = piece.colliders.map(shape => declaredShape(shape, piece.surface));
+    const groups: PropCollisionRow[] = [];
+    for (let start = 0; start < normalized.length; start += shapesPerRow) {
+      const number = start / shapesPerRow;
+      groups.push({ id: number === 0 ? id : `${id}.${number}`, panel: null, initialActive: true, shapes: normalized.slice(start, start + shapesPerRow) });
+    }
+    return groups;
+  });
+}
+
+/** Grid collision in the original registry order, admitted before publication.
+ * Treads expand with the engine's own law; hull floats retain their original
+ * float32 payload. No runtime adapter filters or rewrites this payload. */
+export const headlessConstants: { readonly spawnY: number; readonly hooks: readonly { readonly x: number; readonly y: number; readonly z: number }[]; readonly grappleProfile: typeof grappleProfile; readonly portalRide: { readonly director: string; readonly trigger: typeof portals.trigger; readonly fade: typeof portals.fade; readonly veil: typeof portals.veil; readonly landings: typeof portals.landings }; readonly pieces: unknown } = {
+  spawnY: plan.Y0 + 0.1, hooks: NINE_HOOKS, grappleProfile,
+  portalRide: { director: portals.director, trigger: portals.trigger, fade: portals.fade, veil: portals.veil, landings: portals.landings },
+  pieces: nativePieces,
 };
