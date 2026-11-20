@@ -25,3 +25,12 @@ SDK 0.4.18 reached npm, so the pins move to it (cli, dev, sdk) and to the
 format it pins, 0.55.0, beside engine 0.1.53 from npm `next`; the lockfile
 now resolves from npm, not the packed engine. The whole CI set passed
 locally on the new pins and the product-play checkpoint kept its digest.
+
+## Library allowance (opus-of21-drift2, 2026-11-20)
+
+The first staging upload (publish run 44681354500) was refused with
+`perf-library-download-budget`: 66.2 MB of library against the format's
+8 MB default. Nine now records its own allowance (the definition's
+12.1 MB, plus each build step's growth: 66.2 MB built), under the 100 MB
+phone ceiling (J338). The content is not cut (J437, J444). The hero was
+recaptured on the v0.1.53 devserver client; it shows the same frame.

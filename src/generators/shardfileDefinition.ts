@@ -84,7 +84,12 @@ const courseBytes=courseProgram.blob.bytes.byteLength, courseMemory=courseBytes+
 const navigationResident = navigation.files.reduce((sum, file) => sum + file.decoded, 0);
 // the movers view module's memory (behaviour/movers.as, its pages twice: the client lane's image and its rewind copy)
 const viewMemory = movers.pages * 65536 * 2;
-const budgets = { ...base.budgets, tier: 'large' as const, sim: { resident: navigationResident+courseMemory, compressed: navigation.files.reduce((sum, file) => sum + file.compressed, 0)+courseBytes }, library: { compressed: charged.reduce((sum, file) => sum + file.compressed, 0), resident: charged.reduce((sum, file) => sum + file.decoded + file.gpu, 0) + viewMemory } };
+// OF21: as an ordinary upload Nine's library meets the format's 8 MB default library allowance, which refuses it.
+// Nine records its own line instead (J439/J444: new content moves the line; J437: never cut content to fit an old
+// number): this definition's library bytes on 2026-11-20, to which the build adds each later step's growth (66.2 MB
+// built). Re-record it when the definition's library grows; the hard ceiling is a shard's 100 MB phone download (J338).
+const NINE_LIBRARY_ALLOWANCE = 12_103_534;
+const budgets = { ...base.budgets, tier: 'large' as const, sim: { resident: navigationResident+courseMemory, compressed: navigation.files.reduce((sum, file) => sum + file.compressed, 0)+courseBytes }, library: { compressed: charged.reduce((sum, file) => sum + file.compressed, 0), resident: charged.reduce((sum, file) => sum + file.decoded + file.gpu, 0) + viewMemory, downloadAllowance: NINE_LIBRARY_ALLOWANCE } };
 // parseShardfile admits each link against the format's PortalLink schema (strict nodes, bound links, the walked route)
 return { ...base, plumbing, budgets, navigation: navigation.navigation, critical: navigation.critical,
   serverBudget: { ...base.serverBudget, memory: base.serverBudget.memory + navigationResident+courseMemory },
