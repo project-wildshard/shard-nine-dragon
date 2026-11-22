@@ -1,5 +1,5 @@
 import type { NineHeldProfile } from './heldProfile';
-import { hashImmutableBytes } from '@wildshard/format/immutable';
+import { hashImmutableBytes } from '@wildshard/sharddev/immutable';
 import { assetCost } from '@wildshard/sharddev/assets';
 import { viewmodelGraphs } from './viewmodelGraphs';
 

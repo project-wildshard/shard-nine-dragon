@@ -1,4 +1,4 @@
-import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/format/immutable';
+import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/sharddev/immutable';
 import { parseGlb } from '@wildshard/sharddev/assets';
 import { CAST_NAMES } from './castSources';
 import type { ProjectGenerationContext } from '@wildshard/sharddev/projectGeneration';

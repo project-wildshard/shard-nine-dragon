@@ -8,7 +8,7 @@ import { parseBurstFields } from './sections';
 import bursts from '../data/burstFields.json' with { type: 'json' };
 import { readNineShardfileInputs } from './shardfile';
 import { nineShardfileFrom } from './shardfileDefinition';
-import { hashImmutableBytes } from '@wildshard/format/immutable';
+import { hashImmutableBytes } from '@wildshard/sharddev/immutable';
 
 type OutputSources = Pick<NineOutputInputs, 'construction' | 'held' | 'ownedWorld' | 'scenes' | 'casts' | 'signs' | 'courseProgram'>;
 async function sourcesFor(ctx: ProjectGenerationContext): Promise<OutputSources> {
