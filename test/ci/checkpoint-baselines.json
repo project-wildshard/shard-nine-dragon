@@ -40,5 +40,8 @@
   },
   "0.1.53 linux-x64": {
     "nine-dragon-stack": "1cfac3c60a736889b5382d5a3bbf1190987080dc502f197d48cc9562a390adae"
+  },
+  "0.1.65-next.9c91846e linux-x64": {
+    "nine-dragon-stack": "7ee37491c4bae51ae7d7933a7f57d131a4ed866a018cf6eaf80e7c0c4fe3d57d"
   }
 }
