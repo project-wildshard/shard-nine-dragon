@@ -1,12 +1,12 @@
 // The ordinary product's simulation and the same tape runner native products used.
-import { bindShardfileSim, createShardfileSim } from '@wildshard/engine/game/plugin/simulation';
-import { planPortalRide } from '@wildshard/engine/game/shardfile/declaredPortalRide';
-import { folderHeadlessSections } from '@wildshard/engine/host/headlessSections';
-import { createNativeHeadlessTape } from '@wildshard/engine/host/headlessTape';
-import { runHeadlessJourney } from '@wildshard/engine/host/headlessJourney';
-import { simPlayerCommand } from '@wildshard/engine/host/tickProtocol';
-import { restoreSimHost } from '@wildshard/engine/sim/restore';
-import { createSimSnapshotSerializer, decodeSimSnapshot, snapshotSimHostBytes } from '@wildshard/engine/sim/snapshot';
+import { bindShardfileSim, createShardfileSim } from '@wildshard/sdk/internal/engine/game/plugin/simulation';
+import { planPortalRide } from '@wildshard/sdk/internal/engine/game/shardfile/declaredPortalRide';
+import { folderHeadlessSections } from '@wildshard/sdk/headless/host/headlessSections';
+import { createNativeHeadlessTape } from '@wildshard/sdk/headless/host/headlessTape';
+import { runHeadlessJourney } from '@wildshard/sdk/headless/host/headlessJourney';
+import { simPlayerCommand } from '@wildshard/sdk/headless/host/tickProtocol';
+import { restoreSimHost } from '@wildshard/sdk/internal/engine/sim/restore';
+import { createSimSnapshotSerializer, decodeSimSnapshot, snapshotSimHostBytes } from '@wildshard/sdk/headless/sim/snapshot';
 
 const seat = 'actor.player';
 

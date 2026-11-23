@@ -17,7 +17,7 @@ import manifest from '../../src/discovery.generated';
 import { nineHeldPresentationBytes } from './nine-held-presentation';
 import { fixtureProductFile, fixtureJsonCheck } from './productFile';
 import { headlessConstants } from '../../src/generators/headless';
-import { legacyDouble } from '@wildshard/engine/test/FakeGame';
+import { legacyDouble } from '@wildshard/sdk/headless/test/FakeGame';
 
 export const slottedEnteredRows = { grapple: { item: 'tool.fei-zhua', source: 'fixture/grapple-source.json', presentation: 'weapons/jian-row.json' } };
 export const enteredRows = { grapple: { item: 'tool.fei-zhua', profile: headlessConstants.grappleProfile, hooks: headlessConstants.hooks, presentation: 'weapons/jian-row.json' } };

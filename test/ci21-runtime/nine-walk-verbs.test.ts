@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {expect,test} from 'vitest';
 import * as v from 'valibot';
 import { openNineSession } from '../fixtures/nine-product-session';
-import type {HeadlessTapePlan} from '@wildshard/engine/host/headlessTape';
+import type {HeadlessTapePlan} from '@wildshard/sdk/headless/host/headlessTape';
 
 const walkDocs=v.parse(v.object({verbs:v.array(v.object({id:v.string(),
   input:v.object({walkMs:v.optional(v.number())}),

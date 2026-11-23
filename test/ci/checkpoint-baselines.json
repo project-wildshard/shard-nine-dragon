@@ -43,5 +43,8 @@
   },
   "0.1.65-next.9c91846e linux-x64": {
     "nine-dragon-stack": "7ee37491c4bae51ae7d7933a7f57d131a4ed866a018cf6eaf80e7c0c4fe3d57d"
+  },
+  "0.1.74-next.d6e6bc6b darwin-arm64": {
+    "nine-dragon-stack": "7ee37491c4bae51ae7d7933a7f57d131a4ed866a018cf6eaf80e7c0c4fe3d57d"
   }
 }

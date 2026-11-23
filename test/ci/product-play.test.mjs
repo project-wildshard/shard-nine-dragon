@@ -1,6 +1,6 @@
 // J186: CI only, never a hook. The shard built by this checkout boots the
 // installed engine, takes real player commands, and resumes its own save.
-import '@wildshard/engine/scripts/sim-node-loader.mjs';
+import '@wildshard/sdk/headless/scripts/sim-node-loader.mjs';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
@@ -8,12 +8,12 @@ import { resolve, join } from 'node:path';
 import { test } from 'node:test';
 import { assertCheckpointBaseline, snapshotDigest } from './checkpoint-baseline.mjs';
 
-const { loadHeadlessFolder } = await import('@wildshard/engine/host/headlessFolder');
+const { loadHeadlessFolder } = await import('@wildshard/sdk/headless/host/headlessFolder');
 const { openNineDataWorld } = await import('./nine-data-world.mjs');
-const { outputDescriptor, serverReadsFile } = await import('@wildshard/engine/game/shardfile/outputDescriptor');
-const { loadRapier } = await import('@wildshard/engine/physics/rapier');
-const { manifestFolders, builtShardFolders } = await import('@wildshard/engine/scripts/shard-outputs.mjs');
-const engineRequire = createRequire(import.meta.resolve('@wildshard/engine/package.json'));
+const { outputDescriptor, serverReadsFile } = await import('@wildshard/sdk/headless/game/shardfile/outputDescriptor');
+const { loadRapier } = await import('@wildshard/sdk/headless/physics/rapier');
+const { manifestFolders, builtShardFolders } = await import('@wildshard/sdk/headless/scripts/shard-outputs.mjs');
+import { engineRequire } from '@wildshard/sdk/headless';
 const engineVersion = engineRequire('@wildshard/engine/package.json').version;
 const products = readdirSync('out', { withFileTypes: true }).filter(row => row.isDirectory() && !row.name.startsWith('.') && row.name !== 'tars');
 assert.ok(products.length, 'Build this shard before running its product proof');

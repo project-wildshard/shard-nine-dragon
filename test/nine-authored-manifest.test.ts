@@ -3,7 +3,7 @@ import { bootDiscovery } from './fixtures/nine-boot-discovery';
 import { afterAll, expect, test } from 'vitest';
 import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import manifest from '../src/manifest.json' with { type: 'json' };
-import { authoredManifestSource } from '@wildshard/engine/scripts/authored-manifest.mjs';
+import { authoredManifestSource } from '@wildshard/sdk/headless/scripts/authored-manifest.mjs';
 import { parseDiscoveryValues } from '@wildshard/format/discoveryValues';
 // oxlint-disable-next-line import/no-nodejs-modules -- Inspect the defining compiler output in this clean source tree.
 import { resolve } from 'node:path';

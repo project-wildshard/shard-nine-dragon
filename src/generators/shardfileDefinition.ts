@@ -92,7 +92,8 @@ const NINE_LIBRARY_ALLOWANCE = 12_103_534;
 const budgets = { ...base.budgets, tier: 'large' as const, sim: { resident: navigationResident+courseMemory, compressed: navigation.files.reduce((sum, file) => sum + file.compressed, 0)+courseBytes }, library: { compressed: charged.reduce((sum, file) => sum + file.compressed, 0), resident: charged.reduce((sum, file) => sum + file.decoded + file.gpu, 0) + viewMemory, downloadAllowance: NINE_LIBRARY_ALLOWANCE } };
 // parseShardfile admits each link against the format's PortalLink schema (strict nodes, bound links, the walked route)
 return { ...base, plumbing, budgets, navigation: navigation.navigation, critical: navigation.critical,
-  serverBudget: { ...base.serverBudget, memory: base.serverBudget.memory + navigationResident+courseMemory },
+  // OF31h4: the measured awake tick cost with one player in (engine COST table, SC8)
+  serverBudget: { ...base.serverBudget, awakeMicros: 630, memory: base.serverBudget.memory + navigationResident+courseMemory },
   files: [...worldFiles, ...navigation.files, ...heldGraphFiles.files, ...kinds.map(row => row.file), crowd.file].sort((a, b) => a.hash.localeCompare(b.hash)), tiles: nineSlabTransport(world.shardfile.tiles, world.shardfile.files, inputs.scenes.NINE_WORLD_SCENES.libraries, inputs.scenes.NINE_REFINEMENT_SOURCE), library: [...library],
   accent: 'iris', audio: nineAudioForScenes(inputs.scenes), modes, items, ledger: NINE_LEDGER, spawn: { x: 0.95, y: 125, z: 7.5, yaw: -12 * (Math.PI / 180) },
   entryways: portalEntries, directors: [portalStages],

@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 import { beforePortalClearance } from './fixtures/portal-rail-history';
 import { unsortedPath } from './fixtures/legacy-path';
-import { hashImmutableBytes } from '@wildshard/engine/host/immutable';
+import { hashImmutableBytes } from '@wildshard/sdk/immutable';
 import { portalFloorRows, deckCapRows } from '../src/generators/portalFloors';
 import { portalEntryRows, portalPlanRows } from '../src/generators/portalEntries';
 import { ninePhysicsPlacements, nineWorldInstallRows } from '../src/generators/physicsPlacements';

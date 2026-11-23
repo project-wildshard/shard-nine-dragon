@@ -1,5 +1,5 @@
-import type { Scope } from '@wildshard/engine/app/scope';
-import { ReturnProgram } from '@wildshard/engine/game/population/returnProgram';
+import type { Scope } from '@wildshard/sdk/headless/app/scope';
+import { ReturnProgram } from '@wildshard/sdk/internal/engine/game/population/returnProgram';
 import { ninePracticeBytes, ninePracticeRows } from './nine-practice-program';
 
 const assets = new Map([[ninePracticeRows.script.module.slice('blobs/wasm/'.length, -'.wasm'.length), ninePracticeBytes]]);
