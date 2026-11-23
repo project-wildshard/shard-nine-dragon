@@ -40,10 +40,12 @@ import { CROWD_LOOK } from './crowdGraph';
 import { lightVolumeRows } from './lightVolumes';
 import paint from '../data/paint.json' with { type: 'json' };
 import canopy from '../data/canopy.json' with { type: 'json' };
-/** NB8: radians; ~5 CSS px across on the phone's portrait camera (vertical FOV ~100 deg, 874 px). 0.008 lost the far
- *  towers' lantern dots; the lanterns keep every copy (the targets' red rows). 0.005 to 0.007 (mini-nb8c): spawn 1.072 to
- *  1.046 M, no change a same-pose pair shows */
-const PHONE_MIN_ANGULAR = 0.007;
+/** NB8: radians (radius / distance) under which the phone drops a dressing copy. A copy crosses it while the player walks
+ *  toward it, so it is where that copy appears: 0.007 (mini-nb8c) put a facade box (radius ~0.15 to 0.19 m) in at 21 to
+ *  27 m, 67 pop-ins in a 108 s walk (QA 11-23-b row 10); 0.0015 still put the smallest boxes (~5 cm) in at 34 m. 0.001 is
+ *  ~2 buffer px across on the phone's portrait camera (vertical FOV ~94 deg over 1748 px): a copy appears as a speck, past
+ *  40 m for every facade piece. The lanterns keep every copy (0.008 lost the far towers' lantern dots) */
+const PHONE_MIN_ANGULAR = 0.001;
 /** NB8: a LOD level that takes over the previous one's band on the phone from `metres` (bands must rise, so the previous
  *  keeps 1 cm) and that the desktop never reaches */
 const PHONE_ONLY_FROM = (metres: number): { phone: number; desktop: number } => ({ phone: metres + 0.01, desktop: 1e6 });
