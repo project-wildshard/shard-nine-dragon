@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
-import { snapshotSimHost, serializeSimSnapshot, decodeSimSnapshot } from '@wildshard/engine/sim/snapshot';
-import { openWorld } from '@wildshard/engine/host/openWorld';
+import { snapshotSimHost, serializeSimSnapshot, decodeSimSnapshot } from '@wildshard/sdk/headless/sim/snapshot';
+import { openWorld } from '@wildshard/sdk/internal/engine/host/openWorld';
 import { nineRuntimeInput } from '../fixtures/nine-product-session';
 
 // G498: evict the ordinary product, then re-enter via the served world's installer.

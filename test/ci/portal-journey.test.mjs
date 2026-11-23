@@ -5,18 +5,18 @@
 // published bridge-side ring (nine-content.mjs). Only walked routes and the
 // page's grapple inputs drive it; the ride is read from its own published
 // continuation and the effects it emits. No flag, pose or ride state is written.
-import '@wildshard/engine/scripts/sim-node-loader.mjs';
+import '@wildshard/sdk/headless/scripts/sim-node-loader.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 import { test } from 'node:test';
 
-const { loadHeadlessFolder } = await import('@wildshard/engine/host/headlessFolder');
+const { loadHeadlessFolder } = await import('@wildshard/sdk/headless/host/headlessFolder');
 const { openNineDataWorld } = await import('./nine-data-world.mjs');
-const { outputDescriptor, serverReadsFile } = await import('@wildshard/engine/game/shardfile/outputDescriptor');
-const { loadRapier } = await import('@wildshard/engine/physics/rapier');
-const engineRequire = createRequire(import.meta.resolve('@wildshard/engine/package.json'));
+const { outputDescriptor, serverReadsFile } = await import('@wildshard/sdk/headless/game/shardfile/outputDescriptor');
+const { loadRapier } = await import('@wildshard/sdk/headless/physics/rapier');
+import { engineRequire } from '@wildshard/sdk/headless';
 const { default: grapple } = await import('./nine-content.mjs');
 
 const walk = (id, points, ticks = 1200) => ({ id, ticks, commands: [], route: points.map(([x, z]) => ({ x, z })) });

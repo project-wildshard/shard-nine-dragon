@@ -1,7 +1,7 @@
 import * as v from 'valibot';
-import type { SimHost } from '@wildshard/engine/sim';
+import type { SimHost } from '@wildshard/sdk/internal/engine/sim';
 import type { ShardItems } from '@wildshard/format/items';
-import { SweptMeleeCore } from '@wildshard/engine/combat/sweptMeleeCore';
+import { SweptMeleeCore } from '@wildshard/sdk/internal/engine/combat/sweptMeleeCore';
 
 /** The declared Jian row's id (data/items.ts) and its fixed-step adapter id. */
 export const JIAN_ID = 'weapon.jian';

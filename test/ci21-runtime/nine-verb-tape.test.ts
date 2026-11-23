@@ -3,7 +3,7 @@ import {expect,test} from 'vitest';
 import * as v from 'valibot';
 import { openNineSession } from '../fixtures/nine-product-session';
 type ProductSessionVariant = 'nine-flat';
-import type {HeadlessTapeObservation,HeadlessTapePlan} from '@wildshard/engine/host/headlessTape';
+import type {HeadlessTapeObservation,HeadlessTapePlan} from '@wildshard/sdk/headless/host/headlessTape';
 
 const xyz=v.object({x:v.number(),y:v.number(),z:v.number()});
 const adapterSchema=v.object({sim:v.object({phase:v.string(),target:v.nullable(v.object({landing:xyz,lifts:v.boolean()}))})});

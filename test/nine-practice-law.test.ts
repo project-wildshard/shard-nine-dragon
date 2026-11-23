@@ -1,8 +1,8 @@
 import { afterEach,expect,test } from 'vitest';
-import { ProjectedState, ReturnProgram } from '@wildshard/engine/game/population/returnProgram';
+import { ProjectedState, ReturnProgram } from '@wildshard/sdk/internal/engine/game/population/returnProgram';
 import { ninePracticeRows as program } from './fixtures/nine-practice-program';
 import { lendNinePractice } from './fixtures/nine-practice-modules';
-import {Scope} from '@wildshard/engine/app/scope';
+import {Scope} from '@wildshard/sdk/headless/app/scope';
 import course from '../src/data/grappleCourse.json' with {type:'json'};
 import { practiceFrame } from '../src/generators/practiceFrame';
 

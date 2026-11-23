@@ -1,11 +1,11 @@
 import { afterEach, expect, test } from 'vitest';
 import type { HookPracticeRow } from '@wildshard/format/practiceCourseRows';
-import { ProjectedState, ReturnProgram } from '@wildshard/engine/game/population/returnProgram';
+import { ProjectedState, ReturnProgram } from '@wildshard/sdk/internal/engine/game/population/returnProgram';
 import { practiceFrame } from '../src/generators/practiceFrame';
 import course from '../src/data/grappleCourse.json' with { type: 'json' };
 import { ninePracticeRows as program } from './fixtures/nine-practice-program';
 import { lendNinePractice } from './fixtures/nine-practice-modules';
-import {Scope} from '@wildshard/engine/app/scope';
+import {Scope} from '@wildshard/sdk/headless/app/scope';
 
 const owners:Scope[]=[];afterEach(()=>{for(const owner of owners.splice(0))owner.dispose();});
 
