@@ -1,8 +1,7 @@
 // On a timed-out SDK memory boot, report the last card and failed local
 // reads before the published engine closes Chromium.
-import { createRequire } from 'node:module';
-import { resolve } from 'node:path';
 import { setTimeout } from 'node:timers/promises';
+import { engineRequire } from '@wildshard/sdk/headless';
 
 async function observe(page) {
   await page.addInitScript(() => {
@@ -58,8 +57,7 @@ async function observe(page) {
 
 // The launcher imports memory-product in this process after the preload runs.
 if (process.argv[1]?.endsWith('/bin/wildshard.mjs') && process.argv[2] === 'memory') {
-  const caller = createRequire(resolve('package.json'));
-  const engine = createRequire(caller.resolve('@wildshard/engine/package.json'));
+  const engine = engineRequire;
   const { chromium } = engine('playwright');
   if (process.platform === 'linux') {
     // Use the software renderer that engine Ring 1 selects on hosted Linux.
