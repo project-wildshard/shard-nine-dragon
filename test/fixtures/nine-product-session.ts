@@ -4,6 +4,7 @@ import { loadHeadlessFolder } from '@wildshard/sdk/headless/host/headlessFolder'
 import { loadRapier } from '@wildshard/sdk/headless/physics/rapier';
 import { outputDescriptor } from '@wildshard/sdk/headless/game/shardfile/outputDescriptor';
 import { openNineDataWorld } from '../ci/nine-data-world.mjs';
+import { enginePackageUrl } from '@wildshard/sdk/headless';
 
 export async function nineRuntimeInput() {
   const directory = 'out/nine-dragon-stack', product = await loadHeadlessFolder(directory);
@@ -11,7 +12,7 @@ export async function nineRuntimeInput() {
   if (descriptor === undefined) throw new Error('Missing admitted Nine output');
   const assets = new Map(descriptor.index.files.map(file => [file.commons === true ? `commons:${file.hash}` : file.hash,
     Uint8Array.from(readFileSync(`${directory}/${file.path}`))]));
-  const require = createRequire(import.meta.resolve('@wildshard/engine/package.json'));
+  const require = createRequire(enginePackageUrl);
   const rapier = await loadRapier(readFileSync(require.resolve('@dimforge/rapier3d-simd/rapier_wasm3d_bg.wasm')));
   return { product, shard: product.shardfile, assets, rapier };
 }

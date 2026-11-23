@@ -14,6 +14,7 @@ import {tmpdir} from 'node:os';
 import {dirname,join,resolve} from 'node:path';
 import {brotliCompressSync,brotliDecompressSync,constants} from 'node:zlib';
 import {test} from 'node:test';
+import { enginePackagePath } from '@wildshard/sdk/headless';
 
 const {readServerPackBook,serverPackFile}=await import('@wildshard/sdk/headless/game/shardfile/serverPack');
 const {loadHeadlessFolder}=await import('@wildshard/sdk/headless/host/headlessFolder');
@@ -51,7 +52,7 @@ test('the real cooked Nine earns grapple and resumes using only served server fi
   const assets=new Map(descriptor.index.files.filter(file=>serverReadsFile(file,shard.terrain?.collider)&&
    (file.name===undefined||file.kind==='wasm'||file.kind==='tile')).map(file=>
    [file.commons===true?`commons:${file.hash}`:file.hash,readFileSync(join(unpacked,file.path))]));
-  const engineRequire=createRequire(require.resolve('@wildshard/engine/package.json'));
+  const engineRequire=createRequire(enginePackagePath);
   const rapier=await loadRapier(readFileSync(engineRequire.resolve('@dimforge/rapier3d-simd/rapier_wasm3d_bg.wasm')));
   const create=async snapshot=>{const world=openNineDataWorld({shard,assets,product,rapier},snapshot);worlds.push(world);return world;};
   const world=await create(),{default:grapple}=await import('./nine-content.mjs');
