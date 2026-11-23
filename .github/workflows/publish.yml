@@ -163,7 +163,7 @@ jobs:
               process.exit(0);
             } catch {}
           }
-          console.error('cannot resolve Playwright from @wildshard/dev, @wildshard/cli, or @wildshard/sharddev');
+          console.error('cannot resolve Playwright from @wildshard/dev, @wildshard/cli, or @wildshard/sdk');
           process.exit(1);
           JS
           )"

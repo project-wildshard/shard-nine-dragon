@@ -1,7 +1,7 @@
 import { Color } from 'three';
-import { numericChannelPrograms, type NumericChannelOutput } from '@wildshard/sharddev/clientChannels';
+import { numericChannelPrograms, type NumericChannelOutput } from '@wildshard/sdk/clientChannels';
 import { checkAuthorGraph } from './authorGraph';
-import type { AuthorGraph as GraphIr } from '@wildshard/sharddev/bake/materialGraph';
+import type { AuthorGraph as GraphIr } from '@wildshard/sdk/bake/materialGraph';
 import { architectureGraphs, crowdGraph } from './architectureGraphs';
 import { streakGraph } from './streakGraph';
 import { haloGraph } from './haloGraph';

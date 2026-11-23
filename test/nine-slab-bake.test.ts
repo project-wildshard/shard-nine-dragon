@@ -6,13 +6,13 @@ import * as v from 'valibot';
 import { addQuadrantVisibility, slabAnchorFrames, slabVisibilityCensus, type SlabVisibilityBox } from './fixtures/slabVisibility';
 import { inputs } from './fixtures/nine-shardfile-inputs';
 import { addSlabTriangles, newSlabTriangleProof, compareSlabTriangles, type SlabTriangleProof } from './fixtures/slabJoinProof';
-import { readSourceModel } from '@wildshard/sharddev/bake/skinned';
+import { readSourceModel } from '@wildshard/sdk/bake/skinned';
 import { WorldScenesSchema } from '@wildshard/format/worldScenes';
 import { parseWorldSceneWeld } from '@wildshard/format/worldSceneWeld';
 import { nativeWholeGeometry } from '@wildshard/engine/models/nativeGeometry';
 import { wholeGeometryPieces } from '@wildshard/engine/game/shardfile/wholeGeometryPieces';
-import { joinWholePieces } from '@wildshard/sharddev/bake/wholePieceJoin';
-import { slabGeometryBytes } from '@wildshard/sharddev/bake/slabChunks';
+import { joinWholePieces } from '@wildshard/sdk/bake/wholePieceJoin';
+import { slabGeometryBytes } from '@wildshard/sdk/bake/slabChunks';
 
 // Current source results are the oracle. No historical byte count, hash, geometry total or output is pinned.
 test('Nine staged slabs equal the complete original fine joins, with bounded uploads and frozen bounds', async () => {

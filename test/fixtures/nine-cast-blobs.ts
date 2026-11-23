@@ -2,8 +2,8 @@
 import { mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 // oxlint-disable-next-line import/no-nodejs-modules -- Bind only the existing author/public roots.
 import { resolve } from 'node:path';
-import type { NamedBlob } from '@wildshard/sharddev/blobs';
-import { createProjectGeneration } from '@wildshard/sharddev/projectGeneration';
+import type { NamedBlob } from '@wildshard/sdk/blobs';
+import { createProjectGeneration } from '@wildshard/sdk/projectGeneration';
 import { nineCastsProgram } from '../../src/generators/castsProgram';
 import { CAST_BLOBS } from '../../src/generators/castSources';
 

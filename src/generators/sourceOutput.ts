@@ -1,4 +1,4 @@
-import type { ProjectGenerationContext } from '@wildshard/sharddev/projectGeneration';
+import type { ProjectGenerationContext } from '@wildshard/sdk/projectGeneration';
 import { nineOutput, type NineOutput, type NineOutputInputs } from './outputDefinition';
 import { NINE_MOVERS_CONTRACT, nineMoversProgram } from './moversProgram';
 import { nineEntryProof } from './entryProof';
@@ -8,7 +8,7 @@ import { parseBurstFields } from './sections';
 import bursts from '../data/burstFields.json' with { type: 'json' };
 import { readNineShardfileInputs } from './shardfile';
 import { nineShardfileFrom } from './shardfileDefinition';
-import { hashImmutableBytes } from '@wildshard/sharddev/immutable';
+import { hashImmutableBytes } from '@wildshard/sdk/immutable';
 
 type OutputSources = Pick<NineOutputInputs, 'construction' | 'held' | 'ownedWorld' | 'scenes' | 'casts' | 'signs' | 'courseProgram'>;
 async function sourcesFor(ctx: ProjectGenerationContext): Promise<OutputSources> {

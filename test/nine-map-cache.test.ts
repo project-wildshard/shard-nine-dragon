@@ -6,8 +6,8 @@ import { resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { afterAll, expect, test } from 'vitest';
 import { build } from 'vite';
-import { createProjectGeneration } from '@wildshard/sharddev/projectGeneration';
-import { assertConfigBoundary } from '@wildshard/sharddev/configBoundary';
+import { createProjectGeneration } from '@wildshard/sdk/projectGeneration';
+import { assertConfigBoundary } from '@wildshard/sdk/configBoundary';
 import { nineCastsProgram } from '../src/generators/castsProgram';
 import { nineMap, nineMapPixels, NINE_MAP_INPUTS } from '../src/generators/mapProgram';
 

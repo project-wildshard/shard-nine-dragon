@@ -1,8 +1,8 @@
 import { Color, Matrix4, Quaternion, Vector3, Vector4 } from 'three';
-import { encodePortableBytes } from '@wildshard/sharddev/bake/portableBytes';
-import { defineNamedRows, type NamedRowValue } from '@wildshard/sharddev/formatJsonSchema';
-import { bakeLightSources, type AuthoredLightEmitter } from '@wildshard/sharddev/bake/lightSources';
-import { nameBlob, type NamedBlob } from '@wildshard/sharddev/blobs';
+import { encodePortableBytes } from '@wildshard/sdk/bake/portableBytes';
+import { defineNamedRows, type NamedRowValue } from '@wildshard/sdk/formatJsonSchema';
+import { bakeLightSources, type AuthoredLightEmitter } from '@wildshard/sdk/bake/lightSources';
+import { nameBlob, type NamedBlob } from '@wildshard/sdk/blobs';
 import { bakeLightVolume } from './lightVolume';
 import { neonSize } from './signMath';
 import type { NineSourceWorld } from './worldProgram';
@@ -12,7 +12,7 @@ import lantern from '../data/lantern.json' with { type: 'json' };
 import rawSignRows from '../data/signView.json' with { type: 'json' };
 import { parseSignView } from './sections';
 import type { NineNativeAtlas } from './nativeSignMetadata';
-import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/sharddev/immutable';
+import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/sdk/immutable';
 
 const signRows = parseSignView(rawSignRows);
 

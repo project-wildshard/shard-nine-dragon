@@ -14,7 +14,7 @@ export default defineConfig({
   plugins: [viteTmpRoot()],
   resolve: { alias: rapierAlias, dedupe: ['three', 'valibot'] },
   test: {
-    execArgv: ['--import', path.resolve('node_modules/@wildshard/sharddev/src/sharddev/bake/format-hook.mjs')],
+    execArgv: ['--import', path.resolve('node_modules/@wildshard/sdk/src/sharddev/bake/format-hook.mjs')],
     testTimeout: 30_000,
     environment: 'node',
     server: { deps: { inline: [/@wildshard\//u] } },

@@ -1,7 +1,7 @@
 import rows from '../data/nativeDecals.json' with { type: 'json' };
-import { nameBlob, type NamedBlob } from '@wildshard/sharddev/blobs';
-import { hashImmutableBytes } from '@wildshard/sharddev/immutable';
-import type { ProjectGenerationContext } from '@wildshard/sharddev/projectGeneration';
+import { nameBlob, type NamedBlob } from '@wildshard/sdk/blobs';
+import { hashImmutableBytes } from '@wildshard/sdk/immutable';
+import type { ProjectGenerationContext } from '@wildshard/sdk/projectGeneration';
 
 const tiers = ['phone', 'desktop'] as const;
 

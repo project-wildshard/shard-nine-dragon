@@ -1,7 +1,7 @@
-import type { ProjectGenerationContext } from '@wildshard/sharddev/projectGeneration';
-import { emptyShardfile } from '@wildshard/sharddev/author';
+import type { ProjectGenerationContext } from '@wildshard/sdk/projectGeneration';
+import { emptyShardfile } from '@wildshard/sdk/author';
 import { parseShardfile } from '@wildshard/format/shardSchema';
-import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/sharddev/immutable';
+import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/sdk/immutable';
 import { nineWorldData, nineLayoutWord } from './worldData';
 import { parseWorldHeader, parseWorldLayout } from './sections';
 import { bakedLayout } from './layoutProjection';

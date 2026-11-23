@@ -1,7 +1,7 @@
 // oxlint-disable-next-line import/no-nodejs-modules -- Run the retained executable through its released host.
 import { readFileSync } from 'node:fs';
-import courseSource from '@wildshard/sharddev/commons/scripts/course.as?raw';
-import { courseProgramInputs } from '@wildshard/sharddev/commons/courseProgram';
+import courseSource from '@wildshard/sdk/commons/scripts/course.as?raw';
+import { courseProgramInputs } from '@wildshard/sdk/commons/courseProgram';
 import { admitScriptContract } from '@wildshard/format/scriptContract';
 import { hashImmutableBytes } from '@wildshard/format/immutable';
 

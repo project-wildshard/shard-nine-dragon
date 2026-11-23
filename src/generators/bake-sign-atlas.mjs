@@ -3,11 +3,11 @@ import { fixedKitRows, readFixedSlots } from './casts.ts';
 // Native WebKit reference raster; portable shard file intake reads these retained bytes.
 import { resolve } from 'node:path';
 import rawSignRows from '../data/signView.json' with { type: 'json' };
-import { encodeBuildBytes } from '@wildshard/sharddev/bake/byteCodec';
+import { encodeBuildBytes } from '@wildshard/sdk/bake/byteCodec';
 // oxlint-disable-next-line wildshard/layer -- Engine 0.1.42 predates the SDK dev package layer.
 import { openNativeRaster, bundleNativeRaster } from '@wildshard/dev/bake/nativeRaster';
 import { byteWriter, outputHash, browserBakeBytes } from './bakeBytes.mjs';
-import { readImagePixels } from '@wildshard/sharddev/bake/image';
+import { readImagePixels } from '@wildshard/sdk/bake/image';
 import { parseSignView } from './sections.ts';
 
 const root = resolve(import.meta.dirname, '../../../..');

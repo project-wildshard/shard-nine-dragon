@@ -2,8 +2,8 @@
 import { mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 // oxlint-disable-next-line import/no-nodejs-modules -- Use the defining real author root.
 import { resolve } from 'node:path';
-import { type NamedBlob } from '@wildshard/sharddev/blobs';
-import { createProjectGeneration } from '@wildshard/sharddev/projectGeneration';
+import { type NamedBlob } from '@wildshard/sdk/blobs';
+import { createProjectGeneration } from '@wildshard/sdk/projectGeneration';
 import { nineSignsProgram } from '../../src/generators/signsProgram';
 import { nativeSignAtlas } from './nine-native-atlas';
 import { nativeGlyphs } from './nine-native-glyphs';

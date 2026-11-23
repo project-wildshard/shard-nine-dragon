@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import { openNativeRaster, bundleNativeRaster } from '@wildshard/dev/bake/nativeRaster';
 import { byteWriter, outputHash, browserBakeBytes } from '../generators/bakeBytes.mjs';
 import nativeDecals from '../data/nativeDecals.json' with { type: 'json' };
-import { readImagePixels } from '@wildshard/sharddev/bake/image';
+import { readImagePixels } from '@wildshard/sdk/bake/image';
 
 const root = resolve(import.meta.dirname, '../../../..');
 const code = await bundleNativeRaster({ root, entry: resolve(root, 'src/shards/nine-dragon-stack/generators/decalAtlasPage.ts'), format: 'iife', name: 'NineDecalBake' });

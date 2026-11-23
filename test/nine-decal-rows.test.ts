@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { canvasAtlasRows } from '@wildshard/sharddev/bake/canvasAtlas';
+import { canvasAtlasRows } from '@wildshard/sdk/bake/canvasAtlas';
 import decals from '../src/data/decals.json' with { type: 'json' };
 
 test.each([decals.JIAN_DECALS, decals.HERO_DECALS])('authored decals cross atlas admission', row => {

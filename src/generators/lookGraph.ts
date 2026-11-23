@@ -1,5 +1,5 @@
 import { checkAuthorGraph } from './authorGraph';
-import type { AuthorGraph as GraphIr, AuthorGraphNode as GraphNode, AuthorGraphParam as GraphParam, AuthorGraphRef as GraphRef, AuthorGraphStages as GraphStages, AuthorGraphArrayParam as GraphArrayParam } from '@wildshard/sharddev/bake/materialGraph';
+import type { AuthorGraph as GraphIr, AuthorGraphNode as GraphNode, AuthorGraphParam as GraphParam, AuthorGraphRef as GraphRef, AuthorGraphStages as GraphStages, AuthorGraphArrayParam as GraphArrayParam } from '@wildshard/sdk/bake/materialGraph';
 
 /** Author arithmetic once, emit only admitted graph rows into the shardfile. */
 export class LookGraph {

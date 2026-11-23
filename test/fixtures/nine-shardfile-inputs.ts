@@ -2,11 +2,11 @@
 import { mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 // oxlint-disable-next-line import/no-nodejs-modules -- Bind only the real author project's source root.
 import { resolve } from 'node:path';
-import { createProjectGeneration } from '@wildshard/sharddev/projectGeneration';
+import { createProjectGeneration } from '@wildshard/sdk/projectGeneration';
 import { readNineShardfileInputs } from '../../src/generators/shardfile';
 import { nineShardfileFrom } from '../../src/generators/shardfileDefinition';
-import courseSource from '@wildshard/sharddev/commons/scripts/course.as?raw';
-import { courseProgramInputs } from '@wildshard/sharddev/commons/courseProgram';
+import courseSource from '@wildshard/sdk/commons/scripts/course.as?raw';
+import { courseProgramInputs } from '@wildshard/sdk/commons/courseProgram';
 import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/format/immutable';
 import { ninePracticeRows, ninePracticeBytes } from './nine-practice-program';
 import { runSnapshot } from './runSnapshot';

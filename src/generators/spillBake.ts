@@ -1,6 +1,6 @@
 import { BufferAttribute, type BufferGeometry, Color, Matrix4, Quaternion, Vector3 } from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import { withPortableMath } from '@wildshard/sharddev/math/portableMath';
+import { withPortableMath } from '@wildshard/sdk/math/portableMath';
 import { nineLayoutSource } from './layout';
 import { bakeFixedKits, readFixedSlots } from './casts';
 import { canopyGeometries } from './canopyGeometry';
@@ -9,7 +9,7 @@ import rawSignRows from '../data/signView.json' with { type: 'json' };
 import { parseSignView } from './sections';
 import lantern from '../data/lantern.json' with { type: 'json' };
 import { portalPlanRows } from './portalEntries';
-import { hashImmutableBytes } from '@wildshard/sharddev/immutable';
+import { hashImmutableBytes } from '@wildshard/sdk/immutable';
 
 const signRows = parseSignView(rawSignRows);
 

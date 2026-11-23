@@ -1,8 +1,9 @@
-import type { ProjectGenerationContext } from '@wildshard/sharddev/projectGeneration';
-import { courseProgramInputs, type CourseProgramInputs } from '@wildshard/sharddev/commons/courseProgram';
-import courseSource from '@wildshard/sharddev/commons/scripts/course.as?raw';
-import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/sharddev/immutable';
-import { nameBlob, type NamedBlob } from '@wildshard/sharddev/blobs';
+import type { ProjectGenerationContext } from '@wildshard/sdk/projectGeneration';
+import { courseProgramInputs, type CourseProgramInputs } from '@wildshard/sdk/commons/courseProgram';
+// oxlint-disable-next-line wildshard/public-index -- SHARD-COMPAT SA7b: `./commons/scripts/course.as` is an sdk export; the sdk's wrapper does not yet strip Vite's `?raw` query (sharddev lint/engine-plugin.mjs)
+import courseSource from '@wildshard/sdk/commons/scripts/course.as?raw';
+import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/sdk/immutable';
+import { nameBlob, type NamedBlob } from '@wildshard/sdk/blobs';
 
 /** The original admitted ABI-1 course row and independently owned raw module. */
 export interface NinePracticeProgram { readonly script: CourseProgramInputs['row']; readonly blob: NamedBlob }

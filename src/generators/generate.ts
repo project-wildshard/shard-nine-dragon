@@ -1,5 +1,5 @@
 import type { NineNavigation } from './navigationProgram';
-import type { GeneratedProject, ProjectGenerationContext } from '@wildshard/sharddev/projectGeneration';
+import type { GeneratedProject, ProjectGenerationContext } from '@wildshard/sdk/projectGeneration';
 import { readNineShardfileInputs } from './shardfile';
 import { nineShardfileProduct } from './shardfileDefinition';
 import { NINE_MOVERS_CONTRACT } from './moversProgram';

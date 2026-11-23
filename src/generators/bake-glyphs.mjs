@@ -1,9 +1,9 @@
 // Run through scripts/browser-lane.sh. Native WebKit pixels are committed; shard file intake is portable.
 import { resolve } from 'node:path';
-import { readBoundedFile } from '@wildshard/sharddev/sourceReader';
+import { readBoundedFile } from '@wildshard/sdk/sourceReader';
 // oxlint-disable-next-line wildshard/layer -- Engine 0.1.42 predates the SDK dev package layer.
 import { openNativeRaster, bundleNativeRaster } from '@wildshard/dev/bake/nativeRaster';
-import { decodeBuildDeflate } from '@wildshard/sharddev/bake/byteCodec';
+import { decodeBuildDeflate } from '@wildshard/sdk/bake/byteCodec';
 import { byteWriter, jsonBytes, outputHash, browserBakeBytes } from './bakeBytes.mjs';
 
 const root = resolve(import.meta.dirname, '../../../..');

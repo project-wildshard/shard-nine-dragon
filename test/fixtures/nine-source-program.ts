@@ -2,7 +2,7 @@
 import { mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 // oxlint-disable-next-line import/no-nodejs-modules -- Bind only the same explicit project/public roots as the author CLI.
 import { resolve } from 'node:path';
-import { createProjectGeneration } from '@wildshard/sharddev/projectGeneration';
+import { createProjectGeneration } from '@wildshard/sdk/projectGeneration';
 import { proveStaticPortalEntries } from '@wildshard/dev/projectEntryProof';
 import { prepareAssetDecoders } from '@wildshard/format/shardfileAssets';
 import { generate, type NineGeneratedProject } from '../../src/generators/generate';
