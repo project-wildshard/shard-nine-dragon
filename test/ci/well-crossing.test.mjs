@@ -7,18 +7,18 @@
 // on the bridge and files Over the Well (`nine-dragon-stack.well`) once, and
 // the deck walks on. Course, profile and rings are the shard file's own server
 // files; no flag, pose or grapple state is written.
-import '@wildshard/sdk/headless/scripts/sim-node-loader.mjs';
+import '@wildshard/engine/scripts/sim-node-loader.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 import { test } from 'node:test';
 
-const { loadHeadlessFolder } = await import('@wildshard/sdk/headless/host/headlessFolder');
+const { loadHeadlessFolder } = await import('@wildshard/engine/host/headlessFolder');
 const { openNineDataWorld } = await import('./nine-data-world.mjs');
-const { outputDescriptor, serverReadsFile } = await import('@wildshard/sdk/headless/game/shardfile/outputDescriptor');
-const { loadRapier } = await import('@wildshard/sdk/headless/physics/rapier');
-import { engineRequire } from '@wildshard/sdk/headless';
+const { outputDescriptor, serverReadsFile } = await import('@wildshard/engine/game/shardfile/outputDescriptor');
+const { loadRapier } = await import('@wildshard/engine/physics/rapier');
+const engineRequire = createRequire(import.meta.resolve('@wildshard/engine/package.json'));
 
 const routes = Object.fromEntries(JSON.parse(readFileSync('test/ci/walk-routes.json', 'utf8'))['nine-dragon-stack'].map(row => [row.name, row]));
 const point = ({ x, z, jump, jumpAt }) => ({ x, z, ...(jump === undefined ? {} : { jump }), ...(jumpAt === undefined ? {} : { jumpAt }) });

@@ -1,6 +1,6 @@
 // Frozen independent pre-optimization law from fb514d2fe.
 // SHA256: efae495b53b0f970546131a4e9a772504fdd2490eb78c88bab3a726caf8ea51f
-import { workSlice } from '@wildshard/sdk/internal/engine/core/workSlice';
+import { workSlice } from '@wildshard/engine/core/workSlice';
 // Vertex light spill (SHARD-PLATFORM M3): everything that glows (signs, lanterns, lit shopfronts) is an emitter, and its
 // SPILL is baked once at build time into a per-vertex attribute (`aSpill`) of merged geometry: no per-pixel light loop.
 // Spill = Σ colour × strength / (1 + r² / R²), R = 2.2 · max(w, h) + 1.5, cut at 3R, via a spatial grid.

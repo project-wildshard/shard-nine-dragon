@@ -1,4 +1,4 @@
-import { encodeCanonicalJson } from '@wildshard/sdk/immutable';
+import { encodeCanonicalJson } from '@wildshard/engine/host/immutable';
 import type { NativeProgramSpec } from './native-program';
 import { nativeProgramFixture } from './native-program';
 

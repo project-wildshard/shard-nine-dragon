@@ -9,8 +9,8 @@ import { addSlabTriangles, newSlabTriangleProof, compareSlabTriangles, type Slab
 import { readSourceModel } from '@wildshard/sdk/bake/skinned';
 import { WorldScenesSchema } from '@wildshard/format/worldScenes';
 import { parseWorldSceneWeld } from '@wildshard/format/worldSceneWeld';
-import { nativeWholeGeometry } from '@wildshard/sdk/internal/engine/models/nativeGeometry';
-import { wholeGeometryPieces } from '@wildshard/sdk/internal/engine/game/shardfile/wholeGeometryPieces';
+import { nativeWholeGeometry } from '@wildshard/engine/models/nativeGeometry';
+import { wholeGeometryPieces } from '@wildshard/engine/game/shardfile/wholeGeometryPieces';
 import { joinWholePieces } from '@wildshard/sdk/bake/wholePieceJoin';
 import { slabGeometryBytes } from '@wildshard/sdk/bake/slabChunks';
 

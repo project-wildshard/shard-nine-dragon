@@ -1,19 +1,19 @@
 // oxlint-disable-next-line import/no-nodejs-modules -- The room runs the shipped product bytes and physics module.
 import { readFileSync } from 'node:fs';
 import { expect, test } from 'vitest';
-import { NetClient } from '@wildshard/sdk/internal/engine/net/client';
-import { NetRoom } from '@wildshard/sdk/internal/engine/net/room';
-import { SimNetWorld } from '@wildshard/sdk/internal/engine/net/simWorld';
-import { NET_BUTTONS } from '@wildshard/sdk/internal/engine/input/netButtons';
-import { loadRapier } from '@wildshard/sdk/headless/physics/rapier';
-import { leadPlayer } from '@wildshard/sdk/internal/engine/sim/leadPlayer';
-import { serializeSimSnapshot, snapshotSimHostBytes } from '@wildshard/sdk/headless/sim/snapshot';
+import { NetClient } from '@wildshard/engine/net/client';
+import { NetRoom } from '@wildshard/engine/net/room';
+import { SimNetWorld } from '@wildshard/engine/net/simWorld';
+import { NET_BUTTONS } from '@wildshard/engine/input/netButtons';
+import { loadRapier } from '@wildshard/engine/physics/rapier';
+import { leadPlayer } from '@wildshard/engine/sim/leadPlayer';
+import { serializeSimSnapshot, snapshotSimHostBytes } from '@wildshard/engine/sim/snapshot';
 import { directLoopback } from '../fixtures/netLoopback';
-import { hasNativeAssembly } from '@wildshard/sdk/internal/engine/game/shardfile/nativeAssembly';
+import { hasNativeAssembly } from '@wildshard/engine/game/shardfile/nativeAssembly';
 import { GRAPPLE_PHASES, grappleRow, NO_HOOK } from '../fixtures/grapple-wire';
-import { outputDescriptor } from '@wildshard/sdk/headless/game/shardfile/outputDescriptor';
-import type { CreatureRewardState } from '@wildshard/sdk/internal/engine/game/saves';
-import { openWorld } from '@wildshard/sdk/internal/engine/host/openWorld';
+import { outputDescriptor } from '@wildshard/engine/game/shardfile/outputDescriptor';
+import type { CreatureRewardState } from '@wildshard/engine/game/saves';
+import { openWorld } from '@wildshard/engine/host/openWorld';
 import { nineRuntimeInput } from '../fixtures/nine-product-session';
 import { nineNativeConstants } from '../fixtures/nine-native-constants';
 

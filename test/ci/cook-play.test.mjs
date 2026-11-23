@@ -4,7 +4,7 @@
 // worlds use only cooked server files for grapple, landing and restore.
 // Use the shipped cooker/encoder, then only extracted server-pack bytes.
 // This complete publish/serve/play journey never joins hooks or Ring 3.
-import '@wildshard/sdk/headless/scripts/sim-node-loader.mjs';
+import '@wildshard/engine/scripts/sim-node-loader.mjs';
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
@@ -15,11 +15,11 @@ import {dirname,join,resolve} from 'node:path';
 import {brotliCompressSync,brotliDecompressSync,constants} from 'node:zlib';
 import {test} from 'node:test';
 
-const {readServerPackBook,serverPackFile}=await import('@wildshard/sdk/headless/game/shardfile/serverPack');
-const {loadHeadlessFolder}=await import('@wildshard/sdk/headless/host/headlessFolder');
+const {readServerPackBook,serverPackFile}=await import('@wildshard/engine/game/shardfile/serverPack');
+const {loadHeadlessFolder}=await import('@wildshard/engine/host/headlessFolder');
 const {openNineDataWorld}=await import('./nine-data-world.mjs');
-const {outputDescriptor,serverReadsFile}=await import('@wildshard/sdk/headless/game/shardfile/outputDescriptor');
-const {loadRapier}=await import('@wildshard/sdk/headless/physics/rapier');
+const {outputDescriptor,serverReadsFile}=await import('@wildshard/engine/game/shardfile/outputDescriptor');
+const {loadRapier}=await import('@wildshard/engine/physics/rapier');
 const require=createRequire(import.meta.url);
 
 test('the real cooked Nine earns grapple and resumes using only served server files',{timeout:300_000},async()=>{
@@ -28,7 +28,7 @@ test('the real cooked Nine earns grapple and resumes using only served server fi
  const previous=process.env.WILDSHARD_SPAWN_PART_CACHE;
  process.env.WILDSHARD_SPAWN_PART_CACHE=join(root,'cold-parts');
  try{
-  const {cookShard,servedAsIs}=await import('@wildshard/sdk/headless/game/shardCook');
+  const {cookShard,servedAsIs}=await import('@wildshard/engine/game/shardCook');
   // QA41: the pinned engine includes the per-worker format hook. Exercise
   // the normal phone tiers too; never hide installed-package worker failures.
   const bin=join(dirname(require.resolve('@wildshard/cli/package.json')),'bin/wildshard.mjs'),tar=join(root,'dunes.tar');

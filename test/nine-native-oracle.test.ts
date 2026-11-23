@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { beforePortalClearance } from './fixtures/portal-rail-history';
-import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/sdk/immutable';
+import { encodeCanonicalJson, hashImmutableBytes } from '@wildshard/engine/host/immutable';
 import { fencedNativeOracle } from './fixtures/native-oracle';
 import { nineNativeOracle, NINE_NATIVE_ORACLE } from './fixtures/nine-native-oracle';
 import { nineNativeOracleInputs } from './fixtures/nine-native-oracle-inputs';

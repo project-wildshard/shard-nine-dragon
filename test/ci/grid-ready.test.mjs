@@ -6,22 +6,22 @@
 // and a fresh residency restores the saved pose and regional continuation
 // (tick, clock, rng, flags, adapters) and walks on. Only the engine's public
 // grid and trusted-runtime exports drive it.
-import '@wildshard/sdk/headless/scripts/sim-node-loader.mjs';
+import '@wildshard/engine/scripts/sim-node-loader.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 import { test } from 'node:test';
 
-const { loadHeadlessFolder } = await import('@wildshard/sdk/headless/host/headlessFolder');
-const { openWorld } = await import('@wildshard/sdk/internal/engine/host/openWorld');
-const { outputDescriptor, serverReadsFile } = await import('@wildshard/sdk/headless/game/shardfile/outputDescriptor');
-const { loadRapier } = await import('@wildshard/sdk/headless/physics/rapier');
-const { GridAssembly } = await import('@wildshard/sdk/internal/engine/game/grid/assembly');
-const { GridSimulation } = await import('@wildshard/sdk/internal/engine/game/grid/simulation');
-const { leadPlayer } = await import('@wildshard/sdk/internal/engine/sim/leadPlayer');
-const { regionalContinuation } = await import('@wildshard/sdk/headless/sim/snapshot');
-import { engineRequire } from '@wildshard/sdk/headless';
+const { loadHeadlessFolder } = await import('@wildshard/engine/host/headlessFolder');
+const { openWorld } = await import('@wildshard/engine/host/openWorld');
+const { outputDescriptor, serverReadsFile } = await import('@wildshard/engine/game/shardfile/outputDescriptor');
+const { loadRapier } = await import('@wildshard/engine/physics/rapier');
+const { GridAssembly } = await import('@wildshard/engine/game/grid/assembly');
+const { GridSimulation } = await import('@wildshard/engine/game/grid/simulation');
+const { leadPlayer } = await import('@wildshard/engine/sim/leadPlayer');
+const { regionalContinuation } = await import('@wildshard/engine/sim/snapshot');
+const engineRequire = createRequire(import.meta.resolve('@wildshard/engine/package.json'));
 
 const SLUG = 'nine-dragon-stack';
 const pose = host => { const { position: { x, y, z }, yaw } = leadPlayer(host); return [x, y, z, yaw]; };

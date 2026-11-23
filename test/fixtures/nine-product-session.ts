@@ -1,8 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { loadHeadlessFolder } from '@wildshard/sdk/headless/host/headlessFolder';
-import { loadRapier } from '@wildshard/sdk/headless/physics/rapier';
-import { outputDescriptor } from '@wildshard/sdk/headless/game/shardfile/outputDescriptor';
+import { loadHeadlessFolder } from '@wildshard/engine/host/headlessFolder';
+import { loadRapier } from '@wildshard/engine/physics/rapier';
+import { outputDescriptor } from '@wildshard/engine/game/shardfile/outputDescriptor';
 import { openNineDataWorld } from '../ci/nine-data-world.mjs';
 
 export async function nineRuntimeInput() {
