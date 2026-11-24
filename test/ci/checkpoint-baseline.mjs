@@ -35,14 +35,20 @@ function engineOrder(engine) {
   const [core = '', pre] = engine.split('-');
   return [...core.split('.').map(Number), pre === undefined ? 1 : 0];
 }
-/** This platform's digest for `slug` on the newest engine that recorded one. */
+const byOrder = (a, b) => { for (let i = 0; i < 4; i++) if (a.order[i] !== b.order[i]) return (a.order[i] ?? 0) - (b.order[i] ?? 0); return 0; };
+/**
+ * The digests an engine with no row of its own may match for `slug`: this platform's on the newest engine that recorded
+ * one, and any other platform's from that engine on. Platforms differ only by float and Rapier math, so an engine that
+ * makes them agree walks to another platform's bytes exactly (Driftwood on darwin reads linux's digest from 0.1.80).
+ */
 function newestRecorded(all, slug) {
   const rows = Object.entries(all).flatMap(([key, row]) => {
     const [engine, platform] = key.split(' ');
-    return platform === PLATFORM && row[slug] !== undefined ? [{ order: engineOrder(engine), digest: row[slug] }] : [];
+    return row[slug] !== undefined ? [{ order: engineOrder(engine), platform, digest: row[slug] }] : [];
   });
-  rows.sort((a, b) => { for (let i = 0; i < 4; i++) if (a.order[i] !== b.order[i]) return (a.order[i] ?? 0) - (b.order[i] ?? 0); return 0; });
-  return rows.at(-1)?.digest;
+  const own = rows.filter(row => row.platform === PLATFORM).sort(byOrder).at(-1);
+  if (!own) return new Set();
+  return new Set([own.digest, ...rows.filter(row => row.platform !== PLATFORM && byOrder(row, own) >= 0).map(row => row.digest)]);
 }
 
 /** Throws unless `digest` is this platform's recorded checkpoint for `slug` on `engine`. */
@@ -60,7 +66,7 @@ export function assertCheckpointBaseline(slug, digest, engine) {
   // SHARD-COMPAT PR6: a checkpoint is keyed to the shard's content, not the engine version. An engine with no row of its
   // own passes when the walk ends where it ended on the newest engine recorded for this platform (Nine, Sky Reach,
   // Driftwood and Pine read the same digest from 0.1.65 to 0.1.80); a different digest still fails and is recorded.
-  if (want === undefined && newestRecorded(all, slug) === digest) {
+  if (want === undefined && newestRecorded(all, slug).has(digest)) {
     console.log(`checkpoint baseline: ${slug} on ${key} matches the newest recorded engine's digest`);
     return;
   }

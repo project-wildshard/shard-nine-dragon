@@ -54,6 +54,16 @@ test('changed bytes still fail: an older row, a newer row or new bytes', () => {
   });
 });
 
+test("an engine that makes platforms agree passes on another platform's bytes from the same engine on", () => {
+  // Driftwood on 0.1.80: darwin-arm64 walks to linux-x64's digest.
+  const OTHER = PLATFORM === 'linux-x64' ? 'darwin-arm64' : 'linux-x64';
+  const L = 'f'.repeat(64), M = 'e'.repeat(64);
+  const both = { ...rows, [`0.1.74-next.d6e6bc6b ${OTHER}`]: { shard: M }, [`0.1.76-next.f3b1d4c7 ${OTHER}`]: { shard: L } };
+  const after = withRows(both, () => assertCheckpointBaseline('shard', L, '0.1.80-next.be7e944e'));
+  assert.deepEqual(after, both, 'no row written');
+  withRows(both, () => assert.throws(() => assertCheckpointBaseline('shard', M, '0.1.80-next.be7e944e'), /no checkpoint baseline/u, "another platform's older engine does not count"));
+});
+
 test("this shard's recorded checkpoints hold on the next engine with no new row", () => {
   const slugs = new Set(Object.entries(recorded).filter(([row]) => row.endsWith(` ${PLATFORM}`)).flatMap(([, digests]) => Object.keys(digests)));
   for (const slug of slugs) {
