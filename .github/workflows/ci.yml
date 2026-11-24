@@ -30,7 +30,9 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: ${{ (github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch') && 5 || 15 }}
+    # Ring 3 (QA 11-23-b row 41): a candidate check builds and walks Nine's 120 MB product as a push does; 5 minutes cut it off
+    # in TS21 after a green build (run 45329074685). Nalati's check takes the same 15 under Ring 3's 20-minute deadline.
+    timeout-minutes: 15
     env:
       APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
     steps:
