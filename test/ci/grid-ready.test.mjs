@@ -15,7 +15,8 @@ import { test } from 'node:test';
 
 const { loadHeadlessFolder } = await import('@wildshard/sdk/headless/host/headlessFolder');
 const { openWorld } = await import('@wildshard/sdk/internal/engine/host/openWorld');
-const { outputDescriptor, serverReadsFile } = await import('@wildshard/sdk/headless/game/shardfile/outputDescriptor');
+const { outputDescriptor } = await import('@wildshard/sdk/headless/game/shardfile/outputDescriptor');
+const { serverReadsFile } = await import('@wildshard/format/serverReads');
 const { loadRapier } = await import('@wildshard/sdk/headless/physics/rapier');
 const { GridAssembly } = await import('@wildshard/sdk/internal/engine/game/grid/assembly');
 const { GridSimulation } = await import('@wildshard/sdk/internal/engine/game/grid/simulation');
