@@ -1,0 +1,1 @@
+FORMAT-PRUNE FP50 (SHARD-COMPAT SA10): map.json inputs that left the shard source (public assets, the pre-split sharddev bake files) are dropped; nothing reads them. ci21-map-owner.test.mjs now asserts every input stays in the source, in place of Nine's pre-split block. The hero is re-captured or re-stamped for the new content.

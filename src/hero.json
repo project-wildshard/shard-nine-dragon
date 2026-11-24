@@ -1,12 +1,12 @@
 {
-  "content": "586ff6e5fd558971ba692d33c6610583223e901bc1cae4ed93ae1ae8add8d66f",
-  "captured": "2026-11-24T00:06:09.365Z",
-  "base": "auto re-stamp: curated art unchanged, content moved (wildshard build)",
+  "content": "6de01c86c6c20ab58b3eb8828cf7e05195ba2c39e62102f74f76571c1ab962c3",
+  "captured": "2026-11-24T11:46:33.942Z",
+  "base": "stamp-existing: the hero files already in the shard, adopted without a capture",
   "card": {
     "thumbs/nine-dragon-stack.jpg": "002f103cca5cf4ebde8d8e159fae2865fab553335db18b2cd5f77d930263dada",
     "thumbs/nine-dragon-stack-portrait.jpg": "ebd36770c10d2aa9945ba923c6bac870de565b81b76b404ca3896a1c9fcca606",
     "thumbs/nine-dragon-stack-landscape.jpg": "43b6afb4e40a157e791fec4cd53de4ce2d57593dea289b0a57485c6c0d58af42"
   },
   "curated": true,
-  "look": "2a63374af9a916c9488f31b88de7ab27bfce8b363985556bf7bbc6df07169e53"
+  "look": "0d9cfb5a973b12112118c26318027d9d34b178ede8da96a875bb15cf44550a8a"
 }
