@@ -1,6 +1,6 @@
 {
-  "content": "006f56b54fedeac65a0e592d1d5c39117b2911ff88a56c60a73fd82f5055fe0b",
-  "captured": "2026-11-23T16:46:25.040Z",
+  "content": "586ff6e5fd558971ba692d33c6610583223e901bc1cae4ed93ae1ae8add8d66f",
+  "captured": "2026-11-24T00:06:09.365Z",
   "base": "auto re-stamp: curated art unchanged, content moved (wildshard build)",
   "card": {
     "thumbs/nine-dragon-stack.jpg": "002f103cca5cf4ebde8d8e159fae2865fab553335db18b2cd5f77d930263dada",
@@ -8,5 +8,5 @@
     "thumbs/nine-dragon-stack-landscape.jpg": "43b6afb4e40a157e791fec4cd53de4ce2d57593dea289b0a57485c6c0d58af42"
   },
   "curated": true,
-  "look": "8c1eba148ea5440d9cd15024b6d2ac849be42d14b0285136f93947dae157bd22"
+  "look": "2a63374af9a916c9488f31b88de7ab27bfce8b363985556bf7bbc6df07169e53"
 }
