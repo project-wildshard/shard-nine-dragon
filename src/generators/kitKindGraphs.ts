@@ -21,9 +21,10 @@ interface KitKindFile {
 }
 let built: readonly KitKindFile[] | undefined;
 /** each split kind's graph file, its catalogue entry and its files row (one build per process) */
-export function kitKindFiles(): readonly KitKindFile[] {
+/** each kind's graph file; `rest` dresses a graph before it is hashed (frameChannels `withRestingParams`) */
+export function kitKindFiles(rest: (id: string, graph: GraphIr) => GraphIr = (_id, graph) => graph): readonly KitKindFile[] {
   built ??= KIT_KINDS.map(row => {
-    const bytes = new TextEncoder().encode(JSON.stringify(kindGraph(row.kind))), hash = hashImmutableBytes(bytes);
+    const bytes = new TextEncoder().encode(JSON.stringify(rest(row.look, kindGraph(row.kind)))), hash = hashImmutableBytes(bytes);
     return { look: row.look, bytes, material: { family: 'graph', file: hash }, file: { hash, kind: 'json', compressed: bytes.length, ...assetCost('json', bytes), dependencies: [], critical: false } };
   });
   return built;

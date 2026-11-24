@@ -16,9 +16,10 @@ interface CrowdGraphFile {
 }
 let built: CrowdGraphFile | undefined;
 /** The paired crowd graph's file, its catalogue entry and its files row (one build per process) */
-export function crowdGraphFile(): CrowdGraphFile {
+/** the crowd's graph file; `rest` dresses the graph before it is hashed (frameChannels `withRestingParams`) */
+export function crowdGraphFile(rest: (id: string, graph: ReturnType<typeof crowdGraph>) => ReturnType<typeof crowdGraph> = (_id, graph) => graph): CrowdGraphFile {
   if (built !== undefined) return built;
-  const bytes = new TextEncoder().encode(JSON.stringify(crowdGraph())), hash = hashImmutableBytes(bytes);
+  const bytes = new TextEncoder().encode(JSON.stringify(rest(CROWD_LOOK, crowdGraph()))), hash = hashImmutableBytes(bytes);
   built = { bytes, material: { family: 'graph', file: hash }, file: { hash, kind: 'json', compressed: bytes.length, ...assetCost('json', bytes), dependencies: [], critical: false } };
   return built;
 }

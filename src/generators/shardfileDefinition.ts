@@ -12,6 +12,7 @@ import { architectureGraphs } from './architectureGraphs';
 import { KIT_KINDS } from './kitKinds';
 import { kitKindFiles } from './kitKindGraphs';
 import { CROWD_LOOK, crowdGraphFile } from './crowdGraph';
+import { withRestingParams } from './frameChannels';
 import { burstGraphs } from './burstGraphs';
 import { streakGraph } from './streakGraph';
 import plumbing from '../data/plumbing.json' with { type: 'json' };
@@ -78,7 +79,7 @@ const fine = nineSlabSourceFiles(inputs.scenes.NINE_WORLD_SCENES.libraries, inpu
 const worldFiles = world.shardfile.files.filter(file => !fine.has(file.hash));
 const worldLibrary = world.shardfile.library.filter(hash => !fine.has(hash));
 const base = emptyShardfile({ slug: 'nine-dragon-stack', name: 'Nine Dragon Stack', author: 'Wildshard', revision: 1, seed: 0x9d2a });
-const kinds = kitKindFiles(), crowd = crowdGraphFile();
+const kinds = kitKindFiles(withRestingParams), crowd = crowdGraphFile(withRestingParams);
 const library = new Set([...worldLibrary, ...heldGraphFiles.library, ...kinds.map(row => row.file.hash), crowd.file.hash]), charged = [...world.shardfile.files.filter(file => library.has(file.hash)), ...heldGraphFiles.files, ...kinds.map(row => row.file), crowd.file];
 const courseBytes=courseProgram.blob.bytes.byteLength, courseMemory=courseBytes+courseProgram.script.pages*65536*2;
 const navigationResident = navigation.files.reduce((sum, file) => sum + file.decoded, 0);
@@ -101,7 +102,7 @@ return { ...base, plumbing, budgets, navigation: navigation.navigation, critical
   // as Far Reach's does: no tile retires in play, and no retire re-joins a held refine union mid-walk
   ring: 'cell',
   // the look.materials graphs (data/lookGraphs.json: the sky, the Well's silk sheets, the steam), lent by plugin.ts
-  look: { ...base.look, materials: { ...base.look.materials, ...Object.fromEntries(Object.entries({ ...lookGraphs, ...presentationGraphs, ...architectureGraphs(), 'nine-streaks': streakGraph(), 'nine-halo': haloGraph(), 'nine-filament': filamentGraph(), ...burstGraphs() }).map(([id, graph]) => [id, { family: 'graph' as const, graph }])), ...heldGraphFiles.materials, ...Object.fromEntries(kinds.map(row => [row.look, row.material])), [CROWD_LOOK]: crowd.material } },
+  look: { ...base.look, materials: { ...base.look.materials, ...Object.fromEntries(Object.entries({ ...lookGraphs, ...presentationGraphs, ...architectureGraphs(), 'nine-streaks': streakGraph(), 'nine-halo': haloGraph(), 'nine-filament': filamentGraph(), ...burstGraphs() }).map(([id, graph]) => [id, { family: 'graph' as const, graph: withRestingParams(id, graph) }])), ...heldGraphFiles.materials, ...Object.fromEntries(kinds.map(row => [row.look, row.material])), [CROWD_LOOK]: crowd.material } },
   // NR12: the props family draws only the coarse L1 parents (the whole libraries draw the L0 and library pieces), so it is
   // the coarse graph: the towers past the ring read as walls and lit rooms, not flat pbr slabs
   props: { ...nineSlabProps(world.props, inputs.scenes.NINE_WORLD_SCENES.libraries, inputs.scenes.NINE_REFINEMENT_SOURCE), family: 'nine-coarse-facade', wholeLibrary: worldLibrary, colliders: ninePropColliders(),

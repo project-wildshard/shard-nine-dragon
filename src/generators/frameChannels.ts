@@ -61,7 +61,8 @@ function shape(row: Row): { kind: 'number' | 'vector' | 'colour'; size: number }
 }
 /** the light volumes' box and peak: the world scenes' lent volume rows lend them to their looks (generators/worldScenes.ts VOLUMES) */
 const LENT_VOLUME = new Set(['uLpMinA', 'uLpMinB', 'uLpInvA', 'uLpInvB', 'uLpMax']);
-const SHARED = new Map(Object.entries({ ...sharedUniforms, ...paint.uniforms, ...light.volume, ...light.haloUniforms } satisfies Record<string, Row>)
+const SHARED_ROWS: Readonly<Record<string, Row>> = { ...sharedUniforms, ...paint.uniforms, ...light.volume, ...light.haloUniforms };
+const SHARED = new Map(Object.entries(SHARED_ROWS)
   .flatMap(([name, row]) => { const at = shape(row); return at === null || LENT_VOLUME.has(name) ? [] : [[name, at] as const]; }));
 /** the facade's constant washes, as the linear colours the shared rows make */
 const CONSTANT: Readonly<Record<string, readonly number[]>> = {
@@ -79,29 +80,84 @@ function admitted(rows: Readonly<Record<string, unknown>>): Record<string, Graph
 const GRAPHS: Readonly<Record<string, GraphIr>> = { ...admitted(lookGraphs), ...admitted(scrollGraph), ...architectureGraphs(), ...kitKindGraphs(), [CROWD_LOOK]: crowdGraph(), 'nine-streaks': streakGraph(), 'nine-halo': haloGraph() };
 const SIZE = { float: 1, vec2: 2, vec3: 3, vec4: 4, colour: 3 } as const;
 
+/** where a bound look's param is fed from each frame (its components' expressions), or null when nothing feeds it */
+function feed(id: string, param: string, row: { readonly type: string }): ((at: number) => Expr) | null {
+  const source = /^u[A-Z]/.test(param) ? param : `u${param.charAt(0).toUpperCase()}${param.slice(1)}`;
+  if (row.type === 'texture') return null;
+  const size = SIZE[row.type as keyof typeof SIZE];
+  const frame = FRAME[param] ?? FRAME[source], fixed = CONSTANT[param] ?? CONSTANT[source], shared = SHARED.get(source);
+  const from: ((at: number) => Expr) | null = frame !== undefined ? at => frame[at] ?? (b => b.constant(0))
+    : fixed !== undefined ? at => b => b.constant(fixed[at] ?? 0)
+    : shared === undefined ? null
+    : shared.kind === 'number' ? () => (_b, read) => read('uniforms', [source, 'value'])
+    : shared.kind === 'colour' ? at => (_b, read) => read('uniforms', [source, 'value', RGB[at] ?? 'r'])
+    : at => (_b, read) => read('uniforms', [source, 'value', AXES[at] ?? 'x']);
+  if (from === null) return null;
+  const width = frame?.length ?? fixed?.length ?? shared?.size ?? 0;
+  if (width !== size) throw new Error(`Nine look binding ${id}.${param}: ${String(size)} components from ${String(width)}`);
+  return from;
+}
+
 function lookBindings(): NumericChannelOutput[] {
   const outputs: NumericChannelOutput[] = [];
   for (const id of bindings.graphs) {
     const graph = GRAPHS[id];
     if (graph === undefined) throw new Error(`Nine look binding: no graph ${id}`);
     for (const [param, row] of Object.entries(graph.params ?? {})) {
-      const source = /^u[A-Z]/.test(param) ? param : `u${param.charAt(0).toUpperCase()}${param.slice(1)}`;
-      if (row.type === 'texture') continue;
-      const size = SIZE[row.type];
-      const frame = FRAME[param] ?? FRAME[source], fixed = CONSTANT[param] ?? CONSTANT[source], shared = SHARED.get(source);
-      const from: ((at: number) => Expr) | null = frame !== undefined ? at => frame[at] ?? (b => b.constant(0))
-        : fixed !== undefined ? at => b => b.constant(fixed[at] ?? 0)
-        : shared === undefined ? null
-        : shared.kind === 'number' ? () => (_b, read) => read('uniforms', [source, 'value'])
-        : shared.kind === 'colour' ? at => (_b, read) => read('uniforms', [source, 'value', RGB[at] ?? 'r'])
-        : at => (_b, read) => read('uniforms', [source, 'value', AXES[at] ?? 'x']);
+      const from = feed(id, param, row);
       if (from === null) continue;
-      const width = frame?.length ?? fixed?.length ?? shared?.size ?? 0;
-      if (width !== size) throw new Error(`Nine look binding ${id}.${param}: ${String(size)} components from ${String(width)}`);
+      const size = SIZE[row.type as keyof typeof SIZE];
       for (let at = 0; at < size; at++) outputs.push({ target: id, path: port(param, at, size), expr: from(at) });
     }
   }
   return outputs;
+}
+
+// QA 11-24 row 9 (Jake: "ITS THAT ITS ALL BLACK"): a host that runs no post-graph look (a data cell in the grid, a
+// `wildshard dev` page) never feeds the frame channels, so every bound param kept its authored 0 and the city drew black
+// (paint, shade, wash and windows all zero). Each bound param now rests at the value the channels give it on the first
+// frame at the spawn: the shared rows' values (colours linear, as the live uniforms hold them), the constant washes and the
+// frame's numbers for an eye at the spawn. The live feed still writes over them every frame where the look runs.
+const REST_VIEW: Readonly<Record<string, number>> = (() => {
+  const fov = (70 * Math.PI) / 180, p11 = 1 / Math.tan(fov / 2);
+  return { eyeX: 0.95, eyeY: 126.6, eyeZ: 7.5, rootX: 0, rootY: 0, rootZ: 0, near: 0.1, p11, p00: p11 / (16 / 9) };
+})();
+function restUniform(path: readonly (string | number)[]): number {
+  const [name, , part] = path, row = typeof name === 'string' ? (SHARED_ROWS[name] as Row | undefined) : undefined;
+  if (row === undefined) return 0;
+  if (typeof row === 'number') return row;
+  if ('rgb' in row) { const c = new Color(row.rgb); return part === 'g' ? c.g : part === 'b' ? c.b : c.r; }
+  if ('v4s' in row) { const v = (row as { v4s: readonly (readonly number[])[] }).v4s[Number(part ?? 0)] ?? []; return v[AXES.indexOf((path[3] ?? 'x') as 'x')] ?? 0; }
+  for (const key of ['v2', 'v3', 'v4'] as const) {
+    if (!(key in row)) continue;
+    const raw = (row as Record<string, readonly number[]>)[key] ?? [], unit = (row as { normalize?: boolean }).normalize === true ? Math.hypot(...raw) || 1 : 1;
+    return (raw[AXES.indexOf((part ?? 'x') as 'x')] ?? 0) / unit;
+  }
+  return 0;
+}
+const BINARY: Readonly<Record<string, (a: number, b: number) => number>> = {
+  add: (a, b) => a + b, sub: (a, b) => a - b, mul: (a, b) => a * b, div: (a, b) => a / b, min: Math.min, max: Math.max,
+  gt: (a, b) => (a > b ? 1 : 0), lt: (a, b) => (a < b ? 1 : 0), ge: (a, b) => (a >= b ? 1 : 0), le: (a, b) => (a <= b ? 1 : 0), pow: Math.pow,
+};
+/** an expression's number on the resting frame (the clock at 0, the eye at the spawn) */
+function rest(expr: Expr): number {
+  const b = {
+    constant: (value: number) => value, clock: () => 0,
+    binary: (op: string, x: number, y: number) => { const f = BINARY[op]; if (f === undefined) throw new Error(`Nine rest value: no ${op}`); return f(x, y); },
+  } as unknown as Parameters<Expr>[0];
+  return expr(b, (owner, path) => owner === 'view' ? REST_VIEW[String(path[0])] ?? 0 : owner === 'uniforms' ? restUniform(path) : 0);
+}
+
+/** `graph` with every bound param at its resting value (unbound looks and unfed params keep their own) */
+export function withRestingParams<G extends GraphIr>(id: string, graph: G): G {
+  if (!(bindings.graphs as readonly string[]).includes(id) || graph.params === undefined) return graph;
+  const params = Object.fromEntries(Object.entries(graph.params).map(([param, row]) => {
+    const from = feed(id, param, row);
+    if (from === null) return [param, row];
+    const size = SIZE[row.type as keyof typeof SIZE], values = Array.from({ length: size }, (_, at) => rest(from(at)));
+    return [param, { ...row, value: size === 1 ? values[0] ?? 0 : values }];
+  }));
+  return { ...graph, params };
 }
 
 const looks = lookBindings();
