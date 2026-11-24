@@ -4,7 +4,7 @@
 // compares too. Rapier and float math may differ by platform, so each
 // platform keeps its own baseline. A missing entry fails rather than skips.
 //
-// Re-record after an engine or content change, on each platform:
+// Re-record after a content change, or an engine change that moves the digest, on each platform:
 //   CHECKPOINT_BASELINE=record node --test test/ci/product-play.test.mjs
 // Linux values come from the CI failure message, which prints the entry.
 import { createHash } from 'node:crypto';
@@ -30,6 +30,21 @@ function read() {
   return existsSync(FILE) ? JSON.parse(readFileSync(FILE, 'utf8')) : {};
 }
 
+/** `0.1.80-next.be7e944e` as [0, 1, 80, 0] and `0.1.80` as [0, 1, 80, 1]: a prerelease sorts before its release. */
+function engineOrder(engine) {
+  const [core = '', pre] = engine.split('-');
+  return [...core.split('.').map(Number), pre === undefined ? 1 : 0];
+}
+/** This platform's digest for `slug` on the newest engine that recorded one. */
+function newestRecorded(all, slug) {
+  const rows = Object.entries(all).flatMap(([key, row]) => {
+    const [engine, platform] = key.split(' ');
+    return platform === PLATFORM && row[slug] !== undefined ? [{ order: engineOrder(engine), digest: row[slug] }] : [];
+  });
+  rows.sort((a, b) => { for (let i = 0; i < 4; i++) if (a.order[i] !== b.order[i]) return (a.order[i] ?? 0) - (b.order[i] ?? 0); return 0; });
+  return rows.at(-1)?.digest;
+}
+
 /** Throws unless `digest` is this platform's recorded checkpoint for `slug` on `engine`. */
 export function assertCheckpointBaseline(slug, digest, engine) {
   const all = read(), key = `${engine} ${PLATFORM}`;
@@ -42,6 +57,13 @@ export function assertCheckpointBaseline(slug, digest, engine) {
   }
   const want = all[key]?.[slug];
   if (want === digest) return;
+  // SHARD-COMPAT PR6: a checkpoint is keyed to the shard's content, not the engine version. An engine with no row of its
+  // own passes when the walk ends where it ended on the newest engine recorded for this platform (Nine, Sky Reach,
+  // Driftwood and Pine read the same digest from 0.1.65 to 0.1.80); a different digest still fails and is recorded.
+  if (want === undefined && newestRecorded(all, slug) === digest) {
+    console.log(`checkpoint baseline: ${slug} on ${key} matches the newest recorded engine's digest`);
+    return;
+  }
   const entry = JSON.stringify({ [key]: { [slug]: digest } });
   throw new Error(want === undefined
     ? `${slug}: no checkpoint baseline for ${key} in ${FILE}; record it (CHECKPOINT_BASELINE=record) or add ${entry}`
