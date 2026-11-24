@@ -5,6 +5,10 @@ name: publish
 # there, never in a shard repo. From any machine or a phone:
 #   gh workflow run publish.yml -R project-wildshard/shard-nine-dragon -f channel=staging
 #   (-f slug=<slug> when the repo builds more than one; -f version=X.Y.Z)
+# The version is package.json's (SHARD-COMPAT CP13): bump it in the repo; a
+# version that does not rise above the catalogue's is refused before upload.
+# After the cook, `record` tags the commit r<revision> and commits
+# published.json (version, revision, digest, channel) back to main.
 # `build` gates, checks, builds and prepares with no secret in reach; only
 # `upload` reads the org secrets, inside the channel's environment.
 on:
@@ -20,9 +24,9 @@ on:
         options: [staging, prod]
         default: staging
       version:
-        description: X.Y.Z, or auto (the catalogue's version, patch + 1)
+        description: repo (package.json's version, must rise), X.Y.Z, or auto (the catalogue's patch + 1)
         type: string
-        default: auto
+        default: repo
       engine:
         description: Exact candidate engine commit (empty keeps the pin)
         type: string
@@ -39,11 +43,6 @@ on:
         description: Run every gate, the build and prepare; never upload
         type: boolean
         default: false
-      runner:
-        description: Where prepare's phone WebKit runs (SP5 measured both; hosted macOS arm64 is capacity-limited)
-        type: choice
-        options: [ubuntu-24.04, macos-15]
-        default: ubuntu-24.04
 
 permissions:
   contents: read
@@ -52,13 +51,14 @@ permissions:
 # Ships of one slug run one at a time; each rehearsal has its own group,
 # so a rehearsal never displaces a waiting ship.
 concurrency:
-  group: publish-${{ inputs.slug || github.repository }}-${{ inputs.rehearse && format('rehearse-{0}-{1}-{2}', github.ref_name, inputs.runner, github.run_id) || 'ship' }}
+  group: publish-${{ inputs.slug || github.repository }}-${{ inputs.rehearse && format('rehearse-{0}-{1}', github.ref_name, github.run_id) || 'ship' }}
   cancel-in-progress: false
 
 jobs:
   build:
-    runs-on: ${{ inputs.runner }}
-    timeout-minutes: 45
+    runs-on: ubuntu-24.04
+    # FR-A3: the gate waits up to 30 minutes for this commit's ci, then the slowest green build (open plots) is 43.
+    timeout-minutes: 80
     env:
       APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
       CANDIDATE_ENGINE: ${{ inputs.engine }}
@@ -219,6 +219,8 @@ jobs:
       upload_id: ${{ steps.report.outputs.upload_id }}
       revision: ${{ steps.report.outputs.revision }}
       hash: ${{ steps.report.outputs.hash }}
+      # QA-11-23-b row 45: the version the API holds the bytes as; unchanged bytes keep the version that holds them.
+      version: ${{ steps.report.outputs.version }}
     environment: ${{ inputs.channel }}
     env:
       APP_CLIENT_ID: ${{ secrets.APP_CLIENT_ID }}
@@ -282,7 +284,9 @@ jobs:
         run: |
           test -n "$WILDSHARD_API_KEY" || { echo '::error::no WILDSHARD_API_KEY org secret reaches this repo'; exit 1; }
           set -o pipefail
-          pnpm exec wildshard upload "tmp/publish/$SLUG.shardfile" --channel "$CHANNEL" --version "$VERSION" --no-wait 2>&1 | tee tmp/publish/upload.log
+          # FAST-RELEASE FR-A6: bytes the catalogue already holds under another version are a green no-op, not a red run.
+          pnpm exec wildshard upload "tmp/publish/$SLUG.shardfile" --channel "$CHANNEL" --version "$VERSION" --no-wait 2>&1 | tee tmp/publish/upload.log ||
+            node scripts/publish-shard.mjs unchanged tmp/publish/upload.log
       - name: Accepted upload, or committed revision and grid line
         id: report
         run: node scripts/publish-shard.mjs summary "$SLUG" "$CHANNEL" tmp/publish/upload.log "tmp/publish/$SLUG.shardfile"
@@ -295,13 +299,17 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 110
     environment: ${{ inputs.channel }}
+    outputs:
+      revision: ${{ steps.report.outputs.revision }}
     env:
       SLUG: ${{ needs.build.outputs.slug }}
       CHANNEL: ${{ inputs.channel }}
       HASH: ${{ needs.upload.outputs.hash }}
       UPLOAD_ID: ${{ needs.upload.outputs.upload_id }}
+      # QA-11-23-b row 50: what the follow-up's record job writes to published.json.
+      VERSION: ${{ needs.upload.outputs.version || needs.build.outputs.version }}
       NIGHTLY_APP_CLIENT_ID: ${{ secrets.NIGHTLY_APP_CLIENT_ID }}
-      # QA-11-23-b row 48: past the wait, hand the cook to publish-cook.yml instead of ending red.
+      # QA-11-23-b row 49: past the wait, hand the cook to publish-cook.yml instead of ending red.
       PUBLISH_COOK_HANDOFF: 'true'
     permissions:
       contents: read
@@ -339,12 +347,58 @@ jobs:
             -F "client_payload[slug]=$SLUG" -F "client_payload[revision]=$REVISION" \
             -F "client_payload[hash]=$HASH" -F "client_payload[channel]=$CHANNEL"
           echo "engine shard-pin dispatched for $SLUG rev $REVISION" >> "$GITHUB_STEP_SUMMARY"
-      # QA-11-23-b row 48 (J505): a cook past this job's wait goes on in publish-cook.yml, which pins it on its verdict.
+      # QA-11-23-b row 49 (J505): a cook past this job's wait goes on in publish-cook.yml, which pins it on its verdict.
       - name: Hand a slow cook to publish-cook.yml
         if: steps.report.outputs.handoff == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow run publish-cook.yml --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" \
-            -f slug="$SLUG" -f channel="$CHANNEL" -f hash="$HASH" -f upload_id="$UPLOAD_ID" -f hop=1
+            -f slug="$SLUG" -f channel="$CHANNEL" -f hash="$HASH" -f upload_id="$UPLOAD_ID" -f hop=1 \
+            -f version="$VERSION" -f built="$GITHUB_SHA"
           echo "the cook goes on in publish-cook.yml (hop 1); it asks engine for the pin on its verdict" >> "$GITHUB_STEP_SUMMARY"
+
+  # SHARD-COMPAT CP13: the repo records what it published. The built commit gets tag r<revision> (<slug>-r<revision>
+  # when r<revision> names another slug's commit) and main gets published.json. Engine's pins stop being the only record.
+  record:
+    needs: [build, upload, cook]
+    if: ${{ needs.cook.outputs.revision != '' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    env:
+      SLUG: ${{ needs.build.outputs.slug }}
+      VERSION: ${{ needs.upload.outputs.version || needs.build.outputs.version }}
+      REVISION: ${{ needs.cook.outputs.revision }}
+      HASH: ${{ needs.upload.outputs.hash }}
+      CHANNEL: ${{ inputs.channel }}
+      BUILT: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: package.json
+      - name: Tag the built commit and commit published.json
+        id: record
+        run: |
+          node scripts/publish-shard.mjs record "$SLUG" "$VERSION" "$REVISION" "$HASH" "$CHANNEL" "$BUILT"
+          tag=$(sed -n 's/^tag=//p' "$GITHUB_OUTPUT" | tail -1)
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+            git tag "$tag" "$BUILT"
+            git push origin "refs/tags/$tag"
+          fi
+          git add published.json
+          if git diff --cached --quiet; then
+            echo "published.json already records $SLUG rev $REVISION"
+          else
+            git commit -m "chore(publish): $SLUG $VERSION r$REVISION on $CHANNEL" -m "SHARD-COMPAT CP13: recorded by publish.yml run $GITHUB_RUN_ID."
+            git push origin HEAD || { git pull --rebase origin HEAD && git push origin HEAD; }
+          fi
+          echo "$SLUG $VERSION: tag $tag, published.json on main" >> "$GITHUB_STEP_SUMMARY"

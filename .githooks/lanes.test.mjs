@@ -38,6 +38,18 @@ describe('check lanes', () => {
     assert.match(refused.stderr, /frozen binary tool install failed/);
     assert.equal(readFileSync(join(box.root, 'calls'), 'utf8').trim(), 'exec npr install --frozen');
   });
+  test('a repo with scripts/release-reuse.mjs skips the push lane for a release-only push (FAST-RELEASE FR2)', () => {
+    const box = sandbox();
+    toolchain(box, { ...pass, check: 'false' });
+    box.write('scripts/release-reuse.mjs', "export const releaseOnlyPush = (_root, refs) => ({ ok: refs.includes('refs/tags/v1.2.3'), reason: 'release-only push (test)' });\n");
+    const push = (refs) => spawnSync(process.execPath, ['.githooks/run-checks.mjs', 'push'], { cwd: box.root, env: { ...ENV, WS_PUSH_REFS: refs }, encoding: 'utf8' });
+    const skipped = push(`refs/tags/v1.2.3 ${'a'.repeat(40)} refs/tags/v1.2.3 ${'0'.repeat(40)}`);
+    assert.equal(skipped.status, 0, skipped.stderr);
+    assert.match(skipped.stderr, /release-only push \(test\): push lane skipped/);
+    const gated = push('');
+    assert.notEqual(gated.status, 0);
+    assert.match(gated.stderr, /pnpm check failed/);
+  });
   test('no package.json scripts: lanes stay dormant', () => {
     const result = sandbox().commit({ 'src/a.ts': 'export {};\n' }, MSG);
     assert.equal(result.status, 0, result.stderr);
