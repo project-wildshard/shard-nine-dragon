@@ -116,7 +116,6 @@
       },
       "equipment": {
         "id": "weapon.jian",
-        "legacySlot": "sword",
         "ui": {
           "swapIcon": "<path d=\"M20.5 3.5 9.2 14.8M20.5 3.5l-.6 4.2M20.5 3.5l-4.2.6\"/><path d=\"M6.6 12.2l5.2 5.2M8.4 15.6 4 20\"/>",
           "name": "Neon Jian",
