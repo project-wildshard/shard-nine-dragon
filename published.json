@@ -1,0 +1,9 @@
+{
+  "nine-dragon-stack": {
+    "version": "0.0.10",
+    "revision": 11,
+    "hash": "a38ee0a18e59d2e7860a7a6e9320bf1aa3d089ce5b39566a4a23f7b6f7f6689c",
+    "channel": "staging",
+    "commit": "07204769201ae061bfd5908e386bb4573c131179"
+  }
+}
