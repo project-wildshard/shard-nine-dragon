@@ -69,8 +69,29 @@ if (process.argv[1]?.endsWith('/bin/wildshard.mjs') && process.argv[2] === 'memo
     });
   }
   const connect = chromium.connectOverCDP.bind(chromium);
+  // QA 11-25 row 40: on the hosted runner's software GL a requested dump can come back `success: false`, with a guid but
+  // no dump in the trace, and the pinned probe (engine 0.1.80) then refuses the run on the count. A failed dump is no
+  // reading: hand the probe an empty guid, which it already skips, and say how many were asked, failed and traced.
+  const dumps = { asked: 0, failed: 0, traced: new Set() };
+  process.on('exit', () => {
+    if (dumps.asked > 0) console.error(`Nine memory dumps: ${String(dumps.asked)} asked, ${String(dumps.failed)} failed, ${String(dumps.traced.size)} in the trace`);
+  });
   chromium.connectOverCDP = async (...args) => {
     const browser = await connect(...args);
+    const newBrowserCDPSession = browser.newBrowserCDPSession.bind(browser);
+    browser.newBrowserCDPSession = async () => {
+      const session = await newBrowserCDPSession(), send = session.send.bind(session);
+      session.on('Tracing.dataCollected', event => { for (const row of event.value) if (row?.ph === 'v') dumps.traced.add(row.id); });
+      session.send = async (method, params) => {
+        const result = await send(method, params);
+        if (method !== 'Tracing.requestMemoryDump') return result;
+        dumps.asked++;
+        if (result?.success !== false) return result;
+        dumps.failed++;
+        return { ...result, dumpGuid: '' };
+      };
+      return session;
+    };
     const newContext = browser.newContext.bind(browser);
     browser.newContext = async (...contextOptions) => {
       const context = await newContext(...contextOptions);
