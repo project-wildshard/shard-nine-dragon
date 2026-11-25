@@ -15,7 +15,7 @@
     "typecheck": "echo 'typecheck: the strict src/ pass (A9) is not yet green here; the old scope (kit/) retired with kit/'",
     "lint": "pnpm lint:shards",
     "format:check": "npr oxfmt --check src",
-    "fix": "WILDSHARD_RATCHET_FILE=lint/ratchet.json node src/scripts/.kit/bin-tools.mjs -c .oxlintrc.author.json --tsconfig tsconfig.lint.json src --fix && npr oxfmt --no-error-on-unmatched-pattern src",
+    "fix": "WILDSHARD_RATCHET_FILE=lint/ratchet.json node src/scripts/.kit/bin-tools.mjs -c .oxlintrc.author.json src --fix && npr oxfmt --no-error-on-unmatched-pattern src",
     "format": "npr oxfmt --no-error-on-unmatched-pattern src",
     "test": "pnpm test:kit && pnpm test:shards",
     "check:asks": "node src/scripts/.kit/asks.mjs check",
@@ -30,7 +30,7 @@
     "pack:shards": "node src/scripts/pack-all.mjs",
     "test:kit": "node --test 'src/test/.kit/*.test.mjs' '.githooks/*.test.mjs' '.agents/hooks/test/*.test.mjs'",
     "test:shards": "vitest run",
-    "lint:shards": "WILDSHARD_RATCHET_FILE=lint/ratchet.json node src/scripts/.kit/bin-tools.mjs -c .oxlintrc.author.json --tsconfig tsconfig.lint.json --deny-warnings src",
+    "lint:shards": "WILDSHARD_RATCHET_FILE=lint/ratchet.json node src/scripts/.kit/bin-tools.mjs -c .oxlintrc.author.json --deny-warnings src",
     "check:bin-pins": "node src/scripts/.kit/bin-pins.mjs"
   },
   "dependencies": {

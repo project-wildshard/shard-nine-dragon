@@ -152,8 +152,6 @@ jobs:
         run: node --test test/ci/well-crossing.test.mjs
       # Ring 3 is downstream product compatibility; unchanged hook tooling
       # stays on ordinary push/PR CI rather than spending its five-minute cap.
-      - if: github.event_name == 'push' || github.event_name == 'pull_request'
-        run: pnpm test:hooks
       - name: Name the commits this verdict covers
         if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         continue-on-error: true
