@@ -3,8 +3,8 @@ import { expect, test } from 'vitest';
 import { NodeIO, type Document, type Node, type Primitive } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
 import { MeshoptDecoder } from 'meshoptimizer';
-// @ts-expect-error -- plain JS build script (scripts/ is outside the typed tree)
-import { MERGES, phoneRig, simplifiedRig, SOURCE, TARGET } from '../scripts/nine-phone-rig.mjs';
+// @ts-expect-error -- plain JS build script (src/scripts/ is outside the typed tree)
+import { MERGES, phoneRig, simplifiedRig, SOURCE, TARGET } from '../src/scripts/nine-phone-rig.mjs';
 
 type Merge = { readonly name: string; readonly from: readonly string[] };
 type Mat = number[];
@@ -86,7 +86,7 @@ test('the phone rig simplifies every mesh, merges its plain and hull groups with
   const source = new Uint8Array(readFileSync(SOURCE));
   const baked = await phoneRig(source), again = await phoneRig(source);
   expect(Buffer.compare(Buffer.from(baked.bytes), Buffer.from(again.bytes))).toBe(0);
-  // the checked-in copy is the bake (else: node scripts/nine-phone-rig.mjs)
+  // the checked-in copy is the bake (else: node src/scripts/nine-phone-rig.mjs)
   expect(Buffer.compare(readFileSync(TARGET), Buffer.from(baked.bytes))).toBe(0);
   const [desktop, phone, { doc: simple }] = await Promise.all([io.readBinary(source), io.readBinary(baked.bytes), simplifiedRig(source)]);
 

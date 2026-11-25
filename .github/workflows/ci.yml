@@ -75,7 +75,7 @@ jobs:
         env:
           CANDIDATE_ENGINE: ${{ inputs.engine || github.event.client_payload.engine }}
           CANDIDATE_SHARDDEV: ${{ inputs.sharddev || github.event.client_payload.sharddev }}
-        run: node scripts/select-candidate.mjs
+        run: node src/scripts/select-candidate.mjs
       - name: Install pinned or candidate dependency graph
         env:
           CANDIDATE_ENGINE: ${{ inputs.engine || github.event.client_payload.engine }}
@@ -91,9 +91,9 @@ jobs:
           path: ~/.cache/npm-bin-deps
           key: npr-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.bin-deps/package.json', '.bin-deps/package-lock.json') }}
       - run: pnpm exec npr install --frozen
-      - run: node kit/scripts/bin-pins.mjs
+      - run: node src/scripts/.kit/bin-pins.mjs
       - name: Prove the installed global store
-        run: node scripts/assert-store-layout.mjs
+        run: node src/scripts/.kit/assert-store-layout.mjs
       # The agent hook scripts are shellchecked in pnpm check, at this exact
       # version (.agents/hooks/test/shellcheck.test.mjs refuses any other on CI).
       # MR6: hosted runners are Linux/X64, the Mac mini's VM is Linux/ARM64;
@@ -123,7 +123,7 @@ jobs:
           path: tmp/ci21-map/
           if-no-files-found: ignore
       - name: Keep the cleared queue and public imports honest
-        run: node scripts/check-test-boundary.mjs
+        run: node src/scripts/check-test-boundary.mjs
       - name: Build shard products on the runner
         if: github.event_name != 'push'
         run: pnpm build:shards
@@ -223,7 +223,7 @@ jobs:
         env:
           CANDIDATE_ENGINE: ${{ inputs.engine || github.event.client_payload.engine }}
           CANDIDATE_SHARDDEV: ${{ inputs.sharddev || github.event.client_payload.sharddev }}
-        run: node scripts/select-candidate.mjs
+        run: node src/scripts/select-candidate.mjs
       - name: Install pinned or candidate dependency graph
         env:
           CANDIDATE_ENGINE: ${{ inputs.engine || github.event.client_payload.engine }}
@@ -293,7 +293,7 @@ jobs:
         env:
           CANDIDATE_ENGINE: ${{ inputs.engine }}
           CANDIDATE_SHARDDEV: ${{ inputs.sharddev }}
-        run: node scripts/select-candidate.mjs
+        run: node src/scripts/select-candidate.mjs
       - name: Install pinned or candidate graph
         env:
           CANDIDATE_ENGINE: ${{ inputs.engine }}
@@ -305,7 +305,7 @@ jobs:
             pnpm install --frozen-lockfile --config.ci=false
           fi
       - name: Prove the installed global store
-        run: node scripts/assert-store-layout.mjs
+        run: node src/scripts/.kit/assert-store-layout.mjs
       # The paths ring-2-cook.yml's push trigger watched, plus ci.yml.
       # A plan/** push compares against main, not the branch's last tip, so
       # land never fast-forwards a branch whose watched change skipped Ring 2.
@@ -317,7 +317,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           BEFORE: ${{ startsWith(github.ref, 'refs/heads/plan/') && 'main' || github.event.before }}
         run: |
-          watched='^(\.github/workflows/(ci|ring-2-cook)\.yml$|\.github/actions/|src/|test/|scripts/|lint/|package\.json$|pnpm-lock\.yaml$|pnpm-workspace\.yaml$|tsconfig[^/]*\.json$|vitest\.config\.[^/]*$|\.npmrc$|\.gitattributes$|\.oxlintrc\.author\.json$)'
+          watched='^(\.github/workflows/(ci|ring-2-cook)\.yml$|\.github/actions/|src/|test/|src/scripts/|lint/|package\.json$|pnpm-lock\.yaml$|pnpm-workspace\.yaml$|tsconfig[^/]*\.json$|vitest\.config\.[^/]*$|\.npmrc$|\.gitattributes$|\.oxlintrc\.author\.json$)'
           play=true
           if [ -n "$BEFORE" ] && [ "$BEFORE" != 0000000000000000000000000000000000000000 ] &&
             files=$(gh api "repos/$GITHUB_REPOSITORY/compare/$BEFORE...$GITHUB_SHA" --jq '.files[].filename') &&
@@ -421,7 +421,7 @@ jobs:
         env:
           CANDIDATE_ENGINE: ${{ inputs.engine || github.event.client_payload.engine }}
           CANDIDATE_SHARDDEV: ${{ inputs.sharddev || github.event.client_payload.sharddev }}
-        run: node scripts/select-candidate.mjs
+        run: node src/scripts/select-candidate.mjs
       - name: Install pinned or candidate dependency graph
         env:
           CANDIDATE_ENGINE: ${{ inputs.engine || github.event.client_payload.engine }}
@@ -433,6 +433,6 @@ jobs:
             pnpm install --frozen-lockfile --config.ci=false
           fi
       - name: Prove the installed global store
-        run: node scripts/assert-store-layout.mjs
+        run: node src/scripts/.kit/assert-store-layout.mjs
       - name: Build the shards twice and compare every product byte
         run: pnpm check:build-twice

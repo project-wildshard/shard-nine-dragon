@@ -66,7 +66,7 @@ jobs:
         env:
           CANDIDATE_ENGINE: ${{ inputs.engine }}
           CANDIDATE_SHARDDEV: ${{ inputs.sharddev }}
-        run: node scripts/select-candidate.mjs
+        run: node src/scripts/select-candidate.mjs
       - name: Install pinned or candidate graph
         env:
           CANDIDATE_ENGINE: ${{ inputs.engine }}
@@ -78,7 +78,7 @@ jobs:
             pnpm install --frozen-lockfile --config.ci=false
           fi
       - name: Prove the installed global store
-        run: node scripts/assert-store-layout.mjs
+        run: node src/scripts/.kit/assert-store-layout.mjs
       - name: Build this repo's real shard
         run: pnpm build:shards
       - name: Cook, grapple and restore from server files
