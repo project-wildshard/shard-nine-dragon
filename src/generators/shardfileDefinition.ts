@@ -88,9 +88,9 @@ const viewMemory = movers.pages * 65536 * 2;
 // OF21: as an ordinary upload Nine's library meets the format's 8 MB default library allowance, which refuses it.
 // Nine records its own line instead (J439/J444: new content moves the line; J437: never cut content to fit an old
 // number): this definition's library bytes on 2026-11-20, to which the build adds each later step's growth. Re-recorded
-// 2026-11-25 for QA 11-24 row 52 (real bars and banyan leaves, J510): 88.2 MB built. Re-record it when the definition's
-// library grows; the hard ceiling is a shard's 100 MB phone download (J338), which this line never moves.
-const NINE_LIBRARY_ALLOWANCE = 29_493_846;
+// 2026-11-25 for QA 11-25 row 46 (J519): the banyan leaf cards are back and the real bars stay, 70.8 MB built. Re-record
+// it when the definition's library grows; the hard ceiling is a shard's 100 MB phone download (J338).
+const NINE_LIBRARY_ALLOWANCE = 12_106_054;
 const budgets = { ...base.budgets, tier: 'large' as const, sim: { resident: navigationResident+courseMemory, compressed: navigation.files.reduce((sum, file) => sum + file.compressed, 0)+courseBytes }, library: { compressed: charged.reduce((sum, file) => sum + file.compressed, 0), resident: charged.reduce((sum, file) => sum + file.decoded + file.gpu, 0) + viewMemory, downloadAllowance: NINE_LIBRARY_ALLOWANCE } };
 // parseShardfile admits each link against the format's PortalLink schema (strict nodes, bound links, the walked route)
 return { ...base, plumbing, budgets, navigation: navigation.navigation, critical: navigation.critical,

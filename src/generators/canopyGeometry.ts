@@ -4,7 +4,6 @@
 // (../world/canopy.ts `buildCanopy`).
 import { BufferGeometry, Float32BufferAttribute, Uint32BufferAttribute, Vector3 } from 'three';
 import { Rng } from '@wildshard/sdk/random';
-import LEAF_TEXELS from '../data/leafTexels.json' with { type: 'json' };
 /** one lump of foliage: centre, radii (x, y, z; axis-aligned), how high it sits on its shelf, a seed */
 export interface Lump { c: Vector3; r: Vector3; up: number; seed: number; wash: number }
 
@@ -93,17 +92,9 @@ export interface CardOpt {
 }
 export const CARDS: CardOpt = { perM2: 3.6, size: 1.5, lift: [0.6, 1.0], tilt: 0.55, bias: 0.35, tiles: 2 };
 
-/** leaves per cluster (QA 11-24 row 52): each card's place now holds this many geometry leaves */
-export const LEAF_COUNT = 12;
-/** the leaf atlas's solid texels per tile (./leafTexels.ts) */
-const TILE_TEXELS: readonly (readonly (readonly [number, number])[])[] = LEAF_TEXELS as [number, number][][];
-/** a cluster's own small stream, so its leaves never shift the canopy's shared `rng` (the core and the placements keep theirs) */
-const clusterRandom = (seed: number): (() => number) => { let k = 0; return () => { const x = Math.sin((seed + 1) * 12.9898 + (k++) * 78.233) * 43758.5453; return x - Math.floor(x); }; };
-
-/** leaf clusters over every lump, where the painted cards stood (double-sided leaves; the shading normal is the lump's) */
+/** painted leaf-cluster cards over every lump (double-sided quads; the shading normal is the lump's) */
 export function cardGeometry(lumps: readonly Lump[], rng: Rng, o: CardOpt = CARDS): BufferGeometry {
   const w = new Writer();
-  let cards = 0;
   const crown = crownOf(lumps);
   const up = new Vector3(0, 1, 0);
   for (const l of lumps) {
@@ -124,25 +115,16 @@ export function cardGeometry(lumps: readonly Lump[], rng: Rng, o: CardOpt = CARD
       const s = o.size * scale * rng.range(0.8, 1.2);
       const tile = rng.int(0, o.tiles * o.tiles - 1);
       const u0 = (tile % o.tiles) / o.tiles, v0 = Math.floor(tile / o.tiles) / o.tiles, ts = 1 / o.tiles;
-      rng.chance(0.5); // the old card's mirror: still drawn, so the stream (and the core after it) stays as it was
+      const flip = rng.chance(0.5);
       const tone = rng.next();
-      // QA 11-24 row 52 (J510): the painted leaf-cluster card is now that cluster as geometry: LEAF_COUNT leaves set
-      // through the card's own square, each pointing away from the card's stem end (its bottom middle) as the painted
-      // leaves do, tipped in and out of the card's plane and folded along its midrib; every leaf is one solid texel of
-      // its tile (one painted green), so no leaf is a picture and none is cut by alpha
-      const picks = TILE_TEXELS[tile] ?? [], cluster = clusterRandom(cards++), root = p.clone().addScaledVector(tu, -0.5 * s);
-      for (let leaf = 0; leaf < LEAF_COUNT; leaf++) {
-        const at = p.clone().addScaledVector(tr, (cluster() - 0.5) * 0.75 * s).addScaledVector(tu, (cluster() - 0.45) * 0.7 * s);
-        const len = s * (0.22 + 0.1 * cluster()), out = (cluster() - 0.5) * 1.1;
-        const dir = at.clone().sub(root).normalize().addScaledVector(cn, out).normalize();
-        const stem = at.clone().addScaledVector(dir, -len * 0.5);
-        const across = new Vector3().crossVectors(dir, cn).normalize(), width = len * 0.26, fold = cn.clone().multiplyScalar(len * 0.1);
-        const [lu, lv] = picks[Math.floor(cluster() * picks.length) % Math.max(1, picks.length)] ?? [u0 + ts / 2, 1 - (v0 + ts / 2)];
-        const tip = stem.clone().addScaledVector(dir, len), mid = stem.clone().addScaledVector(dir, len * 0.42).add(fold);
-        const corner = (q: Vector3): number => w.v(q, lumpNormal(l, q), lu, lv, 0, tone, innerAt(q, crown));
-        const a = corner(stem), b = corner(mid.clone().addScaledVector(across, width)), c = corner(tip), e = corner(mid.clone().addScaledVector(across, -width));
-        w.idx.push(a, b, c, a, c, e);
+      const base = w.n;
+      for (const [cx, cy] of [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]] as const) {
+        const q = p.clone().addScaledVector(tr, cx * s).addScaledVector(tu, cy * s);
+        const uu = flip ? 0.5 - cx : cx + 0.5;
+        // the atlas row 0 is the image top: v grows downward in the PNG, so the stem (image bottom) is v = 1 - …
+        w.v(q, lumpNormal(l, q), u0 + uu * ts, 1 - (v0 + (0.5 - cy) * ts), 0, tone, innerAt(q, crown));
       }
+      w.idx.push(base, base + 1, base + 2, base, base + 2, base + 3);
     }
   }
   return w.build();
