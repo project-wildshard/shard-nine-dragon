@@ -31,3 +31,6 @@ Fixups found by running the tools:
   green here yet.
 - The shard lint resolves through `tsconfig.lint.json`: the root tsconfig's
   `three` paths make oxlint misread namespace imports.
+
+Step 3: `agent-sync --from` on the lean layout re-points the kit skills
+at `src/scripts/.kit/`.
