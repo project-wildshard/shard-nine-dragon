@@ -69,12 +69,15 @@ if (process.argv[1]?.endsWith('/bin/wildshard.mjs') && process.argv[2] === 'memo
     });
   }
   const connect = chromium.connectOverCDP.bind(chromium);
-  // QA 11-25 row 40: on the hosted runner's software GL a requested dump can come back `success: false`, with a guid but
-  // no dump in the trace, and the pinned probe (engine 0.1.80) then refuses the run on the count. A failed dump is no
-  // reading: hand the probe an empty guid, which it already skips, and say how many were asked, failed and traced.
-  const dumps = { asked: 0, failed: 0, traced: new Set() };
+  // QA 11-25 row 40: on the hosted runner's software GL the boot is slow, and the pinned probe (engine 0.1.80) asks for
+  // a dump every tick: 186 on 2f1b2d8, where a phone-speed boot asks 40 to 50. The trace's default buffer filled and
+  // dropped the last dumps (179 traced), and a dump can also come back `success: false`, with a guid and nothing traced;
+  // either way the probe refuses the run on the count. The trace gets a buffer that holds them all, a failed dump is no
+  // reading (an empty guid, which the probe already skips), and the line below names the cause of any red.
+  const TRACE_BUFFER_KB = 256 * 1024;
+  const dumps = { asked: 0, failed: 0, traced: new Set(), lost: null };
   process.on('exit', () => {
-    if (dumps.asked > 0) console.error(`Nine memory dumps: ${String(dumps.asked)} asked, ${String(dumps.failed)} failed, ${String(dumps.traced.size)} in the trace`);
+    if (dumps.asked > 0) console.error(`Nine memory dumps: ${String(dumps.asked)} asked, ${String(dumps.failed)} failed, ${String(dumps.traced.size)} in the trace; data lost ${String(dumps.lost)}`);
   });
   chromium.connectOverCDP = async (...args) => {
     const browser = await connect(...args);
@@ -82,7 +85,10 @@ if (process.argv[1]?.endsWith('/bin/wildshard.mjs') && process.argv[2] === 'memo
     browser.newBrowserCDPSession = async () => {
       const session = await newBrowserCDPSession(), send = session.send.bind(session);
       session.on('Tracing.dataCollected', event => { for (const row of event.value) if (row?.ph === 'v') dumps.traced.add(row.id); });
+      session.on('Tracing.tracingComplete', event => { dumps.lost = event.dataLossOccurred ?? null; });
       session.send = async (method, params) => {
+        if (method === 'Tracing.start' && params?.traceConfig !== undefined && params.traceConfig.traceBufferSizeInKb === undefined)
+          params = { ...params, traceConfig: { ...params.traceConfig, traceBufferSizeInKb: TRACE_BUFFER_KB } };
         const result = await send(method, params);
         if (method !== 'Tracing.requestMemoryDump') return result;
         dumps.asked++;

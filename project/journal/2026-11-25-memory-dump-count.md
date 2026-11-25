@@ -11,3 +11,8 @@ The pinned probe (engine 0.1.80) counts every dump that came back with a guid, b
 dump can come back `success: false`, with a guid and nothing in the trace. The CI preload now hands the probe an empty
 guid for a failed dump, which it already skips, and prints how many dumps were asked, failed and traced, so a red
 names its cause.
+
+That was half of it. The next run (2f1b2d8) asked 186 dumps, one failed and only 179 reached the trace: the slow boot
+on software GL asks four times as many dumps as a phone-speed one, and the trace's default buffer filled and dropped
+the last of them. A 256 KB buffer reproduces the same refusal locally (40 asked, 1 traced, data lost). The preload now
+gives the trace a 256 MB buffer, and its line also says whether the trace lost data.
