@@ -14,7 +14,7 @@ export async function nineSourceProgram(): Promise<NineGeneratedProject> {
   mkdirSync('tmp', { recursive: true }); const cache = mkdtempSync(resolve('tmp', 'nine-program-fixture-'));
   try {
     const author = createProjectGeneration(resolve('src'), 'a'.repeat(64), new Map(), cache,
-      [{ prefix: '/assets/', directory: resolve('public/assets') }]);
+      [{ prefix: '/assets/', directory: resolve('src/static/assets') }]);
     return await generate({ ...author, proveStaticPortalEntries });
   } finally { rmSync(cache, { recursive: true, force: true }); }
 }

@@ -42,7 +42,7 @@ async function prepareColdOutput() {
   try {
     const project = resolve('src'), assets = new Map<string, Uint8Array>();
     const context = () => ({ ...createProjectGeneration(project, 'f'.repeat(64), assets, cache,
-      [{ prefix: '/assets/', directory: resolve('public/assets') }]), proveStaticPortalEntries });
+      [{ prefix: '/assets/', directory: resolve('src/static/assets') }]), proveStaticPortalEntries });
     const proofs = { calls: 0 };
     const coldContext = context();
     const cold = await nineSourceOutput({ ...coldContext, proveStaticPortalEntries: (...args) => {

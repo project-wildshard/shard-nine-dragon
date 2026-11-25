@@ -5,4 +5,4 @@ import { admitNativeSignAtlas } from '../../src/generators/nativeSignAtlas';
 
 /** The same seven checked native files supplied by the real shard entry. */
 export const nativeSignAtlas = admitNativeSignAtlas(new Map(inputs.map(row => [row.name,
-  new Uint8Array(readFileSync(`public${row.input}`))])), inputs);
+  new Uint8Array(readFileSync(`src/static${row.input}`))])), inputs);

@@ -18,8 +18,8 @@ import { MeshoptDecoder, MeshoptEncoder, MeshoptSimplifier } from 'meshoptimizer
 
 const ROOT = join(import.meta.dirname, '..');
 /** the authored rig, and the phone copy checked in beside it */
-export const SOURCE = join(ROOT, 'public/assets/nine-dragon/viewmodel/fp-rig.glb');
-export const TARGET = join(ROOT, 'public/assets/nine-dragon/viewmodel/fp-rig.phone.glb');
+export const SOURCE = join(ROOT, 'src/static/assets/nine-dragon/viewmodel/fp-rig.glb');
+export const TARGET = join(ROOT, 'src/static/assets/nine-dragon/viewmodel/fp-rig.phone.glb');
 /** the surface's largest move, in millimetres. A pixel of the phone frame (portrait, 78° FOV over ~1750 buffer px) is
  *  ~0.3 mm at the glove's 0.3 m from the eye and ~0.6 mm at the gauntlet and blade; at 1 mm the 402×874 captures of the
  *  spawn view (Chromium and WebKit) show no difference and the rig keeps ~30 % of its triangles. */

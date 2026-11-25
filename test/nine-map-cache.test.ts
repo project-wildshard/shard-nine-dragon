@@ -15,7 +15,7 @@ mkdirSync('tmp', { recursive: true });
 const cache = mkdtempSync(resolve('tmp', 'nine-map-cache-'));
 afterAll(() => { rmSync(cache, { recursive: true, force: true }); });
 const context = () => createProjectGeneration(resolve('src'), '7'.repeat(64), new Map(), cache,
-  [{ prefix: '/assets/', directory: resolve('public/assets') }]);
+  [{ prefix: '/assets/', directory: resolve('src/static/assets') }]);
 const pixelHash = (pixels: Uint8Array): string => createHash('sha256').update('map-rgba8/1\u00001000x1000\u0000').update(pixels).digest('hex');
 let paints = 0;
 // Cold admission precedes the hit cases: complete current-output comparisons stay
@@ -39,7 +39,7 @@ test('persistent hit reuses the paint while returning independent complete pixel
 });
 
 test('missing/extra inputs, altered native bytes and malformed map caches refuse', async () => {
-  const inputs = new Map(NINE_MAP_INPUTS.map(name => [name, new Uint8Array(readFileSync(resolve(`public${name}`)))]));
+  const inputs = new Map(NINE_MAP_INPUTS.map(name => [name, new Uint8Array(readFileSync(resolve(`src/static${name}`)))]));
   await expect(nineMapPixels(new Map())).rejects.toThrow('Nine map input inventory differs');
   await expect(nineMapPixels(new Map([...inputs, ['extra', new Uint8Array([1])]]))).rejects.toThrow('Nine map input inventory differs');
   inputs.set('/assets/nine-dragon/authored/sign-atlas/signAtlas.json', new Uint8Array([1]));
@@ -68,7 +68,7 @@ test('the actual map producer bundles without file, module or compiler services'
 
 test('lent casts preserve pixels and snapshot bytes before the paint callback',async()=>{
  const source=new Map([...preparedCasts].map(([name,bytes])=>[name,new Uint8Array(bytes)]));
- const inputs=new Map(NINE_MAP_INPUTS.map(name=>[name,new Uint8Array(readFileSync(resolve(`public${name}`)))]));
+ const inputs=new Map(NINE_MAP_INPUTS.map(name=>[name,new Uint8Array(readFileSync(resolve(`src/static${name}`)))]));
  const pixels=await nineMap({cached:(step,generate)=>{
   expect(step.native).toBe(true);expect(step.inputs).toEqual(NINE_MAP_INPUTS);
   expect(step.id).toMatch(/^world-map-[a-f0-9]{64}$/u);

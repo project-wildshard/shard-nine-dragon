@@ -14,7 +14,7 @@ Passes baked here (float, one shared atlas for both objects, written as .npy for
   pos  object-space position ×0.5 + 0.5 (the maps script evaluates every pattern at the texel's 3D point)
   id   the part tag index / 64 (which pattern a texel gets)
   cv   (edge, crease): 1 − N·bevel(1.5 mm) and 1 − AO(4 mm) — the curvature channel is built from both
-Then the objects get their class materials and are exported (glTF, Y-up) → meshopt → public/.
+Then the objects get their class materials and are exported (glTF, Y-up) → meshopt → src/static/.
 """
 import json
 import math
@@ -37,7 +37,7 @@ OPT = {a[2:].split('=')[0]: (a.split('=', 1)[1] if '=' in a else True) for a in 
 POS = [a for a in ARGV if not a.startswith('--')]
 SCRATCH = POS[0] if POS else '/tmp/gauntlet'
 REPO = os.path.abspath(os.path.join(HERE, '..', '..', '..', '..', '..', '..'))
-PUBLIC = os.path.join(REPO, 'public', 'assets', 'nine-dragon', 'lab', 'viewmodel')
+PUBLIC = os.path.join(REPO, 'src/static', 'assets', 'nine-dragon', 'lab', 'viewmodel')
 SIZE = int(OPT.get('size', 2048))
 SAMPLES = int(OPT.get('samples', 64))
 os.makedirs(SCRATCH, exist_ok=True)

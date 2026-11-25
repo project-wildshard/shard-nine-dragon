@@ -20,7 +20,7 @@ const practiceId = `practice-${hashImmutableBytes(text.encode(encodeCanonicalJso
 async function sourceInputs(): Promise<Awaited<ReturnType<typeof readNineShardfileInputs>>> {
   mkdirSync('tmp', { recursive: true }); const cache = mkdtempSync(resolve('tmp', 'nine-declaration-'));
   try {
-    const ctx = createProjectGeneration(resolve('src'), 'b'.repeat(64), new Map(), cache, [{ prefix: '/assets/', directory: resolve('public/assets') }]);
+    const ctx = createProjectGeneration(resolve('src'), 'b'.repeat(64), new Map(), cache, [{ prefix: '/assets/', directory: resolve('src/static/assets') }]);
     return await readNineShardfileInputs({ ...ctx, cached: (step, produce) => step.id === practiceId
       ? Promise.resolve(new Map([['practice.json', text.encode(encodeCanonicalJson(ninePracticeRows))], ['practice.wasm', Uint8Array.from(ninePracticeBytes)]]))
       : ctx.cached(step, produce) });

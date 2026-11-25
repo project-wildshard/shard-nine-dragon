@@ -25,7 +25,7 @@ POS = [a for a in ARGV if not a.startswith('--')]
 SCRATCH = POS[0]
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, '..', '..', '..', '..', '..', '..'))
-PUBLIC = POS[1] if len(POS) > 1 else os.path.join(REPO, 'public', 'assets', 'nine-dragon', 'lab', 'viewmodel')
+PUBLIC = POS[1] if len(POS) > 1 else os.path.join(REPO, 'src/static', 'assets', 'nine-dragon', 'lab', 'viewmodel')
 Q = int(OPT.get('q', 90))
 TAU = math.tau
 

@@ -1,11 +1,11 @@
 {
   "ASSET_GLOBS": [
-    "public/assets/nine-dragon/**",
-    "public/assets/gpu/nine-dragon/**",
-    "public/assets/music/nine-dragon-stack/**",
-    "public/assets/sfx/nine-dragon-stack/**",
-    "public/assets/title/nine-dragon-stack-portrait.jpg",
-    "public/assets/nine-dragon-stack/map/**"
+    "src/static/assets/nine-dragon/**",
+    "src/static/assets/gpu/nine-dragon/**",
+    "src/static/assets/music/nine-dragon-stack/**",
+    "src/static/assets/sfx/nine-dragon-stack/**",
+    "src/static/assets/title/nine-dragon-stack-portrait.jpg",
+    "src/static/assets/nine-dragon-stack/map/**"
   ],
   "BOOT_FILES": [
     "/assets/nine-dragon/paint/concrete.jpg",

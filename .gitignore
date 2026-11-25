@@ -17,9 +17,6 @@ blob-report/
 out/
 tmp/
 .cache/
-/public/assets/nine-dragon-stack/map/top.webp
-/public/assets/nine-dragon-stack/entry-reads.json
 /src/discovery.generated.ts
 /.owner
 # sdk 0.3 `wildshard check` writes its built product here
-/public/shardfiles/

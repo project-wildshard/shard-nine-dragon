@@ -13,7 +13,7 @@ import { parseSignView } from './sections.ts';
 const root = resolve(import.meta.dirname, '../../../..');
 const writer = byteWriter(process.argv.includes('--check'), 'nine-sign-atlas');
 // GD2: this explicit asset refresh/check publishes native inputs outside source.
-const outputData = resolve(root, 'public/assets/nine-dragon/authored/sign-atlas');
+const outputData = resolve(root, 'src/static/assets/nine-dragon/authored/sign-atlas');
 const entry = process.env.NINE_SIGN_ENTRY ?? resolve(import.meta.dirname, 'signAtlasPage.ts');
 const code = await bundleNativeRaster({ root, entry, format: 'iife', name: 'NineSignBake' });
 if (code === undefined) throw new Error('Nine sign page failed to bundle');

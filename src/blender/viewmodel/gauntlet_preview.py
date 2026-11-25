@@ -21,7 +21,7 @@ POS = [a for a in ARGV if not a.startswith('--')]
 SCRATCH, PREFIX = POS[0], POS[1]
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, '..', '..', '..', '..', '..', '..'))
-PUBLIC = os.path.join(REPO, 'public', 'assets', 'nine-dragon', 'lab', 'viewmodel')
+PUBLIC = os.path.join(REPO, 'src/static', 'assets', 'nine-dragon', 'lab', 'viewmodel')
 ONLY = set(str(OPT.get('only', 'eye,frame,side,toon')).split(','))
 
 

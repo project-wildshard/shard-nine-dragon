@@ -10,7 +10,7 @@ import { CAST_BLOBS } from '../../src/generators/castSources';
 async function sourceCasts(): Promise<Awaited<ReturnType<typeof nineCastsProgram>>> {
   mkdirSync('tmp', { recursive: true }); const cache = mkdtempSync(resolve('tmp', 'nine-cast-fixture-'));
   try { return await nineCastsProgram(createProjectGeneration(resolve('src'), 'd'.repeat(64), new Map(), cache,
-    [{ prefix: '/assets/', directory: resolve('public/assets') }])); }
+    [{ prefix: '/assets/', directory: resolve('src/static/assets') }])); }
   finally { rmSync(cache, { recursive: true, force: true }); }
 }
 export const CASTS = await sourceCasts();

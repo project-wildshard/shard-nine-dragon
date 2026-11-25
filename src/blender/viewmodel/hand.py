@@ -1,7 +1,7 @@
 # hand.py — lab P8 "viewmodel" (E169): the first-person gloved hands, built headless in Blender 5.2.
 #
 #   /opt/homebrew/bin/blender -b --factory-startup --python src/shards/nine-dragon-stack/blender/viewmodel/hand.py -- \
-#       --out public/assets/nine-dragon/lab/viewmodel --scratch <dir> [--only arm-r,hand-r,fist-l] [--voxel 0.0005]
+#       --out src/static/assets/nine-dragon/lab/viewmodel --scratch <dir> [--only arm-r,hand-r,fist-l] [--voxel 0.0005]
 #       [--tex 1024] [--tag n] [--no-export]
 #
 # Writes, per asset (hand-r, arm-r, fist-l), into --out:
@@ -40,7 +40,7 @@ from hand_model import Hand, DiagonalHand  # noqa: E402
 
 argv = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
 ap = argparse.ArgumentParser()
-ap.add_argument('--out', default='public/assets/nine-dragon/lab/viewmodel')
+ap.add_argument('--out', default='src/static/assets/nine-dragon/lab/viewmodel')
 ap.add_argument('--scratch', default='/tmp/hand')
 ap.add_argument('--only', default='arm-r,hand-r,fist-l')
 ap.add_argument('--voxel', type=float, default=0.0005)

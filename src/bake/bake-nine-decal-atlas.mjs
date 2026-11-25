@@ -36,7 +36,7 @@ try {
     if (image.width !== raster.width || image.height !== raster.height || !Buffer.from(image.pixels).equals(original)) throw new Error(`Decal PNG changes ${tier} reference pixels`);
     const source = nativeDecals[tier];
     if (!/^\/assets\/nine-dragon\/authored\/[a-z-]+\.png$/u.test(source.url)) throw new Error('Invalid authored decal output');
-    writer.put(resolve(root, 'public', source.url.slice(1)), bytes);
+    writer.put(resolve(root, 'src/static', source.url.slice(1)), bytes);
     console.log(`Nine ${tier} decal: ${raster.width}x${raster.height}, ${bytes.length} bytes, exact RGBA ${outputHash(original)}`);
   }
 } finally { await session.dispose(); }

@@ -24,8 +24,8 @@ SLOTS = ("nd-market", "nd-well", "nd-fight")
 
 
 def build(raw: Path, sfx_raw: Path, art: Path, dry: bool = False) -> dict:
-    music_dir = REPO / "public/assets/music" / SET
-    sfx_dir = REPO / "public/assets/sfx" / SET
+    music_dir = REPO / "src/static/assets/music" / SET
+    sfx_dir = REPO / "src/static/assets/sfx" / SET
     man = json.loads((music_dir / "music.json").read_text())
     sfx = json.loads((sfx_dir / "sfx.json").read_text())
     score = json.loads((HERE / "nd-score.json").read_text())

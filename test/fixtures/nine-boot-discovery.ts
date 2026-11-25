@@ -5,4 +5,4 @@ import { nineBootProgram } from '../../src/generators/bootDiscovery';
 
 /** Actual source operation using current presence facts; creates no intermediate output or cache entry. */
 export const bootDiscovery = nineBootProgram(createProjectGeneration(resolve('src'), 'f'.repeat(64), new Map(),
-  resolve('tmp/nine-boot-inventory'), [{ prefix: '/assets/', directory: resolve('public/assets') }]));
+  resolve('tmp/nine-boot-inventory'), [{ prefix: '/assets/', directory: resolve('src/static/assets') }]));
