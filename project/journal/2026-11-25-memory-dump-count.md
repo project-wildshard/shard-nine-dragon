@@ -16,3 +16,7 @@ That was half of it. The next run (2f1b2d8) asked 186 dumps, one failed and only
 on software GL asks four times as many dumps as a phone-speed one, and the trace's default buffer filled and dropped
 the last of them. A 256 KB buffer reproduces the same refusal locally (40 asked, 1 traced, data lost). The preload now
 gives the trace a 256 MB buffer, and its line also says whether the trace lost data.
+
+And one correction: a dump that answers `success: false` still writes its processes to the trace (2b48d83: 188 asked,
+1 failed, 188 traced, no data lost), so hiding it made the count one short the other way. The preload counts it and
+leaves it alone.
