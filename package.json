@@ -1,6 +1,6 @@
 {
   "name": "@wildshard/shard-nine-dragon",
-  "version": "0.0.0",
+  "version": "0.0.10",
   "private": true,
   "description": "Nine Dragon Stack: a Wildshard shard.",
   "type": "module",
