@@ -7,7 +7,7 @@
 // - timber bridges: a planked deck on stringers and knee braces, cinnabar lattice railings with a lantern on every
 //   other post, a little roofed pavilion (亭) over mid-span with its plaque, lightbox signs hung under the deck;
 // - steel catwalks: a sagging grated deck slung from two cables anchored under the gallery above, hangers, barred
-//   railings (alpha-cut), pipe runs and a neon strip along one edge;
+//   railings (real bars), pipe runs and a neon strip along one edge;
 // - the covered bridge (廊橋): lacquer walls with a band of lit windows under a glazed hip roof, lanterns, a neon sign;
 // - the gate bridge: the stone arch with a flat wide deck, dome B's paifang across its middle, a crowd;
 // - the sagging wire nets strung like hammocks between the fronts, tied off, with the rubbish they catch;
@@ -28,6 +28,7 @@ import { stand } from './well-galleries';
 import { NEON, clamp } from './util';
 import { Rng } from '@wildshard/sdk/random';
 import type { ColliderDesc } from '@wildshard/sdk/bake/placement';
+import { barPanel } from './realBars';
 
 const SURF = paint.surfaces;
 
@@ -379,7 +380,7 @@ function timberBridge(ctx: Ctx, k: Kit, B: BridgeSpec, rng: Rng): ColliderDesc[]
 }
 
 /** a steel catwalk: a sagging grated deck slung from two cables under the gallery above, hangers, barred railings */
-function steelCatwalk(ctx: Ctx, k: Kit, ka: Kit, B: BridgeSpec, rng: Rng): ColliderDesc[] {
+function steelCatwalk(ctx: Ctx, k: Kit, B: BridgeSpec, rng: Rng): ColliderDesc[] {
   const lod = B.lod ?? 0;
   const span = B.x1 - B.x0;
   const sag = Math.min(0.9, span * 0.035);
@@ -393,11 +394,11 @@ function steelCatwalk(ctx: Ctx, k: Kit, ka: Kit, B: BridgeSpec, rng: Rng): Colli
     k.quad4(new Vector3(x0, t0, zf), new Vector3(x1, t1, zf), new Vector3(x1, t1, zb), new Vector3(x0, t0, zb), len, B.w, { ...GRATE, edges: E.none }, x0, 0);
     k.quad4(new Vector3(x1, t1 - 0.06, zf), new Vector3(x0, t0 - 0.06, zf), new Vector3(x0, t0 - 0.06, zb), new Vector3(x1, t1 - 0.06, zb), len, B.w, { ...STEEL_DK, edges: E.none }, x1, 0);
     for (const [zz, s] of [[zf, 1], [zb, -1]] as const) {
-      // the edge channel, the barred railing panel (alpha-cut) and its top rail
+      // the edge channel, the barred railing panel (real bars, QA 11-24 row 52) and its top rail
       k.beam(new Vector3(x0, t0 - 0.1, zz), new Vector3(x1, t1 - 0.1, zz), 0.08, 0.22, STEEL);
       const a = new Vector3(x0, t0, zz), b = new Vector3(x1, t1, zz);
-      if (s > 0) ka.quad4(a, b, b.clone().setY(t1 + 1.05), a.clone().setY(t0 + 1.05), len, 1.05, { ...BARS, edges: E.none }, x0, 0);
-      else ka.quad4(b, a, a.clone().setY(t0 + 1.05), b.clone().setY(t1 + 1.05), len, 1.05, { ...BARS, edges: E.none }, x0, 0);
+      if (s > 0) barPanel(k, a, b, b.clone().setY(t1 + 1.05), a.clone().setY(t0 + 1.05), len, 1.05, BARS);
+      else barPanel(k, b, a, a.clone().setY(t0 + 1.05), b.clone().setY(t1 + 1.05), len, 1.05, BARS);
       k.beam(new Vector3(x0, t0 + 1.05, zz), new Vector3(x1, t1 + 1.05, zz), 0.06, 0.06, STEEL);
       if (i % 2 === 0) k.box(x0, t0, zz, 0.07, 1.05, 0.07, STEEL);
     }
@@ -540,11 +541,11 @@ function gateBridge(ctx: Ctx, k: Kit, kx: KitX, B: BridgeSpec, rng: Rng): Collid
 }
 
 /** build one crossing; returns its collision */
-export function bridge(ctx: Ctx, k: Kit, ka: Kit, kx: KitX, B: BridgeSpec): ColliderDesc[] {
+export function bridge(ctx: Ctx, k: Kit, kx: KitX, B: BridgeSpec): ColliderDesc[] {
   const rng = new Rng(B.seed);
   if (B.kind === 'stone') return stoneBridge(ctx, k, B, rng);
   if (B.kind === 'timber') return timberBridge(ctx, k, B, rng);
-  if (B.kind === 'steel') return steelCatwalk(ctx, k, ka, B, rng);
+  if (B.kind === 'steel') return steelCatwalk(ctx, k, B, rng);
   if (B.kind === 'covered') return coveredBridge(ctx, k, B, rng);
   return gateBridge(ctx, k, kx, B, rng);
 }
@@ -557,9 +558,9 @@ const DEBRIS: readonly Look[] = [
 /**
  * A sagging wire safety net strung like a hammock across the gap between the gallery fronts x0..x1, z0..z1, its rim at
  * height y, sagging `sag` m at the middle; ropes along its rim, tie-offs up to the fronts, and what it caught (paper,
- * a crate, a shoe, leaves). The mesh is in the alpha-cut kit, the ropes and the rubbish solid.
+ * a crate, a shoe, leaves). The mesh is real wire (QA 11-24 row 52, J510), the ropes and the rubbish solid.
  */
-export function net(k: Kit, ka: Kit, x0: number, x1: number, z0: number, z1: number, y: number, sag: number, seed = 1): void {
+export function net(k: Kit, x0: number, x1: number, z0: number, z1: number, y: number, sag: number, seed = 1): void {
   const rng = new Rng(seed);
   const nx = 12, nz = Math.max(3, Math.round((z1 - z0) / 1.2));
   const drop = (u: number, v: number): number => sag * Math.sin(u * Math.PI) * (0.62 + 0.38 * Math.sin(v * Math.PI));
@@ -570,7 +571,7 @@ export function net(k: Kit, ka: Kit, x0: number, x1: number, z0: number, z1: num
   const look: Look = { wash: 0x2e3036, kind: K.net, col: 0.3, line: 1.0 };
   const cw = (x1 - x0) / nx, cz = (z1 - z0) / nz;
   for (let i = 0; i < nx; i++) for (let j = 0; j < nz; j++) {
-    ka.quad4(at(i, j), at(i + 1, j), at(i + 1, j + 1), at(i, j + 1), cw, cz, { ...look, edges: E.none }, x0 + i * cw, z0 + j * cz);
+    barPanel(k, at(i, j), at(i + 1, j), at(i + 1, j + 1), at(i, j + 1), cw, cz, look, i + 1 < nx, j + 1 < nz);
   }
   const rope: Look = { wash: 0x2a2c31, line: 0.6 };
   for (const j of [0, nz]) for (let i = 0; i < nx; i++) k.beam(at(i, j), at(i + 1, j), 0.06, 0.06, rope);

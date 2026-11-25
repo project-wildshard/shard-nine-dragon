@@ -82,7 +82,7 @@ export function buildRim(plan: WellPlan): void {
 
   // ── the near galleries: the main shaft's three walls from their top floor down to SPLIT + one floor ──
   // (one kit for the whole near band and one for its barred railings / catch nets: the lane's cap is 12 draws)
-  const K2: BandKits = { kit: () => ctx.kit('well-r'), alpha: () => ctx.alpha('well-r-a') };
+  const K2: BandKits = { kit: () => ctx.kit('well-r') };
   // Deep: the fronts pulled out into the shaft (west 6.2–8.2 m, east 5.2–7 m before each stack's in-and-out cycle), so
   // from the rim the open gap reads 10–15 m, the verandas converging down the shaft. The west rim floor itself stays
   // shallow (the mockup B camera stands at x −19.5 beside it).

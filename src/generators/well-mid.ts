@@ -22,6 +22,7 @@ import type { Ctx } from './ctx';
 import { type BandKits, CROSSINGS, type Crossing, DECK_TOP, LOW, type WellPlan, snapFloor } from './well-plan';
 import { CABLE, CROSSING_COLLIDERS, EXT, FAR } from './wellBounds';
 import { ghostLevels } from './well-lower-deep';
+import { barRect } from './realBars';
 
 const SURF = paint.surfaces;
 
@@ -132,10 +133,10 @@ function farRun(ctx: Ctx, kit: (y: number) => Kit): void {
   );
 }
 
-/** the crossings' kits: the main shaft's and the run north's (each one mesh, culled as a whole), one alpha-cut kit */
-function regionKits(ctx: Ctx): { main: Kit; ext: Kit; at: (z: number) => Kit; alpha: Kit } {
+/** the crossings' kits: the main shaft's and the run north's (each one mesh, culled as a whole) */
+function regionKits(ctx: Ctx): { main: Kit; ext: Kit; at: (z: number) => Kit } {
   const main = ctx.kit('well-c-main'), ext = ctx.kit('well-c-ext');
-  return { main, ext, at: (z) => (z > WELL.z0 ? main : ext), alpha: ctx.alpha('well-c-a') };
+  return { main, ext, at: (z) => (z > WELL.z0 ? main : ext) };
 }
 
 /** a string of paper lanterns on a sagging wire from a to b, one every `spacing` m */
@@ -156,9 +157,9 @@ export function buildMid(plan: WellPlan): void {
   CROSSING_COLLIDERS.length = 0;
   // ── the run north's walls and the stub, top to bottom, stair flights down their fronts ──
   // (the lane's budget, art/nine-dragon-stack/budget.md: ≤ 16 draws, ≤ 0.35 M tris — so few, big kits: the run north's
-  // walls in two, the crossings by region, one alpha kit, one for both gates. The run north's galleries stop at
+  // walls in two, the crossings by region, one for both gates. The run north's galleries stop at
   // X_LOW, under its lowest crossing: below that its walls run on as painted shells into the mist.)
-  const KX: BandKits = { kit: (y) => ctx.kit(y >= Y0 - 25 ? 'well-x-hi' : 'well-x-lo'), alpha: () => ctx.alpha('well-c-a') };
+  const KX: BandKits = { kit: (y) => ctx.kit(y >= Y0 - 25 ? 'well-x-hi' : 'well-x-lo') };
   // (round 2, pass 10, mockup B: "its walls are warm-lit timber galleries, verandas with lanterns") a lantern row along
   // every open front of the stub and the run north, from the rim's level down: each gallery a warm line receding up the
   // canyon (the stub, face-on to B 57 m off, reads as tiers of lit verandas instead of a block)
@@ -184,7 +185,7 @@ export function buildMid(plan: WellPlan): void {
     const anchor = c.z === ANCHOR.z && c.y === ANCHOR.y;
     // (far walkers are a ~220-triangle LOD: the far crossings carry twice the plan's people, so each rung has its crowd)
     const crowd = anchor || lod >= 1 ? c.crowd * 2 : c.crowd;
-    CROSSING_COLLIDERS.push(...bridge(ctx, k, KC.alpha, kx, {
+    CROSSING_COLLIDERS.push(...bridge(ctx, k, kx, {
       kind: c.kind, z: c.z, y: c.y, x0: fw, x1: fe, w: c.w, seed: 9000 + Math.round((c.z + 200) * 7 + c.y * 13), crowd, lod,
       ax0: Math.max(fw, aw), ax1: Math.min(fe, ae), top0: Math.max(fw, tw), top1: Math.min(fe, te),
       ...(anchor ? { clear: ANCHOR.x } : {}),
@@ -194,7 +195,7 @@ export function buildMid(plan: WellPlan): void {
   NETS.forEach(([z0, z1, y], i) => {
     const [fw, fe] = plan.frontsMax(z0, z1, y);
     const sag = Math.min(2.4, (fe - fw) * 0.14);
-    net(KC.at(z0), KC.alpha, fw + 0.15, fe - 0.15, Math.min(z0, z1), Math.max(z0, z1), y, sag, 300 + i * 7);
+    net(KC.at(z0), fw + 0.15, fe - 0.15, Math.min(z0, z1), Math.max(z0, z1), y, sag, 300 + i * 7);
     // a net-mender in the belly of a few (the targets' nets carry people)
     if (i % 4 === 0 && lodAt((fw + fe) / 2, y, z0) < 2) stand(ctx, new Vector3((fw + fe) / 2 + rng.range(-1.5, 1.5), y - sag * 0.93, (z0 + z1) / 2), rng.chance(0.5) ? new Vector3(1, 0, 0) : new Vector3(0, 0, 1), 1);
   });
@@ -287,7 +288,7 @@ export function buildMid(plan: WellPlan): void {
     lanternLine(ctx, KC.at(z), new Vector3(fw + 0.1, ya, z), new Vector3(fe - 0.1, ya + 0.3, z - 0.6), 1.4, 1.2, 3);
   }
   skyCables(ctx, KC.main, rng);
-  outriggers(plan, KX.kit, KX.alpha, CROSSINGS, rng);
+  outriggers(plan, KX.kit, CROSSINGS, rng);
 }
 
 /**
@@ -322,7 +323,7 @@ function skyCables(ctx: Ctx, k: Kit, rng: Rng): void {
  * with a barred railing round three sides, a lantern, a pot plant and sometimes someone at the rail — the walls read
  * layered, platforms stepping out into the canyon at many heights. None where a crossing or a net comes near.
  */
-function outriggers(plan: WellPlan, kit: (y: number) => Kit, alpha: (y: number) => Kit, crossings: readonly Crossing[], rng: Rng): void {
+function outriggers(plan: WellPlan, kit: (y: number) => Kit, crossings: readonly Crossing[], rng: Rng): void {
   const ctx = plan.ctx;
   const steel = { wash: 0x3a3d44, line: 0.9 };
   const bars = { wash: 0x2a2c31, kind: 4, row: 1, col: 0.13, line: 1 };
@@ -337,18 +338,18 @@ function outriggers(plan: WellPlan, kit: (y: number) => Kit, alpha: (y: number) 
     const out = rng.range(1.4, 2.4), len = rng.range(2.2, 3.6);
     const s = west ? 1 : -1;
     const x0 = west ? fw : fe, x1 = x0 + s * out;
-    const k = kit(y), ka = alpha(y);
+    const k = kit(y);
     const cx = (x0 + x1) / 2;
     k.box(cx, y - 0.16, z, out, 0.16, len, { wash: 0x6b6d72, line: 1.8 }, { top: { wash: 0x5a5c62, kind: 3, line: 0, wet: 0.6 } });
     for (const dz of [-len / 2 + 0.2, len / 2 - 0.2]) k.beam(new Vector3(x0, y - 1.9, z + dz), new Vector3(x1 - s * 0.15, y - 0.2, z + dz), 0.12, 0.12, steel);
-    // the railing: the outer edge and the two sides (alpha-cut bars), a top rail
+    // the railing: the outer edge and the two sides (real bars, QA 11-24 row 52), a top rail
     const n = new Vector3(s, 0, 0);
-    ka.quad(new Vector3(x1, y, z + (west ? -len / 2 : len / 2)), new Vector3(0, 0, west ? 1 : -1), new Vector3(0, 1, 0), len, 1.02, bars);
+    barRect(k, new Vector3(x1, y, z + (west ? -len / 2 : len / 2)), new Vector3(0, 0, west ? 1 : -1), new Vector3(0, 1, 0), len, 1.02, bars);
     k.beam(new Vector3(x1, y + 1.02, z - len / 2), new Vector3(x1, y + 1.02, z + len / 2), 0.06, 0.06, steel);
     for (const dz of [-len / 2, len / 2]) {
       k.beam(new Vector3(x0, y + 1.02, z + dz), new Vector3(x1, y + 1.02, z + dz), 0.06, 0.06, steel);
       k.box(x1, y, z + dz, 0.07, 1.02, 0.07, steel);
-      ka.quad(new Vector3(dz > 0 ? x0 : x1, y, z + dz), new Vector3(dz > 0 ? s : -s, 0, 0), new Vector3(0, 1, 0), out, 1.02, bars);
+      barRect(k, new Vector3(dz > 0 ? x0 : x1, y, z + dz), new Vector3(dz > 0 ? s : -s, 0, 0), new Vector3(0, 1, 0), out, 1.02, bars);
     }
     ctx.lantern(x1 - s * 0.2, y + 2.1, z + rng.range(-len / 3, len / 3), 0.7);
     ctx.put('plant', new Vector3(x0 + s * 0.4, y, z + (rng.chance(0.5) ? 1 : -1) * (len / 2 - 0.4)), n.clone().negate(), new Vector3(1.2, rng.range(1, 1.5), 1.2));

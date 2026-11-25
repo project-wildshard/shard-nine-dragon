@@ -9,33 +9,26 @@ import { E, K, Kit, type Look } from './kit';
 export interface PieceKits { opaque: Kit | null; alpha: Kit | null }
 
 const up = new Vector3(0, 1, 0), X = new Vector3(1, 0, 0), Z = new Vector3(0, 0, 1);
-const RAIL: Look = { wash: 0x26282e, kind: K.bars, row: 1, col: 0.12, line: 1 };
 
 function balcony(): PieceKits {
   // a unit balcony: 1 m wide, 1 m deep (scaled per instance), slab + fascia, a ruled railing on three sides
-  const o = new Kit(), a = new Kit();
+  const o = new Kit();
   o.box(0, 0, 0.5, 1, 0.12, 1, { wash: 0x9a9fa6, line: 1.4 });
   o.box(0, -0.12, 1.0, 1.02, 0.24, 0.05, { wash: 0x8a8f96, line: 1.2 });
   o.box(0, 1.1, 1.0, 1.02, 0.05, 0.05, { wash: 0x3a3d44, line: 0.8 });
-  a.quad(new Vector3(-0.5, 0.12, 1), X, up, 1, 1.0, RAIL);
-  a.quad(new Vector3(-0.5, 0.12, 0), Z, up, 1, 1.0, RAIL);
-  a.quad(new Vector3(0.5, 0.12, 1), Z.clone().negate(), up, 1, 1.0, RAIL);
-  return { opaque: o, alpha: a };
+  // QA 11-24 row 52 (J510): no alpha-cut railing cards (the facades draw facadePieces.ts's real-bar balconies)
+  return { opaque: o, alpha: null };
 }
 
 function cage(): PieceKits {
   // a window cage: 1 m wide, 1.9 m tall, 0.55 m deep, bars on three sides, a tray and a lid
-  const o = new Kit(), a = new Kit();
-  const bars: Look = { wash: 0x2e3036, kind: K.bars, row: 1, col: 0.1, line: 1 };
+  const o = new Kit();
   o.box(0, 0, 0.28, 1.04, 0.07, 0.58, { wash: 0x565a61, line: 1 });
   o.box(0, 1.9, 0.28, 1.08, 0.06, 0.62, { wash: 0x565a61, line: 1 });
-  a.quad(new Vector3(-0.5, 0.07, 0.56), X, up, 1, 1.83, bars);
-  a.quad(new Vector3(-0.5, 0.07, 0), Z, up, 0.56, 1.83, bars);
-  a.quad(new Vector3(0.5, 0.07, 0.56), Z.clone().negate(), up, 0.56, 1.83, bars);
   // junk inside: a box, a bucket
   o.box(-0.2, 0.07, 0.25, 0.3, 0.3, 0.3, { wash: 0x8a6a3a, line: 0.8, accent: true });
   o.cyl(0.25, 0.07, 0.3, 0.12, 0.14, 0.26, 7, { wash: 0x2e5fa3, line: 0.8, accent: true });
-  return { opaque: o, alpha: a };
+  return { opaque: o, alpha: null };
 }
 
 function plant(): PieceKits {

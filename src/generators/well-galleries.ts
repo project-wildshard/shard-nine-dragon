@@ -15,6 +15,7 @@ import { NEONS } from './towers';
 import { WORDS } from './words';
 import NINE_LAYOUT_PLAN from '../data/layoutPlan.json' with { type: 'json' };
 import { Rng } from '@wildshard/sdk/random';
+import { barPanel, barRect } from './realBars';
 
 const SURF = paint.surfaces;
 
@@ -85,8 +86,6 @@ export interface GalleryProfile {
 export interface GalleryKits {
   /** the opaque kit for a spot (altitude bands, so the deep ones cull) */
   kit: (y: number) => Kit;
-  /** the alpha-cut kit (barred railings) */
-  alpha: (y: number) => Kit;
 }
 
 const TILE = [0x2b6b55, 0x2b6b55, 0x2c4f82, 0x464d55] as const;
@@ -120,7 +119,7 @@ export function stand(ctx: Ctx, p: Vector3, face: Vector3, s = 1): void {
 }
 
 /** a lattice (timber) or barred (steel) railing from a to b on a deck at a.y, facing `side` */
-function railing(k: Kit, ka: Kit, a: Vector3, b: Vector3, timber: boolean, red: boolean): void {
+function railing(k: Kit, a: Vector3, b: Vector3, timber: boolean, red: boolean): void {
   const d = new Vector3().subVectors(b, a);
   const len = d.length();
   if (len < 0.2) return;
@@ -132,7 +131,7 @@ function railing(k: Kit, ka: Kit, a: Vector3, b: Vector3, timber: boolean, red: 
     k.boxAxes(c.clone().setY(a.y + 0.55), d, UP, side, len / 2, 0.42, 0.035,
       { wash: red ? 0x7e2a1e : 0x40352d, kind: K.panel, line: 1, accent: red, surf: red ? SURF.lacquer : SURF.wood });
   } else {
-    ka.quad(a.clone().addScaledVector(side, -0.01).addScaledVector(d, 0), d, UP, len, 1.02, STEEL);
+    barRect(k, a.clone().addScaledVector(side, -0.01), d, UP, len, 1.02, STEEL);
   }
   k.boxAxes(c.clone().setY(a.y + 1.04), d, UP, side, len / 2 + 0.04, 0.05, 0.07, RAIL_TOP);
 }
@@ -255,7 +254,7 @@ export function galleryWall(ctx: Ctx, W: GalleryWall, K2: GalleryKits): GalleryP
 
   // the galleries
   floors.forEach((y, fi) => {
-    const k = K2.kit(y), ka = K2.alpha(y);
+    const k = K2.kit(y);
     const life = y >= Y0 - 40 && y <= Y0 + 30;
     const lifeNear = y >= Y0 - 22 && y <= Y0 + 30;
     stacks.forEach((st, si) => {
@@ -300,7 +299,7 @@ export function galleryWall(ctx: Ctx, W: GalleryWall, K2: GalleryKits): GalleryP
         if (g0 > r[0] + 0.3) runs.push([r[0], g0]);
         if (g1 < r[1] - 0.3) runs.push([g1, r[1]]);
       }
-      for (const [a0, a1] of runs) railing(k, ka, world(a0, y, d - 0.06), world(a1, y, d - 0.06), timber, red);
+      for (const [a0, a1] of runs) railing(k, world(a0, y, d - 0.06), world(a1, y, d - 0.06), timber, red);
       const lr = W.lanternRow;
       if (lr !== undefined && y <= lr.yMax + 0.01 && y >= lr.yMin - 0.01) {
         for (const [a0, a1] of runs) {
@@ -309,8 +308,8 @@ export function galleryWall(ctx: Ctx, W: GalleryWall, K2: GalleryKits): GalleryP
         }
       }
       const left = si > 0 ? dAt(fi, si - 1) : 0, right = si < stacks.length - 1 ? dAt(fi, si + 1) : 0;
-      if (left < d - 0.3) railing(k, ka, world(st.u0 + 0.05, y, d - 0.06), world(st.u0 + 0.05, y, left + 0.05), timber, red);
-      if (right < d - 0.3) railing(k, ka, world(st.u1 - 0.05, y, right + 0.05), world(st.u1 - 0.05, y, d - 0.06), timber, red);
+      if (left < d - 0.3) railing(k, world(st.u0 + 0.05, y, d - 0.06), world(st.u0 + 0.05, y, left + 0.05), timber, red);
+      if (right < d - 0.3) railing(k, world(st.u1 - 0.05, y, right + 0.05), world(st.u1 - 0.05, y, d - 0.06), timber, red);
       // covered by the floor above: posts hold its deck. Stepped out beyond it: a glazed pent roof over the strip
       // (sometimes), else an open terrace in the rain. A top floor with nothing above (under the square's lip) stays open
       const above = fi > 0 ? dAt(fi - 1, si) : 0;
@@ -337,8 +336,7 @@ export function galleryWall(ctx: Ctx, W: GalleryWall, K2: GalleryKits): GalleryP
       if (below < d - 1 && rng.chance(0.3)) {
         const a0 = world(st.u0 + 0.1, y - 0.55, d), a1 = world(st.u1 - 0.1, y - 0.55, d);
         const b0 = world(st.u0 + 0.1, y - 0.1, d + 1.5), b1 = world(st.u1 - 0.1, y - 0.1, d + 1.5);
-        ka.quad4(a0, a1, b1, b0, L - 0.2, 1.56, { wash: 0x2e3036, kind: K.net, col: 0.3, line: 1, edges: E.none }, a0.dot(u), 0);
-        ka.quad4(a1, a0, b0, b1, L - 0.2, 1.56, { wash: 0x2e3036, kind: K.net, col: 0.3, line: 1, edges: E.none }, a1.dot(u), 0);
+        barPanel(k, a0, a1, b1, b0, L - 0.2, 1.56, { wash: 0x2e3036, kind: K.net, col: 0.3, line: 1 });
         k.beam(b0, b1, 0.06, 0.06, RAIL_TOP);
         for (const [a, b] of [[a0, b0], [a1, b1]] as const) k.beam(a, b, 0.05, 0.05, RAIL_TOP);
       }

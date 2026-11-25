@@ -18,6 +18,7 @@ import { SQ_DEPTH } from './stairPlan';
 import { buildStairUpper } from './stairstreet-upper';
 import { NEON, chars } from './util';
 import { Rng } from '@wildshard/sdk/random';
+import { barRect } from './realBars';
 
 const { PLAZA, STAIR, STREET, WELL, Y0 } = NINE_LAYOUT_PLAN;
 
@@ -132,13 +133,13 @@ function figure(ctx: Ctx, k: Kit, rng: Rng, x: number, y: number, z: number, r: 
 function skybridge(ctx: Ctx, rng: Rng, x0: number, x1: number, z: number, y: number, width: number, people = 1): void {
   const k = ctx.kit('bridges', true);
   k.compact = true;
-  const ka = ctx.alpha('bridges-a');
   const len = x1 - x0;
   k.box((x0 + x1) / 2, y - 0.5, z, len, 0.6, width, { wash: 0x6c737d, line: 1.5 }, { top: { wash: 0x7d828a, line: 1 } });
   k.box((x0 + x1) / 2, y + 2.7, z, len, 0.35, width + 0.4, { wash: 0x7c838d, line: 1.2 });
   const glass: Look = { wash: 0x2a2c31, kind: K.bars, row: 1, col: 1.2, line: 1 };
-  ka.quad(new Vector3(x0, y + 0.1, z + width / 2), new Vector3(1, 0, 0), new Vector3(0, 1, 0), len, 2.5, glass);
-  ka.quad(new Vector3(x1, y + 0.1, z - width / 2), new Vector3(-1, 0, 0), new Vector3(0, 1, 0), len, 2.5, glass);
+  // QA 11-24 row 52 (J510): the glazing bars are real mullions, not a cut-out picture of them
+  barRect(k, new Vector3(x0, y + 0.1, z + width / 2), new Vector3(1, 0, 0), new Vector3(0, 1, 0), len, 2.5, glass);
+  barRect(k, new Vector3(x1, y + 0.1, z - width / 2), new Vector3(-1, 0, 0), new Vector3(0, 1, 0), len, 2.5, glass);
   // a lit band under the roof and people crossing
   ctx.signs.light(new Vector3((x0 + x1) / 2, y + 2.45, z + width / 2 + 0.03), new Vector3(1, 0, 0), new Vector3(0, 1, 0), len - 1, 0.1, 0xffd9a0, 1.4);
   for (let i = 0; i < Math.round((len / 5) * people); i++) figure(ctx, k, rng, rng.range(x0 + 1, x1 - 1), y, z + rng.range(-width / 3, width / 3), rng.chance(0.5) ? Math.PI / 2 : -Math.PI / 2);
@@ -168,8 +169,7 @@ function cableDeck(ctx: Ctx, rng: Rng): void {
   // the front fascia: lit ropeway-station windows, railings, people, a few signs
   k.box(1, y + 3.2, f - 0.6, 62, 1.1, 0.4, { wash: 0x767c86, line: 1.4 });
   for (let x = -26; x < 28; x += 3.2) if (rng.chance(0.7)) ctx.signs.light(new Vector3(x, y + 1.6, f + 0.06), new Vector3(1, 0, 0), new Vector3(0, 1, 0), 2.0, 0.8, rng.pick([0xd9a868, 0xe0b47a, 0x9fc4c0]), rng.range(0.7, 1.1));
-  const ka = ctx.alpha('deck-a');
-  ka.quad(new Vector3(-30, y + 3.2, f - 0.2), new Vector3(1, 0, 0), new Vector3(0, 1, 0), 62, 1.1, { wash: 0x2a2c31, kind: K.bars, row: 1, col: 0.16, line: 1 });
+  barRect(k, new Vector3(-30, y + 3.2, f - 0.2), new Vector3(1, 0, 0), new Vector3(0, 1, 0), 62, 1.1, { wash: 0x2a2c31, kind: K.bars, row: 1, col: 0.16, line: 1 });
   for (let i = 0; i < 9; i++) figure(ctx, k, rng, rng.range(-24, 26), y + 3.2, rng.range(f - 3, f - 1.2), rng.range(0, 6.28));
   // ropeway station roofs on the deck's edge
   hipRoof(ctx, k, -12, y + 8.5, f - 6, 12, 7, 2.4, 0.5, 0x2e5fa3, NEON.cyan);

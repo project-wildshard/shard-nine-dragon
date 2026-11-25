@@ -29,7 +29,7 @@ const BOTTOM = GHOST_TOP - GHOST_FLOORS * FLOOR_H - 24;
 /** the lane's kits (its budget: 10 draws): the upper floors, everything from LOW + 9 down (drawn only within DEEP_FAR m of
  *  the camera: the rim and the shaft see it, the stair and the street north don't) and the galleries' barred railings */
 const UP_KIT = 'well-l-up', DEEP_KIT = 'well-l-deep', DEEP_FAR = 95;
-const lowerKits = (ctx: WellPlan['ctx']): BandKits => ({ kit: (y) => ctx.kit(y >= LOW + 9 ? UP_KIT : DEEP_KIT), alpha: () => ctx.alpha('well-l-a') });
+const lowerKits = (ctx: WellPlan['ctx']): BandKits => ({ kit: (y) => ctx.kit(y >= LOW + 9 ? UP_KIT : DEEP_KIT) });
 
 /** the temple spur: its centre, the terrace height and its radius. Seen from mockup D's camera it sits ~60° down, 51 %
  *  down the frame, above the balustrade's rail (steeper than ~76° the rail hides it) and 71 m under the eye (F5: its
