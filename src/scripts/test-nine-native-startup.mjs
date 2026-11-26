@@ -67,6 +67,12 @@ try {
   const waited = await page.waitForFunction(() => (localStorage.getItem('wildshard.save.v2@2.device') ?? '').includes('renderer:waiting'),
     null, { timeout: 30_000, polling: 50 }).then(() => true, () => false);
   await page.waitForFunction(() => Boolean(window.__wildshard?.world) || Boolean(document.querySelector('#wserr')), null, { timeout: 60_000 });
+  // meta QA 11-25 row 152 (engine 15ecdf855): Nine's declared plan (its city, sets, movers' views, portal veil) installs
+  // after the restart, before the drill leaves Nine for Explore. Leaving mid-install ends it ('left'), which is no refusal;
+  // a plan that never installs, or refuses, fails the drill. A developer page marks each install's outcome.
+  const plan = await page.waitForFunction(() => performance.getEntriesByName('wildshard.grid.data-stay').map((mark) => mark.detail)
+    .find((stay) => stay?.kind === 'plan' && stay.instance === 'nine-dragon-stack' && stay.outcome !== 'left')?.outcome ?? null,
+  null, { timeout: 60_000, polling: 100 }).then((handle) => handle.jsonValue(), () => 'missing');
   // meta EXPLORE-MODE EX1 (engine f7cc70dc5): the title has no EXPLORE WORLD; the HUD's own entry opens Explore's hub
   if (await page.evaluate(() => Boolean(window.__wildshard?.world))) {
     await page.evaluate(() => { window.__wildshard.world.hud.startExplore(); });
@@ -78,8 +84,8 @@ try {
     exploring: Boolean(document.querySelector('.ws-x.show[data-mode="world"]')),
     error: document.querySelector('#wserr .msg')?.textContent ?? '',
   }));
-  const okay = native.killed && waited && state.world && !state.lost && state.exploring && !state.error && reports.length === 0;
-  console.log(`${okay ? 'PASS' : 'FAIL'} native GPU restart: ${JSON.stringify({ killed: native.killed, waited, reports: reports.length, ...state })}`);
+  const okay = native.killed && waited && plan === 'installed' && state.world && !state.lost && state.exploring && !state.error && reports.length === 0;
+  console.log(`${okay ? 'PASS' : 'FAIL'} native GPU restart: ${JSON.stringify({ killed: native.killed, waited, plan, reports: reports.length, ...state })}`);
   if (!okay) process.exitCode = 1;
 } finally {
   await browser.close();
