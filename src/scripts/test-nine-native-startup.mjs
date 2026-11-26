@@ -4,6 +4,7 @@
 // Only the fresh Playwright GPU process is killed; every pre-existing process is excluded.
 import { webkit } from "./browser-playwright.mjs";
 import { saveFixture } from './debug-settings.mjs';
+import { enterZone } from '@wildshard/sdk/headless/scripts/zone-entry.mjs'; // CHUNK-PARAM-REMOVAL CP20 (J522): no zone in any address
 import { execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';
 
@@ -59,7 +60,7 @@ try {
       return gl;
     };
   }, address.port);
-  await page.goto(`${base}/?chunk=nine-dragon-stack&tier=phone&touch=1`, { waitUntil: 'domcontentloaded' });
+  await enterZone(page, { zone: 'nine-dragon-stack', base, flags: 'tier=phone&touch=1', waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => Boolean(window.__wildshard?.world) || Boolean(document.querySelector('#wserr')), null, { timeout: 60_000 });
   if (await page.locator('.ws-menu-explore').isVisible()) {
     await page.locator('.ws-menu-explore').click();

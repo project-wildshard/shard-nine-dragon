@@ -16,6 +16,7 @@ import { KEYCHAIN_ARGS } from './.kit/chromium-keychain.mjs';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { chromium } from "./browser-playwright.mjs";
+import { enterZone } from '@wildshard/sdk/headless/scripts/zone-entry.mjs'; // CHUNK-PARAM-REMOVAL CP20 (J522): no zone in any address
 
 const ROOT = join(import.meta.dirname, '..', '..');
 const argv = process.argv.slice(2);
@@ -40,7 +41,7 @@ try {
   const ctx = await browser.newContext({ viewport: { width: 402, height: 874 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
   const page = await ctx.newPage();
   page.on('pageerror', (e) => console.info(`pageerror: ${e.message.slice(0, 300)}`));
-  await page.goto(`${base}/?chunk=nine-dragon-stack&skipintro=1&tier=phone&touch=1&mute=1&nolock=1&sw=0`, { waitUntil: 'domcontentloaded' });
+  await enterZone(page, { zone: 'nine-dragon-stack', base, flags: 'skipintro=1&tier=phone&touch=1&mute=1&nolock=1&sw=0', alone: true, waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => Boolean(window.__wildshard?.world?.game?.lastFrame && window.__wildshard.world.game.lastFrame.calls > 20 && !document.querySelector('.ws-load')), undefined, { timeout: 240000, polling: 1000 });
   await page.evaluate(() => {
     const w = window.__wildshard?.world;

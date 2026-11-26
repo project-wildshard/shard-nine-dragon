@@ -6,6 +6,7 @@ import { harnessPins, saveFixture } from './debug-settings.mjs';
 // node src/scripts/test-nine-gpu-boot.mjs [--url=http://127.0.0.1:4184] [--only=webkit|chromium|all] [--fault=precision|shader|context|texture]
 // A pass requires one failure, an error panel, no second load, and diagnostics in both reporting transports.
 import { chromium, webkit } from "./browser-playwright.mjs";
+import { enterZone } from '@wildshard/sdk/headless/scripts/zone-entry.mjs'; // CHUNK-PARAM-REMOVAL CP20 (J522): no zone in any address
 
 const option = (name, fallback) => process.argv.find((part) => part.startsWith(`--${name}=`))?.slice(name.length + 3) ?? fallback;
 const base = option('url', 'http://127.0.0.1:4184').replace(/\/$/, '');
@@ -103,11 +104,12 @@ for (const [name, engine] of engines) {
     page = await context.newPage();
     const navigations = [];
     let injections = 0;
-    page.on('framenavigated', (frame) => { if (frame === page.mainFrame()) navigations.push(frame.url()); });
+    // enterZone stands on /version.json to write the tap: only the game's own documents count
+    page.on('framenavigated', (frame) => { if (frame === page.mainFrame() && new URL(frame.url()).pathname !== '/version.json') navigations.push(frame.url()); });
     page.on('console', (message) => { if (message.text().includes('[gpu-boot-test] injected')) { injections++; console.log(`${name}: injected ${fault} failure`); } });
     page.on('pageerror', (error) => { console.log(`${name}: page error ${error.message.slice(0, 180)}`); });
     const entry = fault === 'context' ? '' : '&skipintro=1';
-    await page.goto(`${base}/?chunk=nine-dragon-stack${entry}&nolock=1&mute=1&touch=1&tier=phone&sw=0`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+    await enterZone(page, { zone: 'nine-dragon-stack', base, flags: `nolock=1&mute=1&touch=1&tier=phone&sw=0${entry}`, waitUntil: 'domcontentloaded', timeout: 30_000 });
     if (fault === 'context') {
       await page.waitForFunction(() => Boolean(window.__wildshard?.world) || Boolean(document.querySelector('#wserr')), null, { timeout: 90_000 });
       await page.locator('.ws-menu-explore').click();
@@ -142,7 +144,8 @@ for (const [name, engine] of engines) {
       url: location.href,
       loadAttempt: (JSON.parse(sessionStorage.getItem('wildshard.save.v2.session') ?? '{}').keys?.loadAttempt?.data ?? null)?.count ?? null,
     }));
-    const otherNavigation = navigations.some((url) => new URL(url).searchParams.get('chunk') !== 'nine-dragon-stack');
+    // one document, the zone's: a second is a recovery navigation (no address names the zone, J522)
+    const otherNavigation = navigations.length !== 1;
     const expectedError = fault === 'precision' ? 'Graphics context did not recover' : fault === 'texture' ? 'Graphics error 1280 after compressed texture' : 'Nine Dragon GPU boot failed';
     const expectedOperation = fault === 'precision' ? 'renderer:waiting' : fault === 'texture' ? 'texture:upload' : 'compile:before';
     const evidence = reports.some((report) => report.context?.bootDiagnostic?.includes(expectedOperation));

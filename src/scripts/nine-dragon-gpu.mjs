@@ -35,6 +35,7 @@ import { closeSync, existsSync, openSync, readFileSync, unlinkSync, writeSync } 
 import { join } from 'node:path';
 import { chromium } from "./browser-playwright.mjs";
 import { debugSettings } from './debug-settings.mjs';
+import { enterZone } from '@wildshard/sdk/headless/scripts/zone-entry.mjs'; // CHUNK-PARAM-REMOVAL CP20 (J522): no zone in any address
 
 const ROOT = join(import.meta.dirname, '..', '..');
 const argv = process.argv.slice(2);
@@ -169,7 +170,7 @@ try {
   if (Object.keys(picks).length > 0) await debugSettings(ctx, picks);
   const page = await ctx.newPage();
   page.on('pageerror', (e) => console.info(`pageerror: ${e.message.slice(0, 300)}`));
-  await page.goto(`${base}/?chunk=nine-dragon-stack&skipintro=1&tier=phone&touch=1&mute=1&nolock=1&sw=0`, { waitUntil: 'domcontentloaded' });
+  await enterZone(page, { zone: 'nine-dragon-stack', base, flags: 'skipintro=1&tier=phone&touch=1&mute=1&nolock=1&sw=0', alone: true, waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => window.__wildshard?.world?.chunk?.slug === 'nine-dragon-stack' && (window.__wildshard.world.game?.lastFrame?.calls ?? 0) > 60 && !document.querySelector('.ws-load'), undefined, { timeout: 400000, polling: 1000 });
   await sleep(6000);
   await page.evaluate(() => {
