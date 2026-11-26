@@ -137,7 +137,7 @@ jobs:
         run: pnpm exec wildshard check . tmp/ci/check
       - name: Walk the owned 1800-tick authored route
         if: github.event_name != 'push'
-        run: node --experimental-transform-types --test test/ci/owned-journey.test.mjs
+        run: node --test test/ci/owned-journey.test.mjs
       - name: Boot, play and resume every built product
         if: github.event_name != 'push'
         run: node --test --test-concurrency=1 test/ci/bump-only.test.mjs test/ci/product-play.test.mjs test/ci/package-products.test.mjs
@@ -334,7 +334,7 @@ jobs:
       - name: Check the shard source as an author would (TS21)
         run: pnpm exec wildshard check . tmp/ci/check
       - name: Walk the owned 1800-tick authored route
-        run: node --experimental-transform-types --test test/ci/owned-journey.test.mjs
+        run: node --test test/ci/owned-journey.test.mjs
       - name: Boot, play and resume every built product
         run: node --test --test-concurrency=1 test/ci/bump-only.test.mjs test/ci/product-play.test.mjs test/ci/package-products.test.mjs
       - name: Ride the portal out and home, then grapple
