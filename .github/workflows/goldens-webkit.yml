@@ -62,11 +62,12 @@ jobs:
         run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
       - uses: ./.github/actions/ring-setup
         if: inputs.client_run == ''
-      - run: node scripts/pins.ts install
+      - run: node src/scripts/pins.ts install
         if: inputs.client_run == ''
+      # script-paths: engine's package script (this job checks out engine, lean since f928fdae2)
       - run: pnpm build:game
         if: inputs.client_run == ''
-      - run: node scripts/app-build/splitOutput.mjs dist --join
+      - run: node src/scripts/app-build/splitOutput.mjs dist --join
         if: inputs.client_run == ''
       - run: tar -cf dist.tar dist
         if: inputs.client_run == ''
@@ -104,13 +105,13 @@ jobs:
         run: |
           node --input-type=module -e '
           import {readFileSync} from "node:fs";
-          import {goldenPreviewIdentity} from "./scripts/goldens/capture-inputs.mjs";
+          import {goldenPreviewIdentity} from "./src/scripts/goldens/capture-inputs.mjs";
           console.log(goldenPreviewIdentity(JSON.parse(readFileSync("dist/version.json","utf8")),process.env.SHA));'
           echo "Capture harness $(git rev-parse HEAD), client $SHA, artifact run ${{ inputs.client_run || github.run_id }}" >> "$GITHUB_STEP_SUMMARY"
-      - run: bash scripts/ci-playwright-install.sh webkit
+      - run: bash src/scripts/ci-playwright-install.sh webkit
       - name: Serve the build
         run: |
-          nohup node scripts/preview-server.mjs --outDir dist --port 4400 > preview.log 2>&1 &
+          nohup node src/scripts/preview-server.mjs --outDir dist --port 4400 > preview.log 2>&1 &
           # Nine's settled reader binds to serve-build's registry: a working record names the folder whose dist is served
           mkdir -p ~/.dev-servers/.shared
           echo "$! $(( $(date +%s) + 7200 )) $GITHUB_WORKSPACE goldens-webkit goldens-webkit" > ~/.dev-servers/4400
@@ -118,13 +119,13 @@ jobs:
           cat preview.log; exit 1
       - name: Capture the 24 cameras in WebKit
         run: |
-          node scripts/goldens/capture.mjs --base=http://127.0.0.1:4400/ --sha="$SHA" --engine=webkit \
+          node src/scripts/goldens/capture.mjs --base=http://127.0.0.1:4400/ --sha="$SHA" --engine=webkit \
             --cameras=shard/art/goldens/cameras24.json --mode=shardfile --shards="$SLUG" --direct --out=tmp/goldens/raw-webkit
       - name: Board against the SHARDFILE goldens
         if: always()
         run: |
           python3 -m venv tmp/venv && tmp/venv/bin/pip install --quiet pillow numpy
-          tmp/venv/bin/python scripts/goldens/board.py --goldens shard/art/goldens --shard "$SLUG" \
+          tmp/venv/bin/python src/scripts/goldens/board.py --goldens shard/art/goldens --shard "$SLUG" \
             --now tmp/goldens/raw-webkit --out tmp/goldens/board --label "NOW webkit ${SHA:0:7}" | tee tmp/goldens/board.txt
       - name: Every camera captured, settled and above the floor
         run: |

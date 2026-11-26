@@ -3,7 +3,7 @@
 // node src/scripts/test-nine-native-startup.mjs --url=http://127.0.0.1:4184
 // Only the fresh Playwright GPU process is killed; every pre-existing process is excluded.
 import { webkit } from "./browser-playwright.mjs";
-import { saveFixture } from './debug-settings.mjs';
+import { saveFixture } from '@wildshard/sdk/headless/scripts/debug-settings.mjs';
 import { enterZone } from '@wildshard/sdk/headless/scripts/zone-entry.mjs'; // CHUNK-PARAM-REMOVAL CP20 (J522): no zone in any address
 import { execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';

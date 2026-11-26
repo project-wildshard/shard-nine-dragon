@@ -34,7 +34,7 @@ import { KEYCHAIN_ARGS } from './.kit/chromium-keychain.mjs';
 import { closeSync, existsSync, openSync, readFileSync, unlinkSync, writeSync } from 'node:fs';
 import { join } from 'node:path';
 import { chromium } from "./browser-playwright.mjs";
-import { debugSettings } from './debug-settings.mjs';
+import { debugSettings } from '@wildshard/sdk/headless/scripts/debug-settings.mjs';
 import { enterZone } from '@wildshard/sdk/headless/scripts/zone-entry.mjs'; // CHUNK-PARAM-REMOVAL CP20 (J522): no zone in any address
 
 const ROOT = join(import.meta.dirname, '..', '..');
