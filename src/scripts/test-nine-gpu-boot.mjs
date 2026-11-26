@@ -2,7 +2,7 @@
 import { KEYCHAIN_ARGS } from './.kit/chromium-keychain.mjs';
 import { harnessPins, saveFixture } from '@wildshard/sdk/headless/scripts/debug-settings.mjs';
 // Reproduce the phone's null precision result or the Simulator's shaderSource failure during boot.
-// Run after `pnpm build` with `pnpm exec vite preview --port 4184` up:
+// Run with `pnpm exec wildshard dev src 4184` up (src/scripts/test-nine-gpu-boot.sh starts it and runs every fault):
 // node src/scripts/test-nine-gpu-boot.mjs [--url=http://127.0.0.1:4184] [--only=webkit|chromium|all] [--fault=precision|shader|context|texture]
 // A pass requires one failure, an error panel, no second load, and diagnostics in both reporting transports.
 import { chromium, webkit } from "./browser-playwright.mjs";
