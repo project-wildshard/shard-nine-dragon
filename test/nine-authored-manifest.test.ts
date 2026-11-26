@@ -13,7 +13,7 @@ mkdirSync('tmp/codex-pins', { recursive: true });
 const root = mkdtempSync(resolve('tmp/codex-pins/manifest-'));
 mkdirSync(resolve(root, 'src/shards'), { recursive: true });
 symlinkSync(resolve('src'), resolve(root, 'src/shards/nine-dragon-stack'));
-mkdirSync(resolve(root, 'scripts'));
+mkdirSync(resolve(root, 'scripts')); // script-paths: the pinned engine's emitter reads its monorepo layout, built here in a temp root
 writeFileSync(resolve(root, 'scripts/manifest-art-inputs.json'), JSON.stringify({ 'nine-dragon-stack': [{ file: 'data/discovery.json', field: ['extraArt'] }] }));
 afterAll(() => rmSync(root, { recursive: true, force: true }));
 

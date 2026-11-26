@@ -21,7 +21,7 @@ import { KEYCHAIN_ARGS } from './.kit/chromium-keychain.mjs';
 //   node src/scripts/nine-dragon-grapple-touch.mjs --flows=rim                     # one flow
 //
 // One headless Chromium on Metal, muted; it holds one of the Nine Dragon browser slots (.git/nine-dragon-browser-{1,2}.lock)
-// like src/scripts/nine-dragon-domes.mjs, and waits while both are taken.
+// like src/scripts/nine-dragon-gpu.mjs, and waits while both are taken.
 import { closeSync, existsSync, mkdirSync, openSync, readFileSync, unlinkSync, writeSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve as resolvePath } from 'node:path';

@@ -2,20 +2,8 @@
  "about": "meta QA 11-25 rows 82 and 119: script paths that point where nothing is, still carried, each with why its fix is not this repo's; shrink only (node .githooks/script-paths.mjs --prune).",
  "findings": [
   {
-   "finding": "src/scripts/nine-dragon-domes.mjs: import ./parity/image-routes.mjs (no src/scripts/parity/image-routes.mjs)",
-   "why": "engine's src/scripts/parity/image-routes.mjs is engine-internal and @wildshard/sdk exports no such module; the import needs an SDK export first (sharddev's to add)."
-  },
-  {
-   "finding": "src/scripts/nine-dragon-domes.mjs: import ./parity/canvas-bytes.mjs (no src/scripts/parity/canvas-bytes.mjs)",
-   "why": "engine's src/scripts/parity/canvas-bytes.mjs is engine-internal and @wildshard/sdk exports no such module; the import needs an SDK export first (sharddev's to add)."
-  },
-  {
-   "finding": "src/scripts/nine-dragon-domes.mjs: path art/nine-dragon-stack/round-6-baseline-hud (no art/nine-dragon-stack/round-6-baseline-hud)",
-   "why": "The round-6 baseline HUD art (11 MB) stayed in singleplayer; this tool cannot run until its parity/ imports have an SDK export (the entries above), so the art comes across with that fix."
-  },
-  {
    "finding": "scripts/blender/: stray in scripts/ (src/scripts/ is the lean home: move it under src/, or baseline why it stays)",
-   "why": "The SDK's Blender build (node_modules/@wildshard/sdk/scripts/blender/build.sh) reads its manifest at ./scripts/blender/targets.json from the repo root, and its nine-dragon-stack/fp-rig target builds a model here here; the folder moves under src/ when the SDK's build reads it there (sharddev's change)."
+   "why": "The installed engine lint (wildshard/no-shard-runtime) finds this shard's registered Blender .mjs helpers only through scripts/blender/targets.json; the move to src/blender/targets.json waits on engine's fix (meta QA 11-25 row 129) reaching this repo's SDK pin. The SDK's build.sh already reads either place (sharddev 220ea7e7)."
   }
  ]
 }
