@@ -62,7 +62,10 @@ try {
       return gl;
     };
   }, address.port);
-  await enterZone(page, { zone: 'nine-dragon-stack', base, flags: 'tier=phone&touch=1', waitUntil: 'domcontentloaded' });
+  await enterZone(page, { zone: 'nine-dragon-stack', base, flags: 'nolock=1&mute=1&tier=phone&touch=1', waitUntil: 'domcontentloaded' });
+  // the boot trace keeps its last 32 checkpoints, and a grid boot writes more than that: read the renderer's wait while it is there
+  const waited = await page.waitForFunction(() => (localStorage.getItem('wildshard.save.v2@2.device') ?? '').includes('renderer:waiting'),
+    null, { timeout: 30_000, polling: 50 }).then(() => true, () => false);
   await page.waitForFunction(() => Boolean(window.__wildshard?.world) || Boolean(document.querySelector('#wserr')), null, { timeout: 60_000 });
   // meta EXPLORE-MODE EX1 (engine f7cc70dc5): the title has no EXPLORE WORLD; the HUD's own entry opens Explore's hub
   if (await page.evaluate(() => Boolean(window.__wildshard?.world))) {
@@ -74,10 +77,9 @@ try {
     world: Boolean(window.__wildshard?.world), lost: window.__wildshard?.world?.game.renderer.getContext().isContextLost(),
     exploring: Boolean(document.querySelector('.ws-x.show[data-mode="world"]')),
     error: document.querySelector('#wserr .msg')?.textContent ?? '',
-    waited: (JSON.stringify(JSON.parse(localStorage.getItem('wildshard.save.v2.device') ?? '{}').keys?.['boot.trace']?.data ?? null)).includes('renderer:waiting'),
   }));
-  const okay = native.killed && state.waited && state.world && !state.lost && state.exploring && !state.error && reports.length === 0;
-  console.log(`${okay ? 'PASS' : 'FAIL'} native GPU restart: ${JSON.stringify({ killed: native.killed, reports: reports.length, ...state })}`);
+  const okay = native.killed && waited && state.world && !state.lost && state.exploring && !state.error && reports.length === 0;
+  console.log(`${okay ? 'PASS' : 'FAIL'} native GPU restart: ${JSON.stringify({ killed: native.killed, waited, reports: reports.length, ...state })}`);
   if (!okay) process.exitCode = 1;
 } finally {
   await browser.close();

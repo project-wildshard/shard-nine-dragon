@@ -30,7 +30,7 @@ for (const [name, engine] of engines) {
       reports.push(route.request().postDataJSON());
       await route.fulfill({ status: 200, contentType: 'application/json', body: '{"id":"synthetic-test"}' });
     });
-    // Synthetic errors test the envelope locally, without polluting production Sentry issues.
+    // A local page never sends to Sentry (engine telemetry/browserErrors.ts, SENTRY-ZERO SZ2): an envelope caught here fails the drill
     const envelopes = [];
     await context.route(/https:\/\/[^/]+\.ingest\.[^/]+\/api\//, async (route) => {
       envelopes.push(route.request().postData() ?? '');
@@ -44,7 +44,9 @@ for (const [name, engine] of engines) {
         const original = WebGL2RenderingContext.prototype.compressedTexSubImage2D;
         let injected = false;
         WebGL2RenderingContext.prototype.compressedTexSubImage2D = function compressedTexSubImage2D(...args) {
-          if (!injected && document.querySelector('.ws-load')?.dataset.step === 'shaders') {
+          // the grid boot uploads the world's compressed textures as it assembles the cell, before the shaders step (the
+          // page's own icons upload earlier, at admission, outside the checked world upload)
+          if (!injected && document.querySelector('.ws-load')?.dataset.step === 'assembly') {
             injected = true;
             args[6] = 0; // not a compressed texture format: INVALID_ENUM
             console.info('[gpu-boot-test] injected compressed upload failure');
@@ -106,19 +108,24 @@ for (const [name, engine] of engines) {
     page = await context.newPage();
     const navigations = [];
     let injections = 0;
-    // enterZone stands on /version.json to write the tap: only the game's own documents count
-    page.on('framenavigated', (frame) => { if (frame === page.mainFrame() && new URL(frame.url()).pathname !== '/version.json') navigations.push(frame.url()); });
+    // enterZone stands on /version.json to write the tap: only the game's own documents count. A document is a navigation
+    // request of the main frame: the page rewrites its own address in place (history, J522), which is no second load
+    page.on('request', (request) => { if (request.isNavigationRequest() && request.frame() === page.mainFrame() && new URL(request.url()).pathname !== '/version.json') navigations.push(request.url()); });
     page.on('console', (message) => { if (message.text().includes('[gpu-boot-test] injected')) { injections++; console.log(`${name}: injected ${fault} failure`); } });
     page.on('pageerror', (error) => { console.log(`${name}: page error ${error.message.slice(0, 180)}`); });
     const entry = fault === 'context' ? '' : '&skipintro=1';
     await enterZone(page, { zone: 'nine-dragon-stack', base, flags: `nolock=1&mute=1&touch=1&tier=phone&sw=0${entry}`, waitUntil: 'domcontentloaded', timeout: 30_000 });
     if (fault === 'context') {
+      // the boot trace keeps its last 32 checkpoints, and a grid boot writes more than that before Explore is stable: the
+      // renderer's wait is read while it is still in the trace
+      const waited = await page.waitForFunction(() => (localStorage.getItem('wildshard.save.v2@2.device') ?? '').includes('renderer:waiting'),
+        null, { timeout: 30_000, polling: 50 }).then(() => true, () => false);
       await page.waitForFunction(() => Boolean(window.__wildshard?.world) || Boolean(document.querySelector('#wserr')), null, { timeout: 90_000 });
       // meta EXPLORE-MODE EX1 (engine f7cc70dc5): the title has no EXPLORE WORLD; the HUD's own entry opens Explore's hub
       await page.evaluate(() => { window.__wildshard.world.hud.startExplore(); });
       await page.locator('.ws-x-card[data-m="world"]').click();
       await page.waitForFunction(() => {
-        const trace = (JSON.parse(localStorage.getItem('wildshard.save.v2.device') ?? '{}').keys?.['boot.trace']?.data ?? null);
+        const trace = (JSON.parse(localStorage.getItem('wildshard.save.v2@2.device') ?? '{}').keys?.['boot.trace']?.data ?? null);
         return trace?.status === 'ready' && trace.checkpoints?.some((point) => point.operation === 'explore:stable');
       }, null, { timeout: 25_000 });
       const state = await page.evaluate(() => ({
@@ -126,35 +133,36 @@ for (const [name, engine] of engines) {
         lost: window.__wildshard?.world?.game.renderer.getContext().isContextLost(),
         calls: window.__wildshard?.world?.game.renderer.info.render.calls ?? 0,
         error: Boolean(document.querySelector('#wserr')),
-        trace: JSON.stringify(JSON.parse(localStorage.getItem('wildshard.save.v2.device') ?? '{}').keys?.['boot.trace']?.data ?? null),
+        trace: JSON.stringify(JSON.parse(localStorage.getItem('wildshard.save.v2@2.device') ?? '{}').keys?.['boot.trace']?.data ?? null),
       }));
       const okay = injections === 1 && navigations.length === 1 && state.world && state.exploring &&
         state.lost === false && state.calls > 0 && !state.error && reports.length === 0 &&
-        state.trace.includes('renderer:waiting') && state.trace.includes('"status":"ready"');
-      console.log(`${okay ? 'PASS' : 'FAIL'} ${name}/context: ${JSON.stringify({ injections, navigations: navigations.length, ...state, trace: undefined })}`);
+        waited && state.trace.includes('"status":"ready"');
+      console.log(`${okay ? 'PASS' : 'FAIL'} ${name}/context: ${JSON.stringify({ injections, navigations: navigations.length, waited, reports: reports.length, ...state, trace: undefined })}`);
       if (!okay) failed = true;
       continue;
     }
-    await page.waitForSelector('#wserr[role="alertdialog"]', { timeout: 30_000 });
-    // Sentry loads lazily after a fault; allow its module fetch and transport to finish.
-    for (let i = 0; i < 50 && envelopes.length === 0; i++) await page.waitForTimeout(100);
+    // a context whose precision never comes back is waited on, not reloaded (engine core/webglStartup.ts): the boot's stuck
+    // watch opens the fatal card after a minute (engine boot/stuckStep.ts STUCK_STEP_MS). A fault the shard load throws
+    // gets the load-failure screen instead (engine ui/errorScreen.ts showLoadFailure: RELOAD, Copy diagnostics)
+    await page.waitForSelector('#wserr[role="alertdialog"], .ws-load-error[role="alert"]', { timeout: fault === 'precision' ? 90_000 : 30_000 });
     await page.waitForTimeout(1500); // an automatic recovery navigation would have happened by now
     const state = await page.evaluate(() => ({
-      error: document.querySelector('#wserr .msg')?.textContent ?? '',
+      card: document.querySelector('#wserr') === null ? 'load-failure' : 'fatal',
+      error: document.querySelector('#wserr .msg')?.textContent ?? document.querySelector('.ws-load-error')?.textContent ?? '',
       detail: document.querySelector('#wserr .n')?.textContent ?? '',
-      retry: Boolean(document.querySelector('#wserr button.here')),
+      retry: Boolean(document.querySelector('#wserr button.here') ?? [...document.querySelectorAll('.ws-load-error button')].find((button) => button.textContent === 'RELOAD')),
       title: Boolean(document.querySelector('#wserr button.title')),
       url: location.href,
-      loadAttempt: (JSON.parse(sessionStorage.getItem('wildshard.save.v2.session') ?? '{}').keys?.loadAttempt?.data ?? null)?.count ?? null,
+      loadAttempt: (JSON.parse(sessionStorage.getItem('wildshard.save.v2@2.session') ?? '{}').keys?.loadAttempt?.data ?? null)?.count ?? null,
     }));
     // one document, the zone's: a second is a recovery navigation (no address names the zone, J522)
     const otherNavigation = navigations.length !== 1;
-    const expectedError = fault === 'precision' ? 'Graphics context did not recover' : fault === 'texture' ? 'Graphics error 1280 after compressed texture' : 'Nine Dragon GPU boot failed';
+    const expectedError = fault === 'precision' ? 'The game stopped loading at step "renderer"' : fault === 'texture' ? 'Graphics error 1280 after compressed texture' : "WebGL2RenderingContext.shaderSource must be an instance of WebGLShader";
     const expectedOperation = fault === 'precision' ? 'renderer:waiting' : fault === 'texture' ? 'texture:upload' : 'compile:before';
     const evidence = reports.some((report) => report.context?.bootDiagnostic?.includes(expectedOperation));
-    const sentryEvidence = envelopes.some((envelope) => envelope.includes('boot_diagnostic') && envelope.includes(expectedOperation));
-    const okay = injections === 1 && !otherNavigation && state.error.includes(expectedError) && state.detail === '' && state.retry && state.title && state.loadAttempt === 1 && evidence && sentryEvidence;
-    console.log(`${okay ? 'PASS' : 'FAIL'} ${name}/${fault}: ${JSON.stringify({ injections, navigations, evidence, sentryEvidence, envelopes: envelopes.length, ...state })}`);
+    const okay = injections === 1 && !otherNavigation && state.error.includes(expectedError) && state.detail === '' && state.retry && (state.card === 'load-failure' || state.title) && state.loadAttempt === 1 && evidence && envelopes.length === 0;
+    console.log(`${okay ? 'PASS' : 'FAIL'} ${name}/${fault}: ${JSON.stringify({ injections, navigations, evidence, envelopes: envelopes.length, ...state, error: state.error.slice(0, 160) })}`);
     if (!okay) failed = true;
   } catch (error) {
     failed = true;
