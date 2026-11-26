@@ -30,6 +30,8 @@ try {
   if (!address || typeof address === 'string') throw new Error('Missing test server port');
   const context = await browser.newContext({ viewport: { width: 402, height: 654 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
   await saveFixture(context, { scope: 'device', key: 'devMode', data: true }); // developer mode: EXPLORE WORLD is developer-only (E386)
+  // QA 11-25 row 133: `wildshard dev` joins a dev world, which asks the device's Name once: the boot waits on the player
+  await saveFixture(context, { scope: 'device', key: 'nameAsked', data: true });
   const reports = [];
   await context.route('**/api/errors', async (route) => {
     reports.push(route.request().postDataJSON());
@@ -62,8 +64,9 @@ try {
   }, address.port);
   await enterZone(page, { zone: 'nine-dragon-stack', base, flags: 'tier=phone&touch=1', waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => Boolean(window.__wildshard?.world) || Boolean(document.querySelector('#wserr')), null, { timeout: 60_000 });
-  if (await page.locator('.ws-menu-explore').isVisible()) {
-    await page.locator('.ws-menu-explore').click();
+  // meta EXPLORE-MODE EX1 (engine f7cc70dc5): the title has no EXPLORE WORLD; the HUD's own entry opens Explore's hub
+  if (await page.evaluate(() => Boolean(window.__wildshard?.world))) {
+    await page.evaluate(() => { window.__wildshard.world.hud.startExplore(); });
     await page.locator('.ws-x-card[data-m="world"]').click();
   }
   await page.waitForTimeout(3000);

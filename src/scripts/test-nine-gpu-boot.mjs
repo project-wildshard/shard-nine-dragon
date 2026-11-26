@@ -23,6 +23,8 @@ for (const [name, engine] of engines) {
   try {
     const context = await browser.newContext({ viewport: { width: 402, height: 654 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true, serviceWorkers: 'block' });
     await saveFixture(context, { scope: 'device', key: 'devMode', data: true }); // developer mode: EXPLORE WORLD is developer-only (E386)
+    // QA 11-25 row 133: `wildshard dev` joins a dev world, which asks the device's Name once: the boot waits on the player
+    await saveFixture(context, { scope: 'device', key: 'nameAsked', data: true });
     const reports = [];
     await context.route('**/api/errors', async (route) => {
       reports.push(route.request().postDataJSON());
@@ -112,7 +114,8 @@ for (const [name, engine] of engines) {
     await enterZone(page, { zone: 'nine-dragon-stack', base, flags: `nolock=1&mute=1&touch=1&tier=phone&sw=0${entry}`, waitUntil: 'domcontentloaded', timeout: 30_000 });
     if (fault === 'context') {
       await page.waitForFunction(() => Boolean(window.__wildshard?.world) || Boolean(document.querySelector('#wserr')), null, { timeout: 90_000 });
-      await page.locator('.ws-menu-explore').click();
+      // meta EXPLORE-MODE EX1 (engine f7cc70dc5): the title has no EXPLORE WORLD; the HUD's own entry opens Explore's hub
+      await page.evaluate(() => { window.__wildshard.world.hud.startExplore(); });
       await page.locator('.ws-x-card[data-m="world"]').click();
       await page.waitForFunction(() => {
         const trace = (JSON.parse(localStorage.getItem('wildshard.save.v2.device') ?? '{}').keys?.['boot.trace']?.data ?? null);
