@@ -13,8 +13,8 @@ mkdirSync('tmp/codex-pins', { recursive: true });
 const root = mkdtempSync(resolve('tmp/codex-pins/manifest-'));
 mkdirSync(resolve(root, 'src/shards'), { recursive: true });
 symlinkSync(resolve('src'), resolve(root, 'src/shards/nine-dragon-stack'));
-mkdirSync(resolve(root, 'scripts')); // script-paths: the pinned engine's emitter reads its monorepo layout, built here in a temp root
-writeFileSync(resolve(root, 'scripts/manifest-art-inputs.json'), JSON.stringify({ 'nine-dragon-stack': [{ file: 'data/discovery.json', field: ['extraArt'] }] }));
+mkdirSync(resolve(root, 'src/scripts'), { recursive: true }); // the pinned engine's emitter reads its lean layout (engine 0.1.96), built here in a temp root
+writeFileSync(resolve(root, 'src/scripts/manifest-art-inputs.json'), JSON.stringify({ 'nine-dragon-stack': [{ file: 'data/discovery.json', field: ['extraArt'] }] }));
 afterAll(() => rmSync(root, { recursive: true, force: true }));
 
 test('Nine compiles a data-only entry without retired runtime imports', () => {

@@ -1,16 +1,19 @@
 {
- "about": "Every model a Blender script builds (M10, E315; docs/design/blender-practice.md). The script is the source, the GLB it exports is committed, a .blend never is. Run a target from the repo root with `bash node_modules/@wildshard/sdk/scripts/blender/build.sh <target>`, check one against its committed GLB with `--check`. Fields: script (the Blender entry, run with --python-exit-code 1), args, pre (shell, before Blender), sources (every other file the target needs: the SDK's scripts/check-model-sources.mjs refuses a file under src/blender/ that no target names), inputs (committed files it reads), lock (Cycles work: take the model lock), build (files Blender must leave in $BUILD), meshopt / copy ([build file, repo file] pairs), post (shell, after the copies), outputs (the committed files it makes), feeds (the code that loads them), manual (not buildable here: why), check (the command --check runs for a manual target).",
+ "about": "Every model a Blender script builds (M10, E315; docs/design/blender-practice.md). The script is the source, the GLB it exports is committed, a .blend never is. Run a target from the repo root with `bash node_modules/@wildshard/sdk/scripts/blender/build.sh <target>`, check one against its committed GLB with `--check`. Fields: script (the Blender entry, run with --python-exit-code 1), args, pre (shell, before Blender), sources (every other file the target needs: the SDK's scripts/check-model-sources.mjs refuses a file under src/blender/ that no target names), inputs (committed files it reads; the SDK's own files by their installed path, node_modules/@wildshard/sdk/…, and as $SDK/… in commands), lock (Cycles work: take the model lock), build (files Blender must leave in $BUILD), meshopt / copy ([build file, repo file] pairs), post (shell, after the copies), outputs (the committed files it makes), feeds (the code that loads them), manual (not buildable here: why), check (the command --check runs for a manual target).",
  "blender": {
   "version": "5.2.1",
   "path": "/opt/homebrew/bin/blender"
  },
  "lock": "~/projects/localai/.model.lock",
  "cache": "~/.cache/wildshard-blender",
+ "notBlender": {
+  "src/static/assets/nine-dragon/viewmodel/fp-rig.phone.glb": "the phone copy of fp-rig.glb: src/scripts/nine-phone-rig.mjs writes it with meshoptimizer, no Blender"
+ },
  "targets": {
   "nine-dragon-stack/fp-rig": {
    "about": "The Nine Dragon first-person arms: hand, gauntlet and guard parts (Blender), rigged with 16 clips into fp-rig.glb by the viewmodel lab's bake (lab P8 round 13, E169); its rig-bake step ran in the deleted dev lab (E357 F7); a rebuild needs a new bake path",
    "manual": "the rig bake ran in the deleted viewmodel lab page, and fp-rig.glb is the only complete copy: src/blender/viewmodel/README.md says how to re-derive it",
-   "check": "node --import ./scripts/bake-loader.mjs src/blender/viewmodel/rig/check-clips.mjs",
+   "check": "node --import $SDK/src/sharddev/headless/scripts/bake-loader.mjs src/blender/viewmodel/rig/check-clips.mjs",
    "script": "src/blender/viewmodel/hand.py",
    "sources": [
     "src/blender/viewmodel/hand_lib.py",
@@ -29,7 +32,7 @@
     "src/blender/viewmodel/rig/check-clips.mjs"
    ],
    "inputs": [
-    "src/game/client/systems/viewmodel/armRig.ts"
+    "node_modules/@wildshard/sdk/src/sharddev/headless/game/systems/viewmodel/armRig.ts"
    ],
    "lock": true,
    "outputs": [
