@@ -2,7 +2,7 @@
 # One command to reproduce the Nine Dragon shader failure recovery in both browser engines.
 set -euo pipefail
 
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/../.."
 pnpm build
 
 port=4184

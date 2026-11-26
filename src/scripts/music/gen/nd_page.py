@@ -18,7 +18,7 @@ from build_page import PAGE_CSS
 from ph_page import CSS_EXTRA, MODELS, RAW_DIR, audio, esc, ff
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[2]
+REPO = HERE.parents[3]
 SET = "nine-dragon-stack"
 SLOTS = ("nd-market", "nd-well", "nd-fight")
 
