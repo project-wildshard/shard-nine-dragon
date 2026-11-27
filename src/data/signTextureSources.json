@@ -23,6 +23,7 @@
       "phone": "signs/atlas-phone-colour.png",
       "desktop": "signs/atlas-desktop-colour.png"
     },
+    "colour": "srgb",
     "label": "Nine Dragon baked sign atlas (GPU only)",
     "sampler": {
       "filter": "linear",
