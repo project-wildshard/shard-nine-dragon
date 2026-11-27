@@ -4,7 +4,7 @@ import { assetCost } from '@wildshard/sdk/assets';
 import { viewmodelGraphs } from './viewmodelGraphs';
 
 interface HeldFile extends ReturnType<typeof assetCost> {
-  readonly hash: string; readonly kind: 'ktx2' | 'json'; readonly compressed: number; readonly dependencies: readonly string[]; readonly critical: boolean;
+  readonly hash: string; readonly kind: 'image' | 'json'; readonly compressed: number; readonly dependencies: readonly string[]; readonly critical: boolean;
 }
 /** Exact existing graph inventory; no generated profile is read by consumers. */
 export interface HeldGraphFiles {
@@ -30,7 +30,7 @@ const entries = Object.entries(graphs).map(([id, graph]) => {
 return {
   assets: new Map([[texture, standIn], ...entries.map(([, row]) => [row.hash, row.bytes] as const)]),
   materials: Object.fromEntries(entries.map(([id, row]) => [id, { family: 'graph' as const, file: row.hash }])),
-  files: [{ hash: texture, kind: 'ktx2' as const, compressed: standIn.length, ...assetCost('ktx2', standIn), dependencies: [], critical: false }, ...new Map(entries.map(([, { hash, bytes, dependencies }]) => [hash,
+  files: [{ hash: texture, kind: 'image' as const, compressed: standIn.length, ...assetCost('image', standIn), dependencies: [], critical: false }, ...new Map(entries.map(([, { hash, bytes, dependencies }]) => [hash,
     { hash, kind: 'json' as const, compressed: bytes.length, ...assetCost('json', bytes), dependencies, critical: false }])).values()],
   library: [texture, ...new Set(entries.map(([, row]) => row.hash))],
   params: Object.fromEntries(Object.entries(graphs).map(([id, graph]) => [id, Object.keys(graph.params)])),

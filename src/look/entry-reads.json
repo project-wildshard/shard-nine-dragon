@@ -83,16 +83,6 @@
     "bytes": 60986
    },
    {
-    "url": "/assets/nine-dragon-stack/gpu/lab/organic/leaf-atlas-9658a9dd.ktx2",
-    "hash": "9658a9dd0c02ee694aedfe1f010cfac105f0c57d35d7c28a1dd98278678f40bd",
-    "bytes": 1126661
-   },
-   {
-    "url": "/assets/nine-dragon-stack/gpu/lab/organic/scroll.phone-580f21aa.ktx2",
-    "hash": "580f21aa41f5fcc4d216d5b3bde8fc3f20fc4363018957e608b8855dbd60c6f5",
-    "bytes": 1100047
-   },
-   {
     "url": "/assets/nine-dragon-stack/gpu/lab/grapple/dragon-hook-28bd7a4c.glb",
     "hash": "28bd7a4ce933e9f32786fbf2744db2bcf6984ca0dc56fbac188ee35028a9ff74",
     "bytes": 1598220
@@ -106,46 +96,6 @@
     "url": "/shardfiles/nine-dragon-stack/blobs/image/af1d80c86f41a8e66c4949645f9ed42cd563888a02b930410be46f06f5528242.png",
     "hash": "af1d80c86f41a8e66c4949645f9ed42cd563888a02b930410be46f06f5528242",
     "bytes": 98653
-   },
-   {
-    "url": "/assets/nine-dragon-stack/gpu/viewmodel/hand-r-maps.phone-0e260f80.ktx2",
-    "hash": "0e260f80f9d56d64f55c3dd868c3eaf049b97e8270680ce03ca5facb3dfb4625",
-    "bytes": 91361
-   },
-   {
-    "url": "/assets/nine-dragon-stack/gpu/viewmodel/hand-r-nrm.phone-aa4d7ff1.ktx2",
-    "hash": "aa4d7ff17b15aa29d2f6e8f23024e5a1fc4387d465fe8f18584bcfbc211bcea6",
-    "bytes": 305925
-   },
-   {
-    "url": "/assets/nine-dragon-stack/gpu/viewmodel/arm-r-maps.phone-2816edf9.ktx2",
-    "hash": "2816edf925f7d6202920a73600d77dd3d9cad8d759e3473fee9882174fa9d03a",
-    "bytes": 85952
-   },
-   {
-    "url": "/assets/nine-dragon-stack/gpu/viewmodel/arm-r-nrm.phone-1fa8943d.ktx2",
-    "hash": "1fa8943d01c5715af79263de4e38dcdb86efc4ee80d6b00f217dc2647558aa1f",
-    "bytes": 268721
-   },
-   {
-    "url": "/assets/nine-dragon-stack/gpu/viewmodel/fist-l-maps.phone-1d475e8f.ktx2",
-    "hash": "1d475e8f36775a8253dd080dc94063dd74baeb1485869e552ba7956e02e1f362",
-    "bytes": 89355
-   },
-   {
-    "url": "/assets/nine-dragon-stack/gpu/viewmodel/fist-l-nrm.phone-92fb64b8.ktx2",
-    "hash": "92fb64b85ee3e19eb437acaf41e9acfbc6e40d2c6b83ff5c198b3630271e8a5c",
-    "bytes": 306107
-   },
-   {
-    "url": "/assets/nine-dragon-stack/gpu/viewmodel/gauntlet-maps.phone-1be17999.ktx2",
-    "hash": "1be179996c44149d89eb5a62c4cb423da594b12a1f217dd18ce77f13d399c8a7",
-    "bytes": 228540
-   },
-   {
-    "url": "/assets/nine-dragon-stack/gpu/viewmodel/gauntlet-nrm.phone-f8d1632c.ktx2",
-    "hash": "f8d1632c1fb2fdfff9702cba84ad72667eccd6dfe318f682c3b1da8e61c11f96",
-    "bytes": 1091461
    }
   ]
  },
@@ -233,12 +183,12 @@
     "bytes": 67274
    },
    {
-    "url": "/assets/nine-dragon-stack/lab/organic/scroll.webp?v=5999c971",
+    "url": "/assets/nine-dragon-stack/lab/organic/scroll.png?v=5999c971",
     "hash": "5999c97106ac4f11adfa1f69e3d926a42619567197d70654751f378d390c7215",
     "bytes": 868648
    },
    {
-    "url": "/assets/nine-dragon-stack/lab/organic/leaf-atlas.webp?v=01f4261a",
+    "url": "/assets/nine-dragon-stack/lab/organic/leaf-atlas.png?v=01f4261a",
     "hash": "01f4261a95cf65609c173ee2497999560e36d98f867ca5a449879ed016e25d4a",
     "bytes": 345528
    },
@@ -258,42 +208,42 @@
     "bytes": 270663
    },
    {
-    "url": "/assets/nine-dragon-stack/viewmodel/hand-r-maps.webp?v=ff42911e",
+    "url": "/assets/nine-dragon-stack/viewmodel/hand-r-maps.png?v=ff42911e",
     "hash": "ff42911ea6ced20216824287bf5b085360cbc092bfa4c4ab8eca80f990b7af09",
     "bytes": 177788
    },
    {
-    "url": "/assets/nine-dragon-stack/viewmodel/hand-r-nrm.webp?v=603fc1a8",
+    "url": "/assets/nine-dragon-stack/viewmodel/hand-r-nrm.png?v=603fc1a8",
     "hash": "603fc1a8857a84cafa6172f2722111b35fc87695ee9cb8173ea0d1b75736bf95",
     "bytes": 212496
    },
    {
-    "url": "/assets/nine-dragon-stack/viewmodel/arm-r-maps.webp?v=8c5695b7",
+    "url": "/assets/nine-dragon-stack/viewmodel/arm-r-maps.png?v=8c5695b7",
     "hash": "8c5695b733dff1a00b4e2df87c0144b43b42667d10481d58375152adf634c6ab",
     "bytes": 162504
    },
    {
-    "url": "/assets/nine-dragon-stack/viewmodel/arm-r-nrm.webp?v=0643eb3c",
+    "url": "/assets/nine-dragon-stack/viewmodel/arm-r-nrm.png?v=0643eb3c",
     "hash": "0643eb3c079dc37389a0b1cac0cd23dcadadef2ed77da98bb0f3af3ec4947628",
     "bytes": 210556
    },
    {
-    "url": "/assets/nine-dragon-stack/viewmodel/fist-l-maps.webp?v=a7a0ddb3",
+    "url": "/assets/nine-dragon-stack/viewmodel/fist-l-maps.png?v=a7a0ddb3",
     "hash": "a7a0ddb34b14d8ffc2397731f9e5b9c530fd8b54318bc8adcae1a8e1dacda70a",
     "bytes": 171762
    },
    {
-    "url": "/assets/nine-dragon-stack/viewmodel/fist-l-nrm.webp?v=a71f15ec",
+    "url": "/assets/nine-dragon-stack/viewmodel/fist-l-nrm.png?v=a71f15ec",
     "hash": "a71f15ecdbaac561c99f6c54628728f2376428abe41cf53c0c086cae7c8fc87a",
     "bytes": 213036
    },
    {
-    "url": "/assets/nine-dragon-stack/viewmodel/gauntlet-maps.webp?v=c896355f",
+    "url": "/assets/nine-dragon-stack/viewmodel/gauntlet-maps.png?v=c896355f",
     "hash": "c896355fa84a29c11c2983b2bfc7193751454770f0ca316818502ec2f11220cd",
     "bytes": 534196
    },
    {
-    "url": "/assets/nine-dragon-stack/viewmodel/gauntlet-nrm.webp?v=142c443e",
+    "url": "/assets/nine-dragon-stack/viewmodel/gauntlet-nrm.png?v=142c443e",
     "hash": "142c443eb41546b77200967950d134dc9133c10617b96ba2b5038dfb12f138fb",
     "bytes": 792210
    }

@@ -2,8 +2,8 @@
   {
     "name": "signAtlas.generated.json",
     "input": "/assets/nine-dragon-stack/authored/sign-atlas/signAtlas.json",
-    "bytes": 1040973,
-    "hash": "3b497bfa59db1ab9b016362e11b29bf09ae568a8d8aa877baa8607cd79593f6e"
+    "bytes": 1040969,
+    "hash": "00a5ba805f9eca0ed582373a5b527a5b48653f350962e125f7b34a45e88134d9"
   },
   {
     "name": "signAtlas-phone.bin",
@@ -12,16 +12,16 @@
     "hash": "4dd029b1683af2f6ccfabf63650c8ec088243998564bacb50301cbbb3152f4c9"
   },
   {
-    "name": "signAtlas-phone-mono.ktx2",
-    "input": "/assets/nine-dragon-stack/authored/sign-atlas/signAtlas-phone-mono.ktx2",
-    "bytes": 59218,
-    "hash": "ed70ef638d67e10d71716f43a7f90aebc34e5b4319ddd5ad0086f510d085e4e6"
+    "name": "signAtlas-phone-mono.png",
+    "input": "/assets/nine-dragon-stack/authored/sign-atlas/signAtlas-phone-mono.png",
+    "bytes": 107084,
+    "hash": "cf8208930b50872ad2e36820983592edab2d6ccbc0abb54ed666011b86390e5d"
   },
   {
-    "name": "signAtlas-phone-colour.ktx2",
-    "input": "/assets/nine-dragon-stack/authored/sign-atlas/signAtlas-phone-colour.ktx2",
-    "bytes": 53275,
-    "hash": "9dc34d63d213db9398e88992cbfec9f6301ff72c9ae19f3499b2e967a7a48684"
+    "name": "signAtlas-phone-colour.png",
+    "input": "/assets/nine-dragon-stack/authored/sign-atlas/signAtlas-phone-colour.png",
+    "bytes": 73282,
+    "hash": "77121486c66d6ad77abad7ae91e2fe1a2bd31346957d629c3823a58c0372117e"
   },
   {
     "name": "signAtlas-desktop.bin",
@@ -30,15 +30,15 @@
     "hash": "24763ba9a4370d01e5ad0589a9dae7aad2ea54b395ff9a084a68e78fb86014ea"
   },
   {
-    "name": "signAtlas-desktop-mono.ktx2",
-    "input": "/assets/nine-dragon-stack/authored/sign-atlas/signAtlas-desktop-mono.ktx2",
-    "bytes": 126264,
-    "hash": "93ce696c4b801d68d4b8480a002636957b534867a20d6b11cef3bb770e87d0d0"
+    "name": "signAtlas-desktop-mono.png",
+    "input": "/assets/nine-dragon-stack/authored/sign-atlas/signAtlas-desktop-mono.png",
+    "bytes": 235550,
+    "hash": "03d6888527eb92e1736ef83bca373f2ecc22df55335497e2eca35b084f3a3588"
   },
   {
-    "name": "signAtlas-desktop-colour.ktx2",
-    "input": "/assets/nine-dragon-stack/authored/sign-atlas/signAtlas-desktop-colour.ktx2",
-    "bytes": 106458,
-    "hash": "66b02edd38b79512bc000973f755a5d322ecba1469512e1d21521d99a09010d5"
+    "name": "signAtlas-desktop-colour.png",
+    "input": "/assets/nine-dragon-stack/authored/sign-atlas/signAtlas-desktop-colour.png",
+    "bytes": 160889,
+    "hash": "34ab72c666548e0dd2b25945738eca79cd7191314da3b6b82a47456d2e1321e7"
   }
 ]

@@ -1,4 +1,4 @@
-import { bakeRawColourPixels } from '@wildshard/sdk/bake/rawTexture';
+import { encodePng } from './pngBytes';
 import type { ProjectGenerationContext } from '@wildshard/sdk/projectGeneration';
 import { parseHeldMeshes, parseHeldRigSource, type NineHeldMesh } from './sections';
 
@@ -58,5 +58,6 @@ export async function nineHeldProfile(ctx: Pick<ProjectGenerationContext, 'cache
     return parseHeldMeshes(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(rows)));
   };
   return { meshes: read('meshes.json'), phoneMeshes: read('phone.json'),
-    standIn: bakeRawColourPixels({ width: 1, height: 1, pixels: new Uint8ClampedArray([0, 0, 0, 255]) }, { colourSpace: 'linear' }) };
+    // SF7 (J525): a 1x1 black PNG, not a baked raw KTX2; off the 4x4 grid, the page decodes it as it is
+    standIn: encodePng(1, 1, 4, new Uint8Array([0, 0, 0, 255])) };
 }

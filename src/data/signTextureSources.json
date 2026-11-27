@@ -2,8 +2,8 @@
   {
     "kind": "product",
     "file": {
-      "phone": "signs/atlas-phone-mono.ktx2",
-      "desktop": "signs/atlas-desktop-mono.ktx2"
+      "phone": "signs/atlas-phone-mono.png",
+      "desktop": "signs/atlas-desktop-mono.png"
     },
     "label": "Nine Dragon baked sign atlas (GPU only)",
     "sampler": {
@@ -20,8 +20,8 @@
   {
     "kind": "product",
     "file": {
-      "phone": "signs/atlas-phone-colour.ktx2",
-      "desktop": "signs/atlas-desktop-colour.ktx2"
+      "phone": "signs/atlas-phone-colour.png",
+      "desktop": "signs/atlas-desktop-colour.png"
     },
     "label": "Nine Dragon baked sign atlas (GPU only)",
     "sampler": {
@@ -38,8 +38,8 @@
   {
     "kind": "product",
     "file": {
-      "phone": "signs/glyphs-phone.ktx2",
-      "desktop": "signs/glyphs-desktop.ktx2"
+      "phone": "signs/glyphs-phone.png",
+      "desktop": "signs/glyphs-desktop.png"
     },
     "label": "Nine Dragon baked sign atlas (GPU only)",
     "sampler": {
