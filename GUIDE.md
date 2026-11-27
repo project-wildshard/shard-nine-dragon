@@ -2029,6 +2029,15 @@ Its manual steps name each other line that still names `legacySlot`
 (a read, a `Pick`, a JSON fixture row). Check after: `pnpm test` and
 `wildshard check .` pass.
 
+#### migrate-0-9-0
+
+Upload now requires an authored `shardVersion` in the source's
+`shard.json`. Run `wildshard migrate` to fill a missing field from the
+source's owning `package.json`. If both fields already exist and differ,
+set them to the intended version. Rebuild the shard before uploading.
+An explicit `wildshard upload --shard-version` must use that same version.
+
+
 ## 8. Primitives
 
 A **primitive** is engine code your shard switches on with data: no host list, no engine change. The server reads your
