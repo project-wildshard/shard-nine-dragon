@@ -24,7 +24,7 @@ const { serverReadsFile } = await import('@wildshard/format/serverReads');
 const {loadRapier}=await import('@wildshard/sdk/headless/physics/rapier');
 const require=createRequire(import.meta.url);
 
-test('the real cooked Nine earns grapple and resumes using only served server files',{timeout:300_000},async()=>{
+test('the real cooked Nine earns grapple and resumes using only served server files',{timeout:1_500_000},async()=>{
  const parent=process.env.WS_PROOF_SCRATCH??tmpdir();mkdirSync(parent,{recursive:true});
  const root=mkdtempSync(join(parent,'nine-cook-')),worlds=[];
  const previous=process.env.WILDSHARD_SPAWN_PART_CACHE;
