@@ -31,7 +31,7 @@ export function nineBootDiscovery(inventory: Readonly<Record<string, number | tr
 /** Read current confined presence facts before producing the original discovery rows. */
 export function nineBootProgram(ctx: Pick<ProjectGenerationContext, 'inputFiles'>): ReturnType<typeof nineBootDiscovery> {
   const list = ctx.inputFiles; if (list === undefined) throw new Error('Nine boot discovery requires current inputFiles capability');
-  const inventory = Object.fromEntries(list(['/assets/nine-dragon/'])
+  const inventory = Object.fromEntries(list(['/assets/nine-dragon-stack/'])
     .filter(url => !url.endsWith('.DS_Store')).map((url): [string, true] => [url, true]));
   return nineBootDiscovery(inventory);
 }

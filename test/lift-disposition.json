@@ -336,7 +336,7 @@
     "disposition": "deleted",
     "reason": "J186: pins private geometry/byte identity, generated ordering, caches, source shape or implementation metadata rather than an outer edge.",
     "evidence": [
-      "test.each(['/assets/nine-dragon/authored/sign-atlas/', '/assets/nine-dragon/authored/glyphs/'])('the source map refuses omitted native root %s', async native => {",
+      "test.each(['/assets/nine-dragon-stack/authored/sign-atlas/', '/assets/nine-dragon-stack/authored/glyphs/'])('the source map refuses omitted native root %s', async native => {",
       "test('the source map encodes and a cache hit returns the same pixels', async () => {",
       "test('Nine has no scheduler jobs and all retired map and practice source handoffs stay absent', () => {"
     ]

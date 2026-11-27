@@ -101,7 +101,7 @@ export async function nineMapAssemblyFrom(inputs: NineMapAssemblyInputs, assembl
     for (const variant of new Set(crowd.map(row => row.variant))) assembly.add(`crowd:${kind}:${variant}`, await cast(`${kind}-${variant}`),
       crowd.filter(row => row.variant === variant).map(row => frame(world.records, row.matrix)));
   }
-  const hook = await mapModelBytes(inputs.read('/assets/nine-dragon/lab/grapple/dragon-hook.glb'), 0, true), y = layoutPlan.Y0;
+  const hook = await mapModelBytes(inputs.read('/assets/nine-dragon-stack/lab/grapple/dragon-hook.glb'), 0, true), y = layoutPlan.Y0;
   const nearest = mounts.filter(m => m.ring.y > y - 23 && m.ring.y < y + 14)
     .sort((a, b) => a.ring.distanceToSquared(new Vector3(-16, y - 2, -24)) - b.ring.distanceToSquared(new Vector3(-16, y - 2, -24))).slice(0, 3);
   assembly.add('dragon-hooks', hook, nearest.map(m => new Matrix4().makeTranslation(m.ring.x, m.ring.y, m.ring.z)

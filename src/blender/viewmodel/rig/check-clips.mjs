@@ -21,7 +21,7 @@ import { Matrix4, Quaternion, Vector3 } from 'three';
 const ROOT = resolve(import.meta.dirname, '../../../../../..');
 const tolArg = process.argv.find((a) => a.startsWith('--tol='));
 const TOL = tolArg === undefined ? 0.1 : Number(tolArg.slice(6));
-const GLB = join(ROOT, 'src/static/assets/nine-dragon/viewmodel/fp-rig.glb');
+const GLB = join(ROOT, 'src/static/assets/nine-dragon-stack/viewmodel/fp-rig.glb');
 const RIG = pathToFileURL(join(ROOT, 'src/client/game/systems/viewmodel/armRig.ts')).href;
 const THREE = pathToFileURL(join(ROOT, 'node_modules/three/build/three.module.js')).href;
 

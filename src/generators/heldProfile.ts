@@ -3,9 +3,9 @@ import type { ProjectGenerationContext } from '@wildshard/sdk/projectGeneration'
 import { parseHeldMeshes, parseHeldRigSource, type NineHeldMesh } from './sections';
 
 /** Existing authored rig, read only through the build's declared public asset root. */
-export const NINE_HELD_RIG = '/assets/nine-dragon/viewmodel/fp-rig.glb';
+export const NINE_HELD_RIG = '/assets/nine-dragon-stack/viewmodel/fp-rig.glb';
 /** NB8: the phone tier's rig (engine `phoneUrl` serves it there), baked by src/scripts/nine-phone-rig.mjs with merged meshes. */
-export const NINE_HELD_PHONE_RIG = '/assets/nine-dragon/viewmodel/fp-rig.phone.glb';
+export const NINE_HELD_PHONE_RIG = '/assets/nine-dragon-stack/viewmodel/fp-rig.phone.glb';
 /** `phoneMeshes`: the phone rig's merged meshes, each dressed in the look of the authored mesh its `lookOf` extra names */
 export interface NineHeldProfile { readonly meshes: readonly NineHeldMesh[]; readonly phoneMeshes: readonly NineHeldMesh[]; readonly standIn: Uint8Array }
 

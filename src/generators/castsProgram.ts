@@ -13,8 +13,8 @@ import { CAST_NAMES } from './castSources';
 import castRows from '../data/casts.json' with { type: 'json' };
 import { parseCastHook } from './sections';
 
-const INPUTS = ['/assets/nine-dragon/lab/walker.glb', '/assets/nine-dragon/lab/sitter.glb',
-  '/assets/nine-dragon/lab/organic/lion.glb', '/assets/nine-dragon/lab/guard.glb', '/assets/nine-dragon/lab/grapple/dragon-hook.glb'];
+const INPUTS = ['/assets/nine-dragon-stack/lab/walker.glb', '/assets/nine-dragon-stack/lab/sitter.glb',
+  '/assets/nine-dragon-stack/lab/organic/lion.glb', '/assets/nine-dragon-stack/lab/guard.glb', '/assets/nine-dragon-stack/lab/grapple/dragon-hook.glb'];
 const json = (value: unknown, suffix = ''): Uint8Array => new TextEncoder().encode(`${JSON.stringify(value)}${suffix}`);
 
 /** Exact predecessor native files, returned as bytes without publishing into source or public folders. */

@@ -13,7 +13,7 @@ export interface HookSpecimen {
 
 /** Decode and warm the native specimen offline; shard file declarations consume only its prepared rows. */
 export async function hookSpecimen(read: (url: string) => Uint8Array): Promise<HookSpecimen> {
-  const geometry = await hookGeometry(read), { gltf } = await readSourceModel(read('/assets/nine-dragon/lab/grapple/dragon-hook.glb'));
+  const geometry = await hookGeometry(read), { gltf } = await readSourceModel(read('/assets/nine-dragon-stack/lab/grapple/dragon-hook.glb'));
   const meshes: Mesh[] = [], isMesh = (node: Object3D): node is Mesh => node instanceof Mesh;
   gltf.scene.traverse(node => { if (isMesh(node)) meshes.push(node); });
   const sculpt = meshes[0];

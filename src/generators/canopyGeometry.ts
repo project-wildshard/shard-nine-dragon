@@ -1,6 +1,6 @@
 // The banyan's canopy geometry (dome B, E169; moved from world/canopy.ts in G285): the lumps' cloud-shelf plan and the
 // painted cards, the leaves and the shells dressed over them. Build-time only: ./specimens.ts bakes the world's crown and
-// the banyan model's (src/static/assets/nine-dragon/baked/specimens.bin); the page draws them in its foliage program
+// the banyan model's (src/static/assets/nine-dragon-stack/baked/specimens.bin); the page draws them in its foliage program
 // (../world/canopy.ts `buildCanopy`).
 import { BufferGeometry, Float32BufferAttribute, Uint32BufferAttribute, Vector3 } from 'three';
 import { Rng } from '@wildshard/sdk/random';

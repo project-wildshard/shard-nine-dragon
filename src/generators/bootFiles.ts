@@ -5,7 +5,7 @@ import { GPU_FILES } from '../ktx2.generated';
 /** The structure-first world's original counted inventory, authored beside its manifest. */
 export function bootSources(tier: BootTier, tex: BootTextures, world: readonly string[], inventory: Readonly<Record<string, number | true>>): BootSources {
   const { gpu } = bootFilePolicy(tier, tex, GPU_FILES, inventory);
-  const root = '/assets/baked/nine-dragon-stack/';
+  const root = '/assets/nine-dragon-stack/baked/';
   return {
     sky: [], baked: Object.keys(inventory).filter((url) => url.startsWith(`${root}tex/`) && !url.includes('.phone.')).map(gpu),
     terrain: [], trees: [], cabins: [],

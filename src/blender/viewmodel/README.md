@@ -1,6 +1,6 @@
 # Nine Dragon first-person arms: the sources of `fp-rig.glb` (M10, E315)
 
-`public/assets/nine-dragon/viewmodel/fp-rig.glb` (2.4 MB, 14 skinned meshes, 16 clips) and its map pairs
+`public/assets/nine-dragon-stack/viewmodel/fp-rig.glb` (2.4 MB, 14 skinned meshes, 16 clips) and its map pairs
 (`hand-r-*`, `arm-r-*`, `fist-l-*`, `gauntlet-*` `.webp`) are what `src/chunks/nine-dragon-stack/vm/fpArms.ts` plays.
 They were made in two stages in the viewmodel lab (lab P8, round 13, E169), and the lab was deleted in `7a339ed2`.
 This folder holds every source of that model that could be found.
@@ -49,7 +49,7 @@ only complete copy of its 16 clips, its skeleton and its skin.** Keep it. Change
 
 1. **The parts:** `bash scripts/blender/build.sh nine-dragon-stack/fp-rig` does not do this. Run the scripts by hand,
    under the model lock (Cycles):
-   - `blender -b --factory-startup --python-exit-code 1 --python hand.py -- --out <lab>/public/assets/nine-dragon/lab/viewmodel --scratch <dir>`
+   - `blender -b --factory-startup --python-exit-code 1 --python hand.py -- --out <lab>/public/assets/nine-dragon-stack/lab/viewmodel --scratch <dir>`
    - `blender … --python gauntlet.py -- <scratch>`, then `python3 gauntlet_maps.py <scratch> <public dir>`
    - `blender … --python guard.py -- <dir>/out30 --clip 0.27 --tris 30000` and `… <dir>/out8 --clip 0.27 --tris 8000 --smooth 20`
 2. **The ink-hull proxies:**
