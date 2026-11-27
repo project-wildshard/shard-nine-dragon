@@ -1,7 +1,8 @@
 import { cachedBlobSources } from '@wildshard/sdk/bake/sourceMetadata';
 import { parseSectionValue } from '@wildshard/sdk/sections';
 import { SignAtlasSchema, parseSignView } from './sections';
-import { encodeBuildBytes, decodeBuildDeflate } from '@wildshard/sdk/bake/byteCodec';
+import { decodeBuildDeflate } from '@wildshard/sdk/bake/byteCodec';
+import { encodePng } from './pngBytes';
 import { NeonText } from './neonGeometry';
 import rawSignRows from '../data/signView.json' with { type: 'json' };
 import { signCopies } from './signCopies';
@@ -15,9 +16,9 @@ import type { NineNativeSignInputs } from './nativeSignMetadata';
 const signRows = parseSignView(rawSignRows);
 
 /** Re-admit cached source metadata beside the producer's existing sign validators. */
-export function parseSignSourceRows(input: unknown): { name: string; kind: 'glb' | 'ktx2' | 'json'; source: string;
+export function parseSignSourceRows(input: unknown): { name: string; kind: 'glb' | 'image' | 'json'; source: string;
   options: { decoded: number; gpu: number; triangles: number; draws: number; critical: boolean; dependencies: string[] } }[] {
-  return cachedBlobSources(input, ['glb', 'ktx2', 'json']);
+  return cachedBlobSources(input, ['glb', 'image', 'json']);
 }
 
 const specimenKey = (p: SignModelParams): string => `${signRows.model.key}:${p.style}:${p.text}:${p.color}:${p.ink ?? ''}:${String(p.vertical)}:${p.size}:${String(p.blade)}`;
@@ -29,30 +30,20 @@ const json = (value: unknown): Uint8Array => new TextEncoder().encode(JSON.strin
 const signJson = (value: unknown): Uint8Array => json(parseSectionValue(SignAtlasSchema, JSON.parse(JSON.stringify(value), (_key, entry: unknown) => entry === '-0' ? -0 : entry)));
 export const SIGN_CHANNELS: { name: string; source: string; width: number; }[] = [{ name: 'aTint', source: '_tint', width: 3 }, { name: 'aNeon', source: '_neon', width: 4 }];
 
-function textureBlob(tier: string, name: 'mono' | 'colour', row: { packed: string; bytes: number }, read: ReadSignBytes): NamedBlob {
-  const data = read(row.packed), header = new DataView(data.buffer, data.byteOffset, data.byteLength);
-  let width = header.getUint32(20, true), height = header.getUint32(24, true), gpu = 0;
-  for (;;) {
-    gpu += width * height * (name === 'mono' ? 1 : 4);
-    if (width === 1 && height === 1) break;
-    width = Math.max(1, width >> 1); height = Math.max(1, height >> 1);
-  }
-  return nameBlob(`signs/atlas-${tier}-${name}.ktx2`, 'ktx2', data, { decoded: row.bytes, gpu });
+/** SF7 (J525): the atlas's own lossless PNG (grey mono, sRGB RGBA colour); the cook makes its KTX2, and the SDK measures its
+ *  costs from the image. */
+function textureBlob(tier: string, name: 'mono' | 'colour', row: { packed: string }, read: ReadSignBytes): NamedBlob {
+  return nameBlob(`signs/atlas-${tier}-${name}.png`, 'image', read(row.packed));
 }
 
-/** Ordinary RG8 KTX2; the existing texture reader owns decompression. */
+/** SF7 (J525): the glyph field (two channels, distance and coverage) as an RGBA PNG, R and G its channels, B 0 and A 255:
+ *  data, so it carries no sRGB chunk. */
 function glyphTexture(tier: string, field: { size: number; packed: readonly string[] }, read: ReadSignBytes): NamedBlob {
-  const pixels = new Uint8Array(field.size * field.size * 2);
-  field.packed.forEach((part, i) => pixels.set(decodeBuildDeflate(read(part), 2_097_152), i * 2_097_152));
-  const packed = encodeBuildBytes(pixels, 'zstd', 3), offset = 168, data = new Uint8Array(offset + packed.length), view = new DataView(data.buffer);
-  data.set([171, 75, 84, 88, 32, 50, 48, 187, 13, 10, 26, 10]);
-  [16, 1, field.size, field.size, 0, 0, 1, 1, 2, 104, 60].forEach((n, i) => view.setUint32(12 + i * 4, n, true));
-  view.setBigUint64(80, BigInt(offset), true); view.setBigUint64(88, BigInt(packed.length), true); view.setBigUint64(96, BigInt(pixels.length), true);
-  view.setUint32(104, 60, true); view.setUint16(112, 2, true); view.setUint16(114, 56, true); data.set([1, 1, 1, 0], 116);
-  data[124] = 2;
-  for (let i = 0; i < 2; i++) { const at = 132 + i * 16; view.setUint16(at, i * 8, true); data[at + 2] = 7; data[at + 3] = i; view.setUint32(at + 12, 255, true); }
-  data.set(packed, offset);
-  return nameBlob(`signs/glyphs-${tier}.ktx2`, 'ktx2', data, { decoded: pixels.length });
+  const pairs = new Uint8Array(field.size * field.size * 2);
+  field.packed.forEach((part, i) => pairs.set(decodeBuildDeflate(read(part), 2_097_152), i * 2_097_152));
+  const texels = new Uint8Array(field.size * field.size * 4);
+  for (let i = 0; i < field.size * field.size; i++) { texels[i * 4] = pairs[i * 2] ?? 0; texels[i * 4 + 1] = pairs[i * 2 + 1] ?? 0; texels[i * 4 + 3] = 255; }
+  return nameBlob(`signs/glyphs-${tier}.png`, 'image', encodePng(field.size, field.size, 4, texels));
 }
 
 /** Standard exact rest pools and lossless KTX2 textures, admitted by the existing named-file writer. */

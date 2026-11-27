@@ -266,7 +266,7 @@ const woven = Object.entries(KIT_GRAPHS).flatMap(([id, graph]) => graph.params !
 const SILK = { kind: 'raster', file: 'looks/silk-weave.r8', size: [256, 256], format: 'r8', wrap: 'repeat', magnify: 'nearest', mipmaps: true, label: 'Nine Dragon silk weave' } as const;
 const lent = [...signTextures, ...VOLUMES, { ...SILK, looks: woven, param: 'uSilk', publish: 'nine.silk' }, { ...SILK, looks: ['nine-sky'], param: 'silk' }, { kind: 'layers', looks: painted, param: 'uPaint', base: '/assets/nine-dragon-stack/paint', label: 'Nine Dragon paint array (GPU only)', size: paint.sizes, anisotropy: 8, layers: paint.layers.map(({ name, alpha }) => ({ name, alpha })) },
   { kind: 'image', looks: ['nine-canopy-cards'], param: 'atlas', sizeParam: 'atlasSize', ...canopy.atlas },
-  { kind: 'image', looks: ['nine-scroll'], param: 'scroll', url: '/assets/nine-dragon-stack/lab/organic/scroll.webp', srgb: true, wrapT: 1001, anisotropy: 4 }];
+  { kind: 'image', looks: ['nine-scroll'], param: 'scroll', url: '/assets/nine-dragon-stack/lab/organic/scroll.png', srgb: true, wrapT: 1001, anisotropy: 4 }];
 // G4: the night market's and the square's balustrade sets as placements of their catalogue models at their baked frames
 // (world/build.ts places each by id): a pavilion's copies carry their turn
 const SET_MODELS: Readonly<Record<string, string>> = { booth: 'marketBooth', parasol: 'parasolTable', 'balustrade-panel': 'balustradePanel', pavilion: 'diningPavilion' };
