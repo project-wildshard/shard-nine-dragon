@@ -7,7 +7,7 @@ import { decodeBuildDeflate } from '@wildshard/sdk/bake/byteCodec';
 import { byteWriter, jsonBytes, outputHash, browserBakeBytes } from './bakeBytes.mjs';
 
 const root = resolve(import.meta.dirname, '../../../..');
-const outputData = resolve(root, 'src/static/assets/nine-dragon/authored/glyphs');
+const outputData = resolve(root, 'src/static/assets/nine-dragon-stack/authored/glyphs');
 const code = await bundleNativeRaster({ root, entry: resolve(import.meta.dirname, 'glyphPage.ts'), format: 'iife', name: 'NineGlyphBake' });
 if (code === undefined) throw new Error('Nine glyph page failed to bundle');
 const session = await openNativeRaster({

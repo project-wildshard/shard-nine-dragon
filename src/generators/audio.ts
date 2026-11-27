@@ -21,7 +21,7 @@ const sampleVoices: (readonly [string, { family: string; tap: string; sequence?:
 export const ND_AUDIO: ReturnType<typeof parseAudioData> = parseAudioData({ entry: { kit: { wind: false, score: false, scene: true } }, cues: [], ambience: null, score: 'default', samples: ND_SAMPLES,
   music: { setPlayback: { scene: { well: 0 }, stateMode: true, waitForBank: true },
     setCatalogue: { inventory: 'title', priority: false, bootSynth: true, titleStings: false, baseSamples: false, cueOverlay: false }, id: 'score.nd', base: 'nd-market', slots: ['nd-market', 'nd-well', 'nd-fight'], bootSlots: ['title', 'nd-market'], synthLead: 'pluck', minFade: 6,
-    source: { dir: '/assets/music/nine-dragon-stack/', manifestKey: 'nine-dragon-stack' }, sets: {}, selectMode: 'first', selection: [
+    source: { dir: '/assets/nine-dragon-stack/music/nine-dragon-stack/', manifestKey: 'nine-dragon-stack' }, sets: {}, selectMode: 'first', selection: [
       { slots: ['nd-fight', 'nd-market'], when: [{ field: 'mode', op: 'equals', value: 'combat' }] },
       { slots: ['nd-well', 'nd-market'], when: [{ field: 'well', op: 'greater', value: 0.5 }] },
       { slots: ['nd-market', 'nd-market'], when: [] },

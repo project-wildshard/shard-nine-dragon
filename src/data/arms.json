@@ -121,7 +121,7 @@
       "from": 0.4
     }
   },
-  "ARMS_BASE": "/assets/nine-dragon/viewmodel/",
+  "ARMS_BASE": "/assets/nine-dragon-stack/viewmodel/",
   "ARMS_MAPS": [
     "hand-r",
     "arm-r",

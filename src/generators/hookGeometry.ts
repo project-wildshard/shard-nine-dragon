@@ -3,7 +3,7 @@ import { readSourceModel } from '@wildshard/sdk/bake/skinned';
 
 /** Preserve the native sculpt's widening and node-transform order before writing its exact typed channels. */
 export async function hookGeometry(read: (url: string) => Uint8Array): Promise<BufferGeometry> {
-  const { gltf } = await readSourceModel(read('/assets/nine-dragon/lab/grapple/dragon-hook.glb'));
+  const { gltf } = await readSourceModel(read('/assets/nine-dragon-stack/lab/grapple/dragon-hook.glb'));
   gltf.scene.updateMatrixWorld(true);
   const meshes: Mesh[] = [];
   const isMesh = (object: Object3D): object is Mesh => object instanceof Mesh;

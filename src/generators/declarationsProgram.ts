@@ -5,7 +5,7 @@ import { bakedLayout } from './layoutProjection';
 import { worldRows, worldPartitionIds, parseWorldDeclarations, type NineWorldDeclarations } from './worldRows';
 import { ND_AUDIO } from './audio';
 
-const INPUTS = ['/assets/nine-dragon/lab/walker.glb', '/assets/nine-dragon/lab/sitter.glb'];
+const INPUTS = ['/assets/nine-dragon-stack/lab/walker.glb', '/assets/nine-dragon-stack/lab/sitter.glb'];
 const encode = (value: unknown): Uint8Array => new TextEncoder().encode(encodeCanonicalJson(value));
 
 /** Original canonical declaration bytes, using this build's admitted layout and GLBs. */

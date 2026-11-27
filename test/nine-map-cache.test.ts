@@ -42,7 +42,7 @@ test('missing/extra inputs, altered native bytes and malformed map caches refuse
   const inputs = new Map(NINE_MAP_INPUTS.map(name => [name, new Uint8Array(readFileSync(resolve(`src/static${name}`)))]));
   await expect(nineMapPixels(new Map())).rejects.toThrow('Nine map input inventory differs');
   await expect(nineMapPixels(new Map([...inputs, ['extra', new Uint8Array([1])]]))).rejects.toThrow('Nine map input inventory differs');
-  inputs.set('/assets/nine-dragon/authored/sign-atlas/signAtlas.json', new Uint8Array([1]));
+  inputs.set('/assets/nine-dragon-stack/authored/sign-atlas/signAtlas.json', new Uint8Array([1]));
   await expect(nineMapPixels(inputs)).rejects.toThrow('Nine native atlas bytes differ');
   for (const files of [new Map<string, Uint8Array>(), new Map([['map.rgba', new Uint8Array(1)]]),
     new Map([['map.rgba', new Uint8Array(4_000_000)], ['extra', new Uint8Array([1])]])]) {

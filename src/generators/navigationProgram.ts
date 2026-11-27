@@ -18,5 +18,5 @@ export async function nineNavigation(ctx: Pick<ProjectGenerationContext, 'cached
   if (bytes === undefined) throw new Error('Missing owned Nine navigation');
   const { assets, ...metadata } = declareNavigation(bytes);
   for (const [hash, owned] of assets) if (ctx.asset(owned) !== hash) throw new Error('Nine navigation publication differs');
-  return { ...metadata, url: '/assets/baked/nine-dragon-stack/navmesh.bin' };
+  return { ...metadata, url: '/assets/nine-dragon-stack/baked/navmesh.bin' };
 }

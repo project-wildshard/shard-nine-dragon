@@ -6,7 +6,7 @@ meets Kowloon Walled City (E169). Fourth card on the title deck.
 
 ## Native decal inputs
 
-The checked phone/desktop decal PNGs live in `public/assets/nine-dragon/authored/`; `data/nativeDecals.json`
+The checked phone/desktop decal PNGs live in `public/assets/nine-dragon-stack/authored/`; `data/nativeDecals.json`
 pins their original bytes. `generators/nativeDecals.ts` admits them through explicit public-input roots and
 publishes owned image blobs. The existing output reader remains the CLI authority during GR3's partial conversion.
 
@@ -34,7 +34,7 @@ The legacy scheduled adapter remains until the source entry conversion is comple
 | `bag` | MAP · GEAR; no pack |
 | `tiers` | phone: no AO, no slices, FXAA, no warm turns, plain image textures; desktop: AO |
 | `audio` | its own ambience and score (S1.5); the forest bed's shrine and island sounds omitted |
-| `assetGlobs`, `ktx2` | `public/assets/nine-dragon/**` and its KTX2, music, SFX and title folders; `ktx2.generated.ts` |
+| `assetGlobs`, `ktx2` | `public/assets/nine-dragon-stack/**` and its KTX2, music, SFX and title folders; `ktx2.generated.ts` |
 
 Explore images, forest settings and boot policy live in `data/discovery.json` and the authored manifest.
 `generators/bootDiscovery.ts` computes current boot inventories and camera discovery through the admitted source

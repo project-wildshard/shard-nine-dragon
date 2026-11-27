@@ -151,7 +151,7 @@
     "glowFar": 40,
     "grade": 1
   },
-  "lut": "/assets/nine-dragon/grade-lut-cleanroom.bin",
+  "lut": "/assets/nine-dragon-stack/grade-lut-cleanroom.bin",
   "haloState": {
     "blending": 5,
     "blendEquation": 100,

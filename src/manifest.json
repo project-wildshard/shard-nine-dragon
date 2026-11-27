@@ -58,11 +58,11 @@
     }
   },
   "assetGlobs": [
-    "public/assets/nine-dragon/**",
-    "public/assets/baked/nine-dragon-stack/**",
-    "public/assets/gpu/nine-dragon/**",
-    "public/assets/music/nine-dragon-stack/**",
-    "public/assets/sfx/nine-dragon-stack/**",
+    "public/assets/nine-dragon-stack/**",
+    "public/assets/nine-dragon-stack/baked/**",
+    "public/assets/nine-dragon-stack/gpu/**",
+    "public/assets/nine-dragon-stack/music/nine-dragon-stack/**",
+    "public/assets/nine-dragon-stack/sfx/nine-dragon-stack/**",
     "public/assets/title/nine-dragon-stack-portrait.jpg",
     "public/assets/nine-dragon-stack/map/**"
   ],
@@ -76,10 +76,10 @@
   "blurb": "Lantern Square, halfway up a city stacked 500 m high: wet granite, a cinnabar gate, neon calligraphy and the Yamen Well dropping away into silk fog. A prototype fragment \u2014 the square, the Well's rim and the stair-street \u2014 rough edges everywhere.",
   "assets": {
     "groundLayers": [
-      "forest_ground_04",
-      "leafy_grass",
-      "rock_ground",
-      "stony_dirt_path"
+      "/assets/nine-dragon-stack/tex/forest_ground_04",
+      "/assets/nine-dragon-stack/tex/leafy_grass",
+      "/assets/nine-dragon-stack/tex/rock_ground",
+      "/assets/nine-dragon-stack/tex/stony_dirt_path"
     ],
     "groundTints": [
       [
@@ -103,7 +103,7 @@
         1
       ]
     ],
-    "slabRock": "rock_ground"
+    "slabRock": "/assets/nine-dragon-stack/tex/rock_ground"
   },
   "trees": {
     "factory": "none",
@@ -113,7 +113,7 @@
   },
   "spawns": [],
   "sky": {
-    "hdri": "kloofendal_48d_partly_cloudy_puresky",
+    "hdri": "/assets/nine-dragon-stack/hdri/kloofendal_48d_partly_cloudy_puresky",
     "painted": {
       "zenith": [
         0.09,

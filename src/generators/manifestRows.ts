@@ -30,14 +30,14 @@ accent: 'iris',
 biome: manifest.NINE_STRINGS.biome,
 blurb: manifest.NINE_STRINGS.blurb,
 assets: {
-    groundLayers: ['forest_ground_04', 'leafy_grass', 'rock_ground', 'stony_dirt_path'],
+    groundLayers: ['/assets/nine-dragon-stack/tex/forest_ground_04', '/assets/nine-dragon-stack/tex/leafy_grass', '/assets/nine-dragon-stack/tex/rock_ground', '/assets/nine-dragon-stack/tex/stony_dirt_path'],
     groundTints: [[1, 1, 1], [1, 1, 1], [1, 1, 1], [1, 1, 1]],
-    slabRock: 'rock_ground',
+    slabRock: '/assets/nine-dragon-stack/tex/rock_ground',
   },
 trees: { factory: 'none', bark: 'pine_bark', twigAtlas: 'pine_tree_01', noun: 'trees' },
 spawns: [],
 sky: {
-    hdri: 'kloofendal_48d_partly_cloudy_puresky', // unused: the sky is painted
+    hdri: '/assets/nine-dragon-stack/hdri/kloofendal_48d_partly_cloudy_puresky', // unused: the sky is painted
     painted: { zenith: [0.09, 0.14, 0.26], horizon: [0.36, 0.44, 0.58], ground: [0.16, 0.18, 0.22], glow: [0.2, 0.2, 0.3] },
     sun: { azimuth: 250, elevation: 8 },
     sunColor: [0.55, 0.62, 0.85], sunIntensity: 0.6, envIntensity: 0.5, bgIntensity: 1.0,
