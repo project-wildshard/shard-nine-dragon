@@ -23,7 +23,7 @@ function crc32(bytes: Uint8Array): number {
 function chunk(name: string, body: Uint8Array): Uint8Array {
   const out = new Uint8Array(12 + body.length), view = new DataView(out.buffer);
   view.setUint32(0, body.length);
-  for (let i = 0; i < 4; i++) out[4 + i] = name.charCodeAt(i);
+  for (let i = 0; i < 4; i++) out[4 + i] = name.codePointAt(i) ?? 0;
   out.set(body, 8);
   view.setUint32(8 + body.length, crc32(out.subarray(4, 8 + body.length)));
   return out;
