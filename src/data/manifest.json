@@ -30,14 +30,14 @@
     "/assets/nine-dragon-stack/lab/organic/scroll.png",
     "/assets/nine-dragon-stack/grade-lut-cleanroom.bin",
     "/assets/nine-dragon-stack/viewmodel/fp-rig.glb",
-    "/assets/nine-dragon-stack/viewmodel/hand-r-maps.png",
-    "/assets/nine-dragon-stack/viewmodel/hand-r-nrm.png",
-    "/assets/nine-dragon-stack/viewmodel/arm-r-maps.png",
-    "/assets/nine-dragon-stack/viewmodel/arm-r-nrm.png",
-    "/assets/nine-dragon-stack/viewmodel/fist-l-maps.png",
-    "/assets/nine-dragon-stack/viewmodel/fist-l-nrm.png",
-    "/assets/nine-dragon-stack/viewmodel/gauntlet-maps.png",
-    "/assets/nine-dragon-stack/viewmodel/gauntlet-nrm.png"
+    "/assets/nine-dragon-stack/viewmodel/hand-r-maps.webp",
+    "/assets/nine-dragon-stack/viewmodel/hand-r-nrm.webp",
+    "/assets/nine-dragon-stack/viewmodel/arm-r-maps.webp",
+    "/assets/nine-dragon-stack/viewmodel/arm-r-nrm.webp",
+    "/assets/nine-dragon-stack/viewmodel/fist-l-maps.webp",
+    "/assets/nine-dragon-stack/viewmodel/fist-l-nrm.webp",
+    "/assets/nine-dragon-stack/viewmodel/gauntlet-maps.webp",
+    "/assets/nine-dragon-stack/viewmodel/gauntlet-nrm.webp"
   ],
   "COMPARE_ROWS": [
     {
