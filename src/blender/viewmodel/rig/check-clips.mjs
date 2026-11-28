@@ -4,13 +4,13 @@
 // fp-rig.glb's 16 clips were sampled by bake.ts from moves.ts (the authored weapon paths) through the arm IK in
 // src/client/game/systems/viewmodel/armRig.ts (the same file the lab used: it moved into the shard unchanged). This re-samples
 // every clip the way bake.ts does (60 Hz, each bone's local rotation under its parent) from the recovered moves.ts and
-// the shipped rig.ts, and compares it with the rotations in the committed GLB. It needs no browser and no Blender.
+// the installed SDK's armRig.ts, and compares it with the rotations in the committed GLB. It needs no browser and no
+// Blender, and runs in this repo alone (meta QA 11-25 row 157), from the repo root:
 //
-//   node --import ./scripts/bake-loader.mjs src/shards/nine-dragon-stack/blender/viewmodel/rig/check-clips.mjs [--tol=0.1]
+//   node --import node_modules/@wildshard/sdk/src/sharddev/headless/scripts/bake-loader.mjs src/blender/viewmodel/rig/check-clips.mjs [--tol=0.1]
 //
 // Pass: the same clip names and durations, every bone rotation within --tol degrees (meshopt's quantisation is ~0.03°).
-import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { NodeIO } from '@gltf-transform/core';
@@ -18,18 +18,39 @@ import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
 import { MeshoptDecoder } from 'meshoptimizer';
 import { Matrix4, Quaternion, Vector3 } from 'three';
 
-const ROOT = resolve(import.meta.dirname, '../../../../../..');
+const ROOT = resolve(import.meta.dirname, '../../../..');
 const tolArg = process.argv.find((a) => a.startsWith('--tol='));
 const TOL = tolArg === undefined ? 0.1 : Number(tolArg.slice(6));
 const GLB = join(ROOT, 'src/static/assets/nine-dragon-stack/viewmodel/fp-rig.glb');
-const RIG = pathToFileURL(join(ROOT, 'src/client/game/systems/viewmodel/armRig.ts')).href;
+const RIG = pathToFileURL(join(ROOT, 'node_modules/@wildshard/sdk/src/sharddev/headless/game/systems/viewmodel/armRig.ts')).href;
 const THREE = pathToFileURL(join(ROOT, 'node_modules/three/build/three.module.js')).href;
 
-// moves.ts as the lab had it, with its two imports pointed at the shipped rig.ts and three
+// The lab's rig.ts was the shipped armRig.ts plus settleLeft, which only the bake used; the engine dropped it as unused.
+// rig.ts here is the SDK's armRig with the lab's settleLeft beside it, so moves.ts solves exactly as it did.
+const rigShim = `export * from '${RIG}';
+import { Quaternion } from '${THREE}';
+import { twoBone } from '${RIG}';
+export function settleLeft(rest, S, Lu, spec, poleHint) {
+  const q = rest.quat.clone();
+  const hub = rest.pos.clone();
+  for (let i = 0; i < 6; i++) {
+    const W = hub.clone().add(spec.wrist.clone().applyQuaternion(q));
+    const r = twoBone(S, W, poleHint, Lu, spec.foreLen);
+    const want = r.W.clone().sub(r.E).normalize();
+    const have = spec.fore.clone().negate().applyQuaternion(q);
+    q.premultiply(new Quaternion().setFromUnitVectors(have, want));
+  }
+  return { pos: hub, quat: q };
+}
+`;
+// moves.ts as the lab had it, with its two imports pointed at that rig.ts and three
 const src = readFileSync(join(import.meta.dirname, 'moves.ts.txt'), 'utf8')
   .replace("from 'three';", `from '${THREE}';`)
-  .replace("from './rig';", `from '${RIG}';`);
-const tmp = mkdtempSync(join(tmpdir(), 'fp-rig-check-'));
+  .replace("from './rig';", "from './rig.ts';");
+mkdirSync(join(ROOT, 'tmp'), { recursive: true });
+const tmp = mkdtempSync(join(ROOT, 'tmp', 'fp-rig-check-'));
+process.on('exit', () => rmSync(tmp, { recursive: true, force: true }));
+writeFileSync(join(tmp, 'rig.ts'), rigShim);
 writeFileSync(join(tmp, 'moves.ts'), src);
 const M = await import(pathToFileURL(join(tmp, 'moves.ts')).href);
 const R = await import(RIG);

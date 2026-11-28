@@ -7,7 +7,7 @@
  "lock": "~/projects/localai/.model.lock",
  "cache": "~/.cache/wildshard-blender",
  "notBlender": {
-  "src/static/assets/nine-dragon/viewmodel/fp-rig.phone.glb": "the phone copy of fp-rig.glb: src/scripts/nine-phone-rig.mjs writes it with meshoptimizer, no Blender"
+  "src/static/assets/nine-dragon-stack/viewmodel/fp-rig.phone.glb": "the phone copy of fp-rig.glb: src/scripts/nine-phone-rig.mjs writes it with meshoptimizer, no Blender"
  },
  "targets": {
   "nine-dragon-stack/fp-rig": {
@@ -36,15 +36,15 @@
    ],
    "lock": true,
    "outputs": [
-    "src/static/assets/nine-dragon/viewmodel/fp-rig.glb",
-    "src/static/assets/nine-dragon/viewmodel/hand-r-maps.webp",
-    "src/static/assets/nine-dragon/viewmodel/hand-r-nrm.webp",
-    "src/static/assets/nine-dragon/viewmodel/arm-r-maps.webp",
-    "src/static/assets/nine-dragon/viewmodel/arm-r-nrm.webp",
-    "src/static/assets/nine-dragon/viewmodel/fist-l-maps.webp",
-    "src/static/assets/nine-dragon/viewmodel/fist-l-nrm.webp",
-    "src/static/assets/nine-dragon/viewmodel/gauntlet-maps.webp",
-    "src/static/assets/nine-dragon/viewmodel/gauntlet-nrm.webp"
+    "src/static/assets/nine-dragon-stack/viewmodel/fp-rig.glb",
+    "src/static/assets/nine-dragon-stack/viewmodel/hand-r-maps.webp",
+    "src/static/assets/nine-dragon-stack/viewmodel/hand-r-nrm.webp",
+    "src/static/assets/nine-dragon-stack/viewmodel/arm-r-maps.webp",
+    "src/static/assets/nine-dragon-stack/viewmodel/arm-r-nrm.webp",
+    "src/static/assets/nine-dragon-stack/viewmodel/fist-l-maps.webp",
+    "src/static/assets/nine-dragon-stack/viewmodel/fist-l-nrm.webp",
+    "src/static/assets/nine-dragon-stack/viewmodel/gauntlet-maps.webp",
+    "src/static/assets/nine-dragon-stack/viewmodel/gauntlet-nrm.webp"
    ],
    "feeds": [
     "src/generators/heldView.ts"
